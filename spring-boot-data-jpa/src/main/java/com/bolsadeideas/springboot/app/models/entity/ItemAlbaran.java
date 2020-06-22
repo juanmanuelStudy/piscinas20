@@ -38,7 +38,7 @@ public class ItemAlbaran implements Serializable{
 		
 		
 		
-		var descuento= producto.getPrecio() * producto.getDescuento()/100;
+		Double descuento= producto.getPrecio() * producto.getDescuento()/100;
 		Double precios = (producto.getPrecio()-descuento)/100;
 		
 		return cantidad.doubleValue() * precios;
