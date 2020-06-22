@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/layoutMcompras :: head"></head>
+<body>
+
+	<header th:replace="layout/layoutMcompras :: header"></header>
+
+	<div class="container py-4">
+
+
+		<div class="card bg-light">
+			<div class="card-header" th:text="${titulo}+ ' '+${albaran.id}"></div>
+			<div class="card-body">
+
+
+				<h4 class="card-title">
+					<a th:href="@{/albaranes/listarAlbaranes}"
+						class="btn btn-light btn-xs">&laquo; volver</a>
+				</h4>
+
+				
+
+				<ul class="list-group my-2">
+					<li class="list-group-item list-group-item-success"
+						th:text="'Cliente:'  + ${albaran.cliente.nombre} + '  Proveedor:  ' +${albaran.proveedor.vnombre}"></li>
+					
+					
+					<li class="list-group-item"
+						th:text="'Nº Albaran: ' + ${albaran.numeroAlbaran}"></li>
+					<li class="list-group-item"
+						th:text="'Lugar: ' + ${albaran.lugar}"></li>
+					<li class="list-group-item"
+						th:text="'Fecha: ' + ${albaran.dfecha}"></li>
+						<li class="list-group-item"
+						th:text="'Proveedor: ' + ${albaran.proveedor.vnombre}"></li>
+				</ul>
+				<div class="alert alert-info my-4"
+					th:if="${#lists.isEmpty(albaran.items)}"
+					th:text="'No hay lineas para la factura' + ${albaran.descripcion}"></div>
+
+				<table th:if="${not #lists.isEmpty(albaran.items)}"
+					class="table table-striped table-hover table-bordered my-3">
+					<thead>
+						<tr>
+							<th>Producto</th>							
+							<th>Cantidad</th>
+						
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="linea: ${albaran.items}">
+							<td th:text="${linea.producto.nombre}"></td>							
+							<td th:text="${linea.cantidad}"></td>
+							
+						</tr>
+					</tbody>
+
+				</table>
+
+				<h5 class="float-right">
+					Cantidad Total <span th:text="${albaran.total}"
+						class="badge badge-secondary"></span>
+				</h5>
+
+				<div class="card border-info mb-4" style="max-width: 20rem;">
+					<div class="card-header">Observaciones</div>
+					<div class="card-body">
+						<p class="card-text" th:text="${albaran.observacion}"
+							th:if="${not #strings.isEmpty(albaran.observacion)}"></p>
+						<h4 class="card-title"
+							th:if="${#strings.isEmpty(albaran.observacion)}"
+							th:text="'No tiene observaciones'"></h4>
+					</div>
+				</div>
+				<img 
+					class="img-thumbnail rounded float-left" style="max-width: 25%;"
+					th:src="@{'/uploads/' + ${albaran.foto}}" th:alt="${albaran.foto}" />
+					
+					
+					
+			</div>
+		</div>
+<a th:href="@{/albaranes/listarAlbaranes}"
+					class="btn btn-light btn-xs">&laquo; volver</a>
+	</div>
+	<footer th:replace="layout/layoutMcompras :: footer"></footer>
+</body>
+</html>

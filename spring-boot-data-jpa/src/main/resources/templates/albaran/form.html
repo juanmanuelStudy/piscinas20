@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/layoutMcompras :: head"></head>
+  
+
+
+<style>
+.bootstrap-iso .formden_header h2, .bootstrap-iso .formden_header p,
+	.bootstrap-iso form {
+	font-family: Arial, Helvetica, sans-serif;
+	color: black
+}
+
+.bootstrap-iso form button, .bootstrap-iso form button:hover {
+	color: #337ab7 !important;
+}
+
+.bootstrap-iso .outline, .bootstrap-iso .outline:focus {
+	background-color: transparent;
+	
+	border: 2px solid #337ab7
+}
+
+.bootstrap-iso .outline:hover {
+	background-color: transparent;
+	border: 2px solid #5ba2df;
+	color: #5ba2df !important
+}
+
+.asteriskField {
+	color: red;
+}
+</style>
+
+<body>
+
+	<header th:replace="layout/layoutMcompras :: header"></header>
+
+	<div class="container py-4">
+		<div class="card bg-light">
+			<div class="card-header" th:text="${titulo}"></div>
+			<div class="card-body">
+				<h4 class="card-title">
+					<a class="btn btn-light"
+						th:href="@{'/ver/' + ${albaran.cliente.id}}"
+						th:text="'&laquo; volver'"></a>
+				</h4>
+
+				<form th:action="@{/albaranes/form/}"  enctype="multipart/form-data" th:object="${albaran}"
+					method="post">
+
+					<div class="form-group row">
+						<label for="cliente" class="col-sm-2 col-form-label"
+							th:text="'Cliente'"></label>
+						<div class="col-sm-4">
+							<input name="cliente"
+								th:value="${albaran.cliente.nombre} + ' ' + ${albaran.cliente.apellido}"
+								class="form-control" disabled='disabled' />
+						</div>
+					</div>
+
+					<div class="form-group row">
+						<label for="lugar" class="col-sm-2 col-form-label"
+							th:text="'Obra'"></label>
+						<div class="col-sm-6">
+							<input type="text" th:field="*{lugar}" class="form-control" th:errorclass="'form-control is-invalid'" />
+							<div class="invalid-feedback" th:if="${#fields.hasErrors('lugar')}" th:errors="*{lugar}"></div>
+						</div>
+					</div>
+					
+					
+
+					<div class="form-group row">
+						<label for="dfechavenci" class="col-sm-2 col-form-label" >Fecha del Albaran</label>
+						<div class="col-sm-2">
+							<input class="form-control" id="date" name="dfechavenci" type="date"/><small
+								class="form-text text-danger"
+								th:if="${#fields.hasErrors('dfechavenci')}"
+								th:errors="*{dfechavenci}"></small>
+						</div>
+					</div>
+				
+						
+					<div class="form-group row">
+						<label class="col-sm-2 col-form-label">Nº Albaran</label>
+						<div class="col-sm-2">
+							<input type="text" th:field="*{numeroAlbaran}" class="form-control"
+								th:errorclass="'form-control alert-danger'" /> <small
+								class="form-text text-danger" th:if="${#fields.hasErrors('numeroAlbaran')}" th:errors="*{numeroAlbaran}"></small>
+						</div>
+					</div>
+					
+					<div class="form-group row">
+						<label class="col-sm-2 col-form-label">Proveedor</label>
+						<div class="col-sm-4">
+							<select class="form-control"  th:field="*{proveedor}">
+								<option th:each="proveedor:${proveedores}"
+									th:value="${proveedor.nproveedor}" th:text="${proveedor.vnombre}"
+									th:selected="false" />
+							</select> <small class="form-text text-danger"
+								th:if="${#fields.hasErrors('proveedor')}" th:errors="*{proveedor}"></small>
+						</div>
+					</div>
+
+					
+
+					<div class="form-group row">
+						<label for="buscar_producto" class="col-sm-2 col-form-label"
+							th:text="'Buscar producto'"></label>
+						<div class="col-sm-6">
+							<input type="text" name="buscar_producto" id="buscar_producto"
+								class="form-control" />
+						</div>
+					</div>
+
+					<table th:replace="albaran/plantilla-items :: itemsFactura"></table>
+
+					<table id="cargarItemProductos"
+						class="table table-sm table-striped table-hover">
+						<thead>
+							<tr>
+								<th>Nombre</th>							
+								<th>Cantidad</th>							
+								<th>Eliminar</th>
+							</tr>
+						</thead>
+						<tbody>
+						</tbody>
+					</table>
+					<h5>Total <span class="badge badge-secondary" id="gran_total">0</span></h5>
+<div class="form-group row">
+						<label for="observacion" class="col-sm-2 col-form-label"
+							th:text="'Observación'"></label>
+						<div class="col-sm-6">
+							<textarea th:field="*{observacion}" class="form-control"></textarea>
+						</div>
+					</div>
+					
+						<div class="form-group row">
+						<label for="file" class="col-sm-2 col-form-label">Foto</label>
+						<div class="col-sm-6">
+							<input type="file" name="file" class="form-control" />
+						</div>
+					</div>
+					<div class="form-group row">
+						<div class="col-sm-6">
+							<input type="submit" th:value="${titulo}"
+								class="btn btn-secondary" />
+						</div>
+					</div>
+				</form>
+
+
+			</div>
+		</div>
+	</div>
+
+	<footer th:replace="layout/layoutMcompras :: footer"></footer>
+	<script th:replace="factura/js/autocomplete-productos :: javascript"></script>
+
+</body>
+</html>

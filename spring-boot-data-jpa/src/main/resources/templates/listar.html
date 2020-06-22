@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="layout/layoutMcompras :: head">
+<meta charset="utf-8" />
+
+<title>Spring Boot + JPA + Datatables</title>
+<link rel="stylesheet" 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<link rel="stylesheet" 	href="https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css">
+<script 	src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+
+<link rel="stylesheet" href="../css/table.css">
+
+</head>
+<body>
+
+	<header th:replace="layout/layoutMcompras :: header"></header>
+
+	<div class="container py-2">
+
+		<div class="card bg-light">
+			<div class="card-header" th:text="${titulo}"></div>
+			<div class="card-body">
+			<div class="form-group row">
+
+				<h4 class="card-title">
+					<a th:href="@{/form}" class="btn btn-primary btn-sm">Crear Cliente</a>
+				</h4>
+				<div class="col-sm-6">
+						<form th:action="@{/buscar}" method="post">
+							<label for="nombre" class="card-title" th:text="'Buscar Cliente'"></label>
+							<input type="text" id="nombre" name="nombre"> <input
+								type="submit" class="btn btn-primary btn-sm" value="Buscar">							
+						</form>
+					</div>		
+
+				<table id="table" class="table mt-2">
+						<thead class="thead-dark" >
+						<tr>
+							<th>#</th>
+							<th>Nombre</th>						
+							<th>Email</th>							
+							<th>Teléfono</th>
+							<th>Direccion</th>
+							<th>Crear </th>
+							<th>Crear </th>
+							<th>Editar</th>
+							<th>Eliminar</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="cliente: ${clientes}">
+							<td><a class="btn btn-primary btn-xs"
+								th:href="@{/ver/} + ${cliente.id}" th:text="${cliente.id}"></a></td>
+							<td th:text="${cliente.nombre}+' '+${cliente.apellido}"></td>							
+							<td th:text="${cliente.email}"></td>
+							<!-- <td th:text="${#dates.format(cliente.createAt,'dd-MM-yyyy')}"></td> -->
+							<td th:text="${cliente.telefono}"></td>
+							<td th:text="${cliente.direccion}"></td>
+							
+							<td><a class="btn btn-success btn-sm"
+								th:href="@{'/facturas/form/' + ${cliente.id}}"
+								th:text="'Factura'"></a></td>
+								
+							<td><a class="btn btn-success btn-sm"
+								th:href="@{'/albaranes/form/' + ${cliente.id}}"
+								th:text="'Albaran'"></a></td>
+								
+							<td><a class="btn btn-primary btn-sm"
+								th:href="@{/form/} + ${cliente.id}" th:text="'Editar'"></a></td>
+							<td><a class="btn btn-danger btn-sm"
+								th:href="@{/eliminar/} + ${cliente.id}" th:text="'Eliminar'"
+								onclick="return confirm('Est�s seguro que quieres eliminar?');"></a></td>
+						</tr>
+					</tbody>
+
+				</table>
+				<nav th:replace="paginator-nav :: paginator"></nav>
+			</div>
+		</div>
+</div>
+	</div>
+
+	<footer th:replace="layout/layoutMcompras :: footer"></footer>
+</body>
+
+<!-- ordenar la tabla poner en un archivo par poder luego llamar -->
+<script type="text/javascript">
+	
+</script>
+
+<style>
+table tr th {
+	cursor: pointer;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+.sorting {
+	background-color: #D4D4D4;
+}
+
+.asc:after {
+	content: ' ↑';
+}
+
+.desc:after {
+	content: " ↓";
+}
+</style>
+</html>

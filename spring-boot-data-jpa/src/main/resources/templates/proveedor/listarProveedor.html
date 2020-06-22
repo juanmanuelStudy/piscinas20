@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<!--  Bootstrap  -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+<!-- Plugin Leaflet.awesome-markers  -->
+  <link rel="stylesheet" href="../dist/leaflet.awesome-markers.css">
+  <script src="../dist/leaflet.awesome-markers.js">  </script>
+
+<!-- Plugin Leaflet.awesome-markers  -->
+  <link rel="stylesheet" href="../dist/leaflet.awesome-markers.css">
+  <script src="../dist/leaflet.awesome-markers.js"></script>
+
+<head th:replace="layout/layout :: head"></head>
+<body>
+
+	<header th:replace="layout/layoutMcompras :: header"></header>
+
+	<div class="container py-2">
+
+		<div class="card bg-light">
+			<div class="card-header" th:text="${titulo}"></div>
+			<div class="card-body">
+			<div class="form-group row">
+				<h4 class="card-title">
+					<a th:href="@{/proveedor/form}"  class="btn btn-primary btn-sm">Crear Proveedor</a>
+				</h4>
+					<div class="col-sm-6">
+						<form th:action="@{/proveedor/buscar}" method="post">
+							<label for="nombre" class="card-title" th:text="'Buscar Proveedor'"></label>
+							<input type="text" id="nombre" name="nombre"> <input
+								type="submit" class="btn btn-primary btn-sm" value="Buscar">
+					
+						</form>
+					</div>	
+
+				<table class="table table-striped">
+					<thead class="thead-dark">
+						<tr>
+							<th>#</th>
+							<th>Nombre</th>
+							<th COLSPAN="1">direccion</th>
+							<th>Teléfono</th>							
+							<th>Email</th>
+														
+							<th>Editar</th>
+							<th>Eliminar</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="proveedor:${proveedor}">
+							<td
+								th:text="${proveedor.nproveedor}"></td>							
+							<td th:text="${proveedor.vnombre}"></td>
+							<td th:text="${proveedor.vdireccion}"></td>
+							<td th:text="${proveedor.ntelefono}"></td>
+							<td th:text="${proveedor.vemail}"></td>							
+														
+							
+							<!--hasta que no tenga el modulo completo no se vera con el tema de genera factura al los clientes
+							<td><a class="btn btn-success btn-sm"
+								th:href="@{'/factura/form/' + ${clientes.ncliente}}"
+								th:text="'crear factura'"></a></td> 
+								-->
+							<td><a class="btn btn-primary btn-sm"
+								th:href="@{/proveedor/form/} + ${proveedor.nproveedor}">Editar</a>
+							</td>
+							
+							<td><a class="btn btn-danger btn-sm"
+								th:href="@{/proveedor/eliminar/} + ${proveedor.nproveedor}" 
+								onclick="return confirm('Est�s seguro que quieres eliminar el proveedor?');">Eliminar</a>
+								</td>
+						</tr>
+					</tbody>
+
+				</table>
+			</div>
+			</div>
+		</div>
+				<nav th:replace = "paginator-nav ::paginator"></nav>
+
+	</div>
+
+	<footer th:replace="layout/layoutMcompras :: footer"></footer>
+</body>
+</html>

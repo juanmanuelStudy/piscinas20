@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+
+<head th:replace="layout/layoutMcompras :: head">
+<meta charset="utf-8" />
+
+<title>Spring Boot + JPA + Datatables</title>
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<link rel="stylesheet"
+	href="https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css">
+<script
+	src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="../css/table.css">
+
+</head>
+<body>
+
+	<header th:replace="layout/layoutMcompras :: header"> </header>
+
+	<div class="container py-4">
+
+		<div class="card bg-light">
+			<div class="card-header" th:text="${titulo}"></div>
+			<div class="card-body">
+				<div class="form-group row">
+					<div class="col-sm-12">
+						<form th:action="@{/albaranes/buscar}" method="post">
+							<label for="cliente" class="card-title" th:text="'Cliente'"></label>
+							 <input type="text" id="cliente" name="cliente">
+							 
+							 <label for="lugar" class="card-title" th:text="'Lugar'"></label>
+							 <input type="text" id="lugar" name="lugar">
+							 
+							 <label for="proveedor" class="card-title" th:text="'Proveedor'"></label>
+							 <input type="text" id="proveedor" name="proveedor">
+							 
+							 <input type="submit" class="btn btn-primary btn-sm" value="Buscar">							
+						</form>
+					</div>				
+					<div class="table-responsive">
+					<table id="table" class="table mt-2">
+						<thead class="thead-dark">
+							<tr>
+								<th>#</th>
+								<th>Cliente</th>
+								<th>Proveedor</th>
+								<th>F.Albaran</th>
+								<th>Lugar</th>
+								<th>Nº Albaran</th>
+								<th>Ver</th>
+							
+							</tr>
+						</thead>
+						 <tbody>
+							<tr th:each="albaranes:${albaranes}">
+								<td th:text="${albaranes.id}"></td>
+								<td th:text="${albaranes.cliente.nombre}"></td>
+								<td th:text="${albaranes.proveedor.vnombre}"></td>								
+								<td th:text="${albaranes.dfechavenci}"></td>								
+								<td th:text="${albaranes.lugar}"></td>
+								<td th:text="${albaranes.numeroAlbaran}"></td>
+						<td><a class="btn btn-primary btn-sm" th:href="@{'/albaranes/ver/' + ${albaranes.id}}" th:text="'detalle'"></a></td>							</tr>
+						</tbody>
+
+					</table>
+					</div>
+				</div>
+			</div>
+			<nav th:replace="paginator-nav ::paginator"></nav>
+		</div>
+	</div>
+
+	<footer th:replace="layout/layoutMcompras :: footer"></footer>
+</body>
+
+<!-- ordenar la tabla poner en un archivo par poder luego llamar -->
+<script type="text/javascript">
+	
+</script>
+
+<style>
+table tr th {
+	cursor: pointer;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+.sorting {
+	background-color: #D4D4D4;
+}
+
+.asc:after {
+	content: ' ↑';
+}
+
+.desc:after {
+	content: " ↓";
+}
+</style>
+
+</html>
