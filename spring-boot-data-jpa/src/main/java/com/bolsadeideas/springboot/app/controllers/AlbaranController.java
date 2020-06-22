@@ -97,7 +97,7 @@ public class AlbaranController {
 
 		Page<Albaran> albaranes = albaranService.findAll(pageRequest);
 
-		PageRender<Albaran> pageRender = new PageRender<Albaran>("listarAlbaranes", albaranes);
+		PageRender<Albaran> pageRender = new PageRender<Albaran>("/listarAlbaranes", albaranes);
 		model.addAttribute("titulo", "Listado de Albaranes");
 		model.addAttribute("albaranes", albaranes);
 		model.addAttribute("page", pageRender);
@@ -245,7 +245,7 @@ Pageable pageRequest = PageRequest.of(page, 10);
  log.info("NOMBRE DEL PROVEEDOR "+proveedor.toString());
  log.info("NOMBRE DEL Lugar "+lugar.toString());
 
- PageRender<Albaran> pageRender = new PageRender<Albaran>("listarAlbaran", albaran);
+ PageRender<Albaran> pageRender = new PageRender<Albaran>("/listarAlbaran", albaran);
 
  //captura la candidad buscada en el filtro
  	model.addAttribute("cantidad",albaranService.findByClienteAndProveedorAndLugar(cliente, lugar,proveedor, pageable).getNumberOfElements());
