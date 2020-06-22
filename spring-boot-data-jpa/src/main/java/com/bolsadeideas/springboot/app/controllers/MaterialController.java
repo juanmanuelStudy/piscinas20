@@ -49,7 +49,7 @@ public class MaterialController {
 				
 		PageRequest pageRequest =  PageRequest.of(page,5);
 		Page <Producto> material = materialService.findAll(pageRequest);
-		PageRender<Producto> pageRender = new PageRender<>("listarMaterial",material);
+		PageRender<Producto> pageRender = new PageRender<>("/listarMaterial",material);
 		model.addAttribute("material",material);
 		model.addAttribute("page",pageRender);
 		model.addAttribute("titulo", "Listado de Material");
