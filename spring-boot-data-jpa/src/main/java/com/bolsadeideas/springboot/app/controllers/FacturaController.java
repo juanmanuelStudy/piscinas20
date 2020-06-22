@@ -106,7 +106,7 @@ public class FacturaController{
 
 		Page<Factura> facturas = clienteService.findByvenviadoagestor(pageRequest);
 
-		PageRender<Factura> pageRender = new PageRender<Factura>("listarFactura",facturas);
+		PageRender<Factura> pageRender = new PageRender<Factura>("/listarFactura",facturas);
 		model.addAttribute("titulo", "Listado de Facturas Sin Contabilizar");
 		model.addAttribute("facturas",facturas);
 		model.addAttribute("page", pageRender);
@@ -120,7 +120,7 @@ public class FacturaController{
 
 		Page<Factura> facturas = clienteService.findByvenviadoagestorS(pageRequest);
 
-		PageRender<Factura> pageRender = new PageRender<Factura>("listarFacturaCon",facturas);
+		PageRender<Factura> pageRender = new PageRender<Factura>("/listarFacturaCon",facturas);
 		model.addAttribute("titulo", "Listado de Facturas Contabilizadas");
 		model.addAttribute("facturas",facturas);
 		model.addAttribute("date",date);
