@@ -1,0 +1,150 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/layoutMcompras :: head"></head>
+
+
+<!-- Extra JavaScript/CSS added manually in "Settings" tab -->
+<!-- Include jQuery -->
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
+ <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script> 
+
+<script>
+$(function() {
+  $("#date").datepicker();  
+});
+</script>
+<style>
+.bootstrap-iso .formden_header h2, .bootstrap-iso .formden_header p,
+	.bootstrap-iso form {
+	font-family: Arial, Helvetica, sans-serif;
+	color: black
+}
+
+.bootstrap-iso form button, .bootstrap-iso form button:hover {
+	color: #337ab7 !important;
+}
+
+.bootstrap-iso .outline, .bootstrap-iso .outline:focus {
+	background-color: transparent;
+	
+	border: 2px solid #337ab7
+}
+
+.bootstrap-iso .outline:hover {
+	background-color: transparent;
+	border: 2px solid #5ba2df;
+	color: #5ba2df !important
+}
+
+.asteriskField {
+	color: red;
+}
+</style>
+
+<body>
+
+	<header th:replace="layout/layoutMcompras :: header"></header>
+
+	<div class="container py-4">
+
+		<div class="card bg-dark text-white">
+			<div class="card-header" th:text="${titulo}"></div>
+			<div class="card-body">
+
+				<div th:object="${cliente}" th:remove="tag">
+					<ul th:if="${#fields.hasErrors('*')}" class="alert alert-danger">
+						<li th:each="err: ${#fields.errors('*')}" th:text="${err}"></li>
+					</ul>
+				</div>
+				<form th:action="@{/form}" th:object="${cliente}" method="post" >
+					<div class="form-group row">
+						<label class="col-sm-2 col-form-label">Nombre</label>
+						<div class="col-sm-6">
+							<input type="text" th:field="*{nombre}" class="form-control"
+								th:errorclass="'form-control alert-danger'" /> <small
+								class="form-text text-danger"
+								th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></small>
+						</div>
+					</div>
+					<div class="form-group row">
+						<label class="col-sm-2 col-form-label">Apellido</label>
+						<div class="col-sm-6">
+							<input type="text" th:field="*{apellido}" class="form-control"
+								th:errorclass="'form-control alert-danger'" /> <small
+								class="form-text text-danger"
+								th:if="${#fields.hasErrors('apellido')}" th:errors="*{apellido}"></small>
+						</div>
+					</div>
+					
+						<div class="form-group row">
+						<label class="col-sm-2 col-form-label">Dirección</label>
+						<div class="col-sm-6">
+							<input type="text" th:field="*{direccion}" class="form-control"
+								th:errorclass="'form-control alert-danger'" /> <small
+								class="form-text text-danger"
+								th:if="${#fields.hasErrors('direccion')}" th:errors="*{direccion}"></small>
+						</div>
+					</div>
+					
+						<div class="form-group row">
+						<label class="col-sm-2 col-form-label">Teléfono</label>
+						<div class="col-sm-6">
+							<input type="text" th:field="*{telefono}" class="form-control"
+								th:errorclass="'form-control alert-danger'" /> <small
+								class="form-text text-danger"
+								th:if="${#fields.hasErrors('telefono')}" th:errors="*{telefono}"></small>
+						</div>
+					</div>
+					
+					<div class="form-group row">
+						<label class="col-sm-2 col-form-label">Email</label>
+						<div class="col-sm-6">
+							<input type="text" th:field="*{email}" class="form-control"
+								th:errorclass="'form-control alert-danger'" /> <small
+								class="form-text text-danger"
+								th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></small>
+						</div>
+					</div>
+				
+					
+					<!-- HTML Form (wrapped in a .bootstrap-iso div) 
+
+					<div class="form-group row">
+						<label class="col-sm-2 col-form-label" for="createAt">Fecha</label>
+						<div class="col-sm-6">
+							<input class="form-control" id="date" name="createAt"
+								 type="text" /> <small
+								class="form-text text-danger"
+								th:if="${#fields.hasErrors('createAt')}"
+								th:errors="*{createAt}"></small>
+						</div>
+					</div>
+					-->
+				
+					
+					<!--  <div class="form-group row">
+						<label for="file" class="col-sm-2 col-form-label">Foto</label>
+						<div class="col-sm-6">
+							<input type="file" name="file" class="form-control" />
+						</div>
+					</div>
+					-->
+					
+					<div class="form-group row">
+						<div class="col-sm-6">
+							<input type="submit" value="Crear Cliente" class="btn btn-secondary" />
+						</div>
+					</div>
+
+				</form>
+			</div>
+		</div>
+	</div>
+	<footer th:replace="layout/layoutMcompras :: footer"></footer>
+
+</body>
+</html>
