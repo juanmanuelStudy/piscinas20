@@ -110,7 +110,7 @@ public class FacturaController{
 		model.addAttribute("titulo", "Listado de Facturas Sin Contabilizar");
 		model.addAttribute("facturas",facturas);
 		model.addAttribute("page", pageRender);
-		return "/factura/listarFactura";
+		return "factura/listarFactura";
 	}
 	
 	@RequestMapping(value = "/listarFacturasContabilizadas", method = RequestMethod.GET)
@@ -125,7 +125,7 @@ public class FacturaController{
 		model.addAttribute("facturas",facturas);
 		model.addAttribute("date",date);
 		model.addAttribute("page", pageRender);
-		return "/factura/listarFacturaCon";
+		return "factura/listarFacturaCon";
 	}
 	
 	
@@ -297,7 +297,7 @@ Pageable pageRequest = PageRequest.of(page, 10);
 	model.addAttribute("countMaterial", materialService.count());
 	model.addAttribute("countProveedor", proveedorService.count());	
 	
-	return "/factura/listarFactura";
+	return "factura/listarFactura";
 	}
 	
 	//filtro de busqueda de facturas
@@ -340,7 +340,7 @@ Pageable pageRequest = PageRequest.of(page, 10);
 		//model.addAttribute("countMaterial", materialService.count());
 		//model.addAttribute("countProveedor", proveedorService.count());	
 		
-		return "/factura/listarFacturaCon";
+		return "factura/listarFacturaCon";
 		}
 		
 		@GetMapping("/contabilizar/{npersonal}")
@@ -362,6 +362,6 @@ Pageable pageRequest = PageRequest.of(page, 10);
 			return "redirect:/facturas/listarFacturasSinContabilizar";
 
 			}
-			return "/factura/listarFactura";
+			return "factura/listarFactura";
 		}
 }
