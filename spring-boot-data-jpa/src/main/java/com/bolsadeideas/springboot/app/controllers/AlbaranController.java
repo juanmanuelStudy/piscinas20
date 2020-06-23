@@ -101,7 +101,7 @@ public class AlbaranController {
 		model.addAttribute("titulo", "Listado de Albaranes");
 		model.addAttribute("albaranes", albaranes);
 		model.addAttribute("page", pageRender);
-		return "/albaran/listarAlbaranes";
+		return "albaran/listarAlbaranes";
 	}
 	
 	@GetMapping("/ver/{id}")
@@ -256,7 +256,7 @@ Pageable pageRequest = PageRequest.of(page, 10);
 	//model.addAttribute("countMaterial", materialService.count());
 	model.addAttribute("countProveedor", proveedorService.count());	
 	
-	return "/albaran/listarAlbaranes";
+	return "albaran/listarAlbaranes";
 	}
 
 }
