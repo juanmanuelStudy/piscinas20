@@ -56,7 +56,7 @@ public class MaterialController {
 		model.addAttribute("countMaterial", materialService.count());
 		model.addAttribute("countCliente", clienteService.count());
 		model.addAttribute("countProveedor", proveedorService.count());
-		return "/productos/listarMaterial";
+		return "productos/listarMaterial";
 	}
 		
 
@@ -79,7 +79,7 @@ public class MaterialController {
 			model.put("proveedores",proveedorService.findAll());
 			model.put("titulo", "Formulario de Material");
 		
-		return "/productos/materialForm";
+		return "productos/materialForm";
 	}
 	
 	@RequestMapping(value="/form/{id}")
@@ -100,7 +100,7 @@ public class MaterialController {
 		model.put("material", material);
 		model.put("titulo", "Editar material");
 		model.put("proveedores",proveedor);
-		return "/productos/materialForm";
+		return "productos/materialForm";
 	}
 	
 
@@ -127,7 +127,7 @@ public class MaterialController {
 			model.addAttribute("countMaterial", materialService.count());
 			model.addAttribute("countCliente", clienteService.count());
 			model.addAttribute("countProveedor", proveedorService.count());
-			return "/productos/listarMaterial";
+			return "productos/listarMaterial";
 }
 	
 	
