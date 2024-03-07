@@ -124,6 +124,8 @@
 						<div class="col-sm-6">
 							<input type="submit" value="Crear Proveedor"
 								class="btn btn-secondary" />
+							<button type="reset" class="btn btn-secondary">Resetear</button>
+							<a th:href="@{'/proveedor/listarProveedor'}" class="btn btn-secondary">Listar Proveedores</a>
 						</div>
 					</div>
 					<input type="hidden" th:field="*{nproveedor}"/>

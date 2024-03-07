@@ -18,7 +18,7 @@
 
 	<header th:replace="layout/layoutMcompras :: header"></header>
 
-	<div class="container py-2">
+	<div class="container p-lg-1">
 
 		<div class="card bg-light">
 			<div class="card-header" th:text="${titulo}"></div>
@@ -45,7 +45,7 @@
 							<th>Teléfono</th>
 							<th>Direccion</th>
 							<th>Crear </th>
-							<th>Crear </th>
+							<th>Crear</th>
 							<th>Editar</th>
 							<th>Eliminar</th>
 						</tr>
@@ -60,14 +60,12 @@
 							<td th:text="${cliente.telefono}"></td>
 							<td th:text="${cliente.direccion}"></td>
 							
-							<td><a class="btn btn-success btn-sm"
-								th:href="@{'/facturas/form/' + ${cliente.id}}"
-								th:text="'Factura'"></a></td>
-								
+							<td ><a class="btn btn-success btn-sm"
+								th:href="@{'/albaranes/form/' + ${cliente.id}}"
+								th:text="'Pedido'"></a></td>
 							<td><a class="btn btn-success btn-sm"
 								th:href="@{'/albaranes/form/' + ${cliente.id}}"
 								th:text="'Albaran'"></a></td>
-								
 							<td><a class="btn btn-primary btn-sm"
 								th:href="@{/form/} + ${cliente.id}" th:text="'Editar'"></a></td>
 							<td><a class="btn btn-danger btn-sm"
