@@ -1,10 +1,9 @@
 package com.bolsadeideas.springboot.app.models.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.io.Serializable;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -24,157 +23,161 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 
-
-import org.springframework.format.annotation.DateTimeFormat;
-
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Entity
 @Table(name = "clientes")
 public class Cliente implements Serializable {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String nombre;
 
-	@NotEmpty
-	private String nombre;
+    @NotEmpty
+    private String apellido;
 
-	@NotEmpty
-	private String apellido;
+    @NotEmpty
+    @Email
+    private String email;
 
-	@NotEmpty
-	@Email
-	private String email;
-	
-	private String telefono;
-	
-	private String direccion;
+    private String telefono;
 
-	
-	@Column(name = "create_at")
-	@Temporal(TemporalType.DATE)	
-	private Date createAt;
-	
-	@PrePersist
-	public void prePersist() {
-		createAt = new Date();
-	}
-
-	@OneToMany(mappedBy = "cliente", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private List<Factura> facturas;
-	
-	@OneToMany(mappedBy = "cliente", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private List<Albaran> albaranes;
-
-	private String foto;
-
-	public Cliente() {
-		facturas = new ArrayList<Factura>();
-		albaranes = new ArrayList<Albaran>();
-	}
+    private String direccion;
 
 
+    @Column(name = "create_at")
+    @Temporal(TemporalType.DATE)
+    private Date createAt;
 
-	public Long getId() {
-		return id;
-	}
+    @PrePersist
+    public void prePersist() {
+        createAt = new Date();
+    }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    @JsonIgnore
+    @OneToMany(mappedBy = "cliente", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Factura> facturas;
 
-	public String getNombre() {
-		return nombre;
-	}
+    @JsonIgnore
+    @OneToMany(mappedBy = "cliente", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Albaran> albaranes;
 
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
-	}
+    @JsonIgnore
+    @OneToMany(mappedBy = "cliente", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Pedido> pedido;
 
-	public String getApellido() {
-		return apellido;
-	}
+    private String foto;
 
-	public void setApellido(String apellido) {
-		this.apellido = apellido;
-	}
+    public Cliente() {
+        facturas = new ArrayList<Factura>();
+        albaranes = new ArrayList<Albaran>();
+    }
 
-	public String getEmail() {
-		return email;
-	}
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public Date getCreateAt() {
-		return createAt;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public void setCreateAt(Date createAt) {
-	
-		this.createAt = createAt;
-	}
+    public String getNombre() {
+        return nombre;
+    }
 
-	public String getFoto() {
-		return foto;
-	}
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
 
-	public void setFoto(String foto) {
-		this.foto = foto;
-	}
+    public String getApellido() {
+        return apellido;
+    }
 
-	public List<Factura> getFacturas() {
-		return facturas;
-	}
+    public void setApellido(String apellido) {
+        this.apellido = apellido;
+    }
 
-	public void setFacturas(List<Factura> facturas) {
-		this.facturas = facturas;
-	}
+    public String getEmail() {
+        return email;
+    }
 
-	public void addFactura(Factura factura) {
-		facturas.add(factura);
-	}
-	public void addAlbaran(Albaran albaran) {
-		albaranes.add(albaran);
-	}
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
-	public static long getSerialversionuid() {
-		return serialVersionUID;
-	}
-		
-	public List<Albaran> getAlbaranes() {
-		return albaranes;
-	}
+    public Date getCreateAt() {
+        return createAt;
+    }
 
-	public void setAlbaranes(List<Albaran> albaranes) {
-		this.albaranes = albaranes;
-	}
+    public void setCreateAt(Date createAt) {
 
-	
-	
-	public String getDireccion() {
-		return direccion;
-	}
+        this.createAt = createAt;
+    }
 
-	public void setDireccion(String direccion) {
-		this.direccion = direccion;
-	}
+    public String getFoto() {
+        return foto;
+    }
 
-	
-	public String getTelefono() {
-		return telefono;
-	}
+    public void setFoto(String foto) {
+        this.foto = foto;
+    }
 
-	public void setTelefono(String telefono) {
-		this.telefono = telefono;
-	}
-	
-	
+    public List<Factura> getFacturas() {
+        return facturas;
+    }
 
-	@Override
-	public String toString() {
-		return nombre + " " + apellido;
-	}
-	
-	private static final long serialVersionUID = 1L;
+    public void setFacturas(List<Factura> facturas) {
+        this.facturas = facturas;
+    }
+
+    public void addFactura(Factura factura) {
+        facturas.add(factura);
+    }
+
+    public void addAlbaran(Albaran albaran) {
+        albaranes.add(albaran);
+    }
+
+    public static long getSerialversionuid() {
+        return serialVersionUID;
+    }
+
+    public List<Albaran> getAlbaranes() {
+        return albaranes;
+    }
+
+    public List<Pedido> getPedido() {
+        return pedido;
+    }
+
+    public void setAlbaranes(List<Albaran> albaranes) {
+        this.albaranes = albaranes;
+    }
+
+
+    public String getDireccion() {
+        return direccion;
+    }
+
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
+    }
+
+
+    public String getTelefono() {
+        return telefono;
+    }
+
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
+    }
+
+
+    @Override
+    public String toString() {
+        return nombre + " " + apellido;
+    }
+
+    private static final long serialVersionUID = 1L;
 }

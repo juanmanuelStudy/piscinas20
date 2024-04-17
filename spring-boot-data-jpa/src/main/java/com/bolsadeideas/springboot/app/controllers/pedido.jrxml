@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Definición del informe -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd"
+              name="PedidoReport"
+              pageWidth="595" pageHeight="842"
+              columnWidth="555" leftMargin="20" rightMargin="20"
+              topMargin="20" bottomMargin="20"
+              uuid="8eaae10c-5b9b-46a4-b3b7-7b32e3c92681">
+    <!-- Definición de los campos a mostrar en el informe -->
+    <field name="id" class="java.lang.Long"/>
+    <field name="nombreCliente" class="java.lang.String"/>
+    <field name="observacion" class="java.lang.String"/>
+    <field name="fechaPedido" class="java.util.Date"/>
+    <field name="estado" class="java.lang.String"/>
+
+    <!-- Definición de los parámetros (si los hubiera) -->
+    <parameter name="title" class="java.lang.String"/>
+
+    <!-- Estilos y propiedades del informe -->
+    <title>
+        <band height="50">
+            <staticText>
+                <reportElement x="0" y="0" width="555" height="30" uuid="0a79963a-8a5f-45d1-8f1e-332144186f0a"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font size="18" isBold="true"/>
+                </textElement>
+                <text><![CDATA[$P{title}]]></text>
+            </staticText>
+        </band>
+    </title>
+
+    <!-- Definición del detalle del informe -->
+    <detail>
+        <band height="20">
+            <textField>
+                <reportElement x="0" y="0" width="100" height="20" uuid="6e07a677-1256-4f61-8f08-9928c70a9bfa"/>
+                <textFieldExpression><![CDATA[$F{id}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="100" y="0" width="200" height="20" uuid="fc8a5886-9d4b-4a85-ae8b-d8b3580fb64a"/>
+                <textFieldExpression><![CDATA[$F{nombreCliente}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="300" y="0" width="150" height="20" uuid="0d56f6e4-2eb8-4994-a457-7a5a1bf5f618"/>
+                <textFieldExpression><![CDATA[$F{observacion}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="300" y="0" width="150" height="20" uuid="0d56f6e4-2eb8-4994-a457-7a5a1bf5f618"/>
+                <textFieldExpression><![CDATA[$F{fechaPedido}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="450" y="0" width="100" height="20" uuid="d94a38f1-1aa0-49e0-9f59-d19d44fe14f8"/>
+                <textFieldExpression><![CDATA[$F{total}]]></textFieldExpression>
+            </textField>
+        </band>
+    </detail>
+
+    <!-- Establecer la fuente de datos para el informe -->
+    <summary>
+        <band height="20">
+            <staticText>
+                <reportElement x="0" y="0" width="100" height="20" uuid="4127cc50-2b61-4d40-8c19-cb58b893c9b4"/>
+                <text><![CDATA[Id]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="100" y="0" width="200" height="20" uuid="1d5880d2-7d2c-4d18-b11e-6a1071545f5b"/>
+                <text><![CDATA[Nombre del Cliente]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="300" y="0" width="150" height="20" uuid="a8f7e49f-7843-4aa1-b308-47e40d9f2529"/>
+                <text><![CDATA[Observacion]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="300" y="0" width="150" height="20" uuid="a8f7e49f-7843-4aa1-b308-47e40d9f2523"/>
+                <text><![CDATA[Fecha del Pedido]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="450" y="0" width="100" height="20" uuid="9e732bfb-5056-4a61-9886-6b89d6f56829"/>
+                <text><![CDATA[Total]]></text>
+            </staticText>
+        </band>
+    </summary>
+</jasperReport>

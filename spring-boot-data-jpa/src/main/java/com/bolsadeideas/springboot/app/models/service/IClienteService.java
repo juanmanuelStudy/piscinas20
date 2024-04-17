@@ -1,16 +1,14 @@
 package com.bolsadeideas.springboot.app.models.service;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
+import com.bolsadeideas.springboot.app.models.entity.*;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperPrint;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.Query;
-
-import com.bolsadeideas.springboot.app.models.entity.Albaran;
-import com.bolsadeideas.springboot.app.models.entity.Cliente;
-import com.bolsadeideas.springboot.app.models.entity.Factura;
-import com.bolsadeideas.springboot.app.models.entity.Producto;
 
 public interface IClienteService {
 
@@ -31,13 +29,18 @@ public interface IClienteService {
 	public Producto findProductoById(Long id);
 	
 	public Factura findFacturaById(Long id);
-	
+
+	public Page <Factura> findFacturaByIdPage(Long id, Pageable pageRequestFactura);
+
 	public void deleteFactura(Long id);
-	
+
+	public void deletePedido(Long id);
 
 	public void saveAlbaran(Albaran albaran);
 	
-	public Albaran findAlbaranById(Long id);		
+	public Albaran findAlbaranById(Long id);
+
+	public Pedido findPedidoById(Long id);
 	
 	public void deleteAlbaran(Long id);
 
@@ -55,6 +58,9 @@ public interface IClienteService {
 	
 	public Page<Factura> findByClienteAndProveedorAndLugarAndEmviadoN(String desde,String hasta,String cliente,String proveedor,String lugar,Pageable pageable);
 
+	public Page<Factura> findByClienteAndProveedorAndTipo(String cliente,String tipo,Pageable pageable);
+
+	JasperPrint generateJasperPrints(String cliente, String tipo) throws IOException, JRException;
 
 	public Factura  modificarContbilizar(Factura factura);
 	
@@ -62,6 +68,17 @@ public interface IClienteService {
 	
 	public Factura listarFactuaByNumero(String numero);
 	
-	
+	public Page<Factura> findAllByCliente(Long id, Pageable pageable);
+
+	public Page<Factura> findFacturaAll(Pageable pageable);
+
+	//JasperPrint generateJasperPrint(String cliente, String estado)throws IOException, JRException;
+
+	//Busca la ultima factura
+	//public Factura obtenerUltimaFactura();
+
+
+
+
 
 }

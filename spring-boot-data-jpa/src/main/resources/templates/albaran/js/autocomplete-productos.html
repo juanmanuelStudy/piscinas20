@@ -59,15 +59,12 @@
 					this.calcularGranTotal();
 				},
 				hasProducto: function(id){
-					
 					var resultado = false;
-					
 					$('input[name="item_id[]"]').each(function(){
 						if(parseInt(id) == parseInt($(this).val()) ){
 							resultado = true;
 						}
 					});
-					
 					return resultado;
 				},
 				incrementaCantidad: function(id,precio){
@@ -81,11 +78,9 @@
 				},
 				calcularGranTotal: function(){
 					var total = 0;
-					
 					$('span[id^="total_importe_"]').each(function(){
 						total += parseInt($(this).html());
 					});
-					
 					$('#gran_total').html(total);
 				}
 		}

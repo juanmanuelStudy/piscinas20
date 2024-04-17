@@ -1,5 +1,10 @@
 package com.bolsadeideas.springboot.app.models.entity;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -22,173 +27,159 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
-
-
 @Entity
+@Data
+@Getter
+@Setter
 @Table(name = "ALBARAN")
 public class Albaran implements Serializable {
+    private static final long serialVersionUID = 1456456L;
 
-	private static final long serialVersionUID = 1456456L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "IDENTIFICADOR")
+    @SequenceGenerator(sequenceName = "albaran_seq", allocationSize = 1, name = "IDENTIFICADOR")
+    private Long id;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "IDENTIFICADOR")
-	@SequenceGenerator(sequenceName = "albaran_seq", allocationSize = 1, name = "IDENTIFICADOR")
-	private Long id;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Cliente cliente;
 
+    @ManyToOne
+    @JoinColumn(name = "NPROVEEDOR")
+    private Proveedor proveedor;
 
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "albaran_id")
+    private List<ItemAlbaran> items;
+    public Albaran() {
+        this.items = new ArrayList<ItemAlbaran>();
+    }
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	private Cliente cliente;
+    private String descripcion;
 
-	@ManyToOne
-	@JoinColumn(name = "NPROVEEDOR")
-	private Proveedor proveedor;
+    private String observacion;
 
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinColumn(name = "albaran_id")
-	private List<ItemAlbaran> items;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date dfecha;
 
-	public Albaran() {
-		this.items = new ArrayList<ItemAlbaran>();
-	}
-	
-	
-	private String descripcion;
-	
-	
-	private String observacion;
+    private String dfechavenci;
+    private String lugar;
+    private String numeroAlbaran;
 
-	
-	@Temporal(TemporalType.TIMESTAMP)	
-	private Date dfecha;
+    private Boolean pasadoAlbaran = false;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private String foto;
 
-		
-	private String dfechavenci;
+    @PrePersist
+    public void prePersit() {
+        dfecha = new Date();
+    }
 
-	
-	private String lugar;
+    public void addItemAlbaran(ItemAlbaran item) {
+        this.items.add(item);
+    }
 
-	
-	private String numeroAlbaran;
-	
-	
-	private String foto;
+    public Double getTotal() {
+        Double total = 0.0;
 
-	@PrePersist
-	public void prePersit() {
-		dfecha = new Date();
-	}
+        int size = items.size();
 
-	public void addItemAlbaran(ItemAlbaran item) {
-		this.items.add(item);
-	}
-
-	public Double getTotal() {
-		Double total = 0.0;
-
-		int size = items.size();
-
-		for (int i = 0; i < size; i++) {
-			total += items.get(i).getCantidad();
-		}
-		return total;
-	}
-	
+        for (int i = 0; i < size; i++) {
+            total += items.get(i).getCantidad();
+        }
+        return total;
+    }
 
 
-	public String getLugar() {
-		return lugar;
-	}
+    public String getLugar() {
+        return lugar;
+    }
 
-	
 
-	public String getNumeroAlbaran() {
-		return numeroAlbaran;
-	}
+    public String getNumeroAlbaran() {
+        return numeroAlbaran;
+    }
 
-	public void setNumeroAlbaran(String numeroAlbaran) {
-		this.numeroAlbaran = numeroAlbaran;
-	}
+    public void setNumeroAlbaran(String numeroAlbaran) {
+        this.numeroAlbaran = numeroAlbaran;
+    }
 
-	public void setLugar(String lugar) {
-		this.lugar = lugar;
-	}
+    public void setLugar(String lugar) {
+        this.lugar = lugar;
+    }
 
-	public Cliente getCliente() {
-		return cliente;
-	}
+    public Cliente getCliente() {
+        return cliente;
+    }
 
-	public void setCliente(Cliente cliente) {
-		this.cliente = cliente;
-	}
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
+    }
 
-	public Proveedor getProveedor() {
-		return proveedor;
-	}
+    public Proveedor getProveedor() {
+        return proveedor;
+    }
 
-	public void setProveedor(Proveedor proveedor) {
-		this.proveedor = proveedor;
-	}
+    public void setProveedor(Proveedor proveedor) {
+        this.proveedor = proveedor;
+    }
 
-	public Date getDfecha() {
-		return dfecha;
-	}
+    public Date getDfecha() {
+        return dfecha;
+    }
 
-	public void setDfecha(Date dfecha) {
-		this.dfecha = dfecha;
-	}
+    public void setDfecha(Date dfecha) {
+        this.dfecha = dfecha;
+    }
 
-	
 
-	public String getDfechavenci() {
-		return dfechavenci;
-	}
+    public String getDfechavenci() {
+        return dfechavenci;
+    }
 
-	public void setDfechavenci(String dfechavenci) {
-		this.dfechavenci = dfechavenci;
-	}
+    public void setDfechavenci(String dfechavenci) {
+        this.dfechavenci = dfechavenci;
+    }
 
-	public Long getId() {
-		return id;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public List<ItemAlbaran> getItems() {
-		return items;
-	}
+    public List<ItemAlbaran> getItems() {
+        return items;
+    }
 
-	public void setItems(List<ItemAlbaran> items) {
-		this.items = items;
-	}
+    public void setItems(List<ItemAlbaran> items) {
+        this.items = items;
+    }
 
-	public String getDescripcion() {
-		return descripcion;
-	}
+    public String getDescripcion() {
+        return descripcion;
+    }
 
-	public void setDescripcion(String descripcion) {
-		this.descripcion = descripcion;
-	}
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
 
-	public String getObservacion() {
-		return observacion;
-	}
+    public String getObservacion() {
+        return observacion;
+    }
 
-	public void setObservacion(String observacion) {
-		this.observacion = observacion;
-	}
+    public void setObservacion(String observacion) {
+        this.observacion = observacion;
+    }
 
-	public String getFoto() {
-		return foto;
-	}
+    public String getFoto() {
+        return foto;
+    }
 
-	public void setFoto(String foto) {
-		this.foto = foto;
-	}
-	
-	
+    public void setFoto(String foto) {
+        this.foto = foto;
+    }
+
 
 }

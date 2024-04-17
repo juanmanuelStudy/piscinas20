@@ -13,6 +13,8 @@ public interface AlbaranesService {
 	
 	public Iterable<Albaran> findAll();
 
+
+
 	public Page<Albaran> findAll(Pageable pageable);
 
 	public Albaran save(Albaran albaran);
@@ -25,5 +27,5 @@ public interface AlbaranesService {
 	
 	public Page<Albaran> findByClienteAndProveedorAndLugar(String cliente,String lugar,String proveedor, Pageable pageable);
 
-	
+	public Page<Albaran> findAlbaranCliente(Long idCliente , Pageable pageable);
 }

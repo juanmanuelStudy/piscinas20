@@ -55,6 +55,12 @@ public class AlbaranServiceImpl implements AlbaranesService {
 
 	@Override
 	@Transactional(readOnly=true)
+	public Page<Albaran> findAlbaranCliente(Long idCliente, Pageable pageable) {
+		return AlbaranDao.findAlbaranCliente(idCliente, pageable);
+	}
+
+	@Override
+	@Transactional(readOnly=true)
 	public Page<Albaran> findAll(Pageable pageable) {		
 		return AlbaranDao.findAll(pageable);
 	}

@@ -2,354 +2,147 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="layout/layoutMcompras :: head">
 
-<link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.min.css">
-<script type="text/javascript" src="js/jquery.min.js"></script>
-<script src="bootstrap/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.min.css">
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script src="bootstrap/js/bootstrap.min.js"></script>
 
-<script type="text/javascript">
-// Campos Nombres
-$(document).ready(function() {
+    <script type="text/javascript">
+        // Campos Nombres
+        $(document).ready(function () {
+            $("input[name=anticipo1]").change(function () {
+                alert($(this).val());
+            });
+        });
+    </script>
+    <style>
+        table {
+            border: none;
+            width: 100%;
+            border-collapse: collapse;
+        }
 
+        th {
+            padding: 5px 10px;
+            text-align: center;
+            border: 1px solid #999;
+        }
 
-				
-
-				
-				
-					$("input[name=anticipo1]").change(function () {	 
-					alert($(this).val());
-					});
-				
-
-				
-}
-
-
-
-</script>
-   <style>
-            table {
-                border: none;
-                width: 100%;
-                border-collapse: collapse;
-            }
-
-            th { 
-                padding: 5px 10px;
-                text-align: center;
-                border: 1px solid #999;
-            }
-
-            tr:nth-child(1) {
-                background: #dedede;
-            }
-        </style>
+        tr:nth-child(1) {
+            background: #dedede;
+        }
+    </style>
 </head>
 <body>
 
-	<header th:replace="layout/layoutMcompras :: header"></header>
+<header th:replace="layout/layoutMcompras :: header"></header>
 
-	<div class="container py-4">
-		<div class="card bg-light">
-			<div class="card-header" th:text="${titulo}"></div>
-			<div class="card-body">
-			
-				
-				<form th:action="@{/facturas/form/}" enctype="multipart/form-data"
-					th:object="${factura}" method="post">
+<div class="container py-4">
+    <div class="card bg-light">
+        <div class="card-header" th:text="'Crear Albaran del Pedido'"></div>
+        <div class="card-body">
+            <form th:action="@{/facturas/form/}" enctype="multipart/form-data" th:object="${factura}" method="post">
 
-					<div class="form-group row">
-						<label for="cliente" class="col-sm-2 col-form-label"
-							th:text="'Cliente'"></label>
-						<div class="col-sm-4">
-							<input name="cliente"
-								th:value="${factura.cliente.nombre} + ' ' + ${factura.cliente.apellido}"
-								class="form-control" disabled='disabled' />
-						</div>
-						<label class="col-sm-2 col-form-label">Proveedor</label>
-						<div class="col-sm-4">
-							<select class="form-control" th:field="*{nproveedor}">
-								<option th:each="proveedor:${proveedores}"
-									th:value="${proveedor.nproveedor}"
-									th:text="${proveedor.vnombre}" th:selected="false" />
-							</select> <small class="form-text text-danger"
-								th:if="${#fields.hasErrors('nproveedor')}"
-								th:errors="*{nproveedor}"></small>
-						</div>
-					</div>
-					<hr>
-					<div class="form-group row">
-						<label for="dfechaAlbaran" class="col-sm-2 col-form-label">Fecha
-							de Albarán</label>
-						<div class="col-sm-2">
-							<input class="form-control" id="date" name="dfechaAlbaran"
-								type="date" /><small class="form-text text-danger"
-								th:if="${#fields.hasErrors('dfechaAlbaran')}"
-								th:errors="*{dfechaAlbaran}"></small>
-						</div>
+                <div class="form-group row">
+                    <label for="cliente" class="col-sm-2 col-form-label" th:text="'Cliente'"></label>
+                    <div class="col-sm-4">
+                        <input name="cliente" th:value="${factura.cliente.nombre} + ' ' + ${factura.cliente.apellido}" class="form-control" disabled='disabled'/>
+                    </div>
+                    <label class="col-sm-2 col-form-label" th:text="'Número de Pedido'"></label>
+                    <div class="col-sm-2">
+                        <input type="text" th:value="${factura.npedido}" name ="npedido" id="npedido" disabled="disabled" class="form-control" />
+                        <input type="hidden" th:value="${factura.npedido}" name ="npedido"   class="form-control" />
+                    </div>
+                </div>
 
-						<label for="numeroAlbaran" class="col-sm-2 col-form-label"
-							th:text="' Número de Albarán'"></label>
-						<div class="col-sm-2">
-							<input type="text" th:field="*{numeroAlbaran}"
-								class="form-control" th:errorclass="'form-control is-invalid'" />
-							<div class="invalid-feedback"
-								th:if="${#fields.hasErrors('numeroAlbaran')}"
-								th:errors="*{numeroAlbaran}"></div>
-						</div>
+                <hr>
 
+                <div class="form-group row">
+                    <label for="dfechaAlbaran" class="col-sm-2 col-form-label">Fecha de Pedido</label>
+                    <div class="col-sm-2">
+                        <input type="text" th:value="${factura.dfechaAlbaran}" disabled="disabled" class="form-control" />
+                    </div>
 
-						<label class="col-sm-2 col-form-label">Forma de Pago</label>
-						<div class="col-sm-2">
-							<select class="form-control" th:field="*{metodoPago}">
-								<option value="">Elige</option>
-								<option th:each="metodos:${metodos}" th:text="${metodos}"
-									th:value="${metodos}" th:selected="false"></option>
-							</select> <small class="form-text text-danger"
-								th:if="${#fields.hasErrors('metodoPago')}"
-								th:errors="*{metodoPago}"></small>
-						</div>
+                    <label for="tipoPedido" class="col-sm-2 col-form-label" th:text="'Tipo de Pedido'"></label>
+                    <div class="col-sm-2">
+                        <input type="text" th:value="${factura.tipoPedido}" disabled="disabled" class="form-control" />
+                    </div>
+                </div>
+    <hr>
+                <div class="form-group row">
+                    <label for="buscar_producto" class="col-sm-2 col-form-label" th:text="'Producto'"></label>
+                    <div class="col-sm-4">
+                        <input type="text" name="buscar_producto" id="buscar_producto" class="form-control"/>
+                    </div>
+                </div>
+            <div class="form-group row">
 
-					</div>
-					<div class="form-group row">
-
-						<label for="dfechaFactura" class="col-sm-2 col-form-label">Fecha
-							de Factura</label>
-						<div class="col-sm-2">
-							<input class="form-control" id="date" name="dfechaFactura"
-								type="date" /><small class="form-text text-danger"
-								th:if="${#fields.hasErrors('dfechaFactura')}"
-								th:errors="*{dfechaFactura}"></small>
-
-						</div>
-
-						<label for="npersonal" class="col-sm-2 col-form-label"
-							th:text="'Número de Factura'"></label>
-						<div class="col-sm-2">
-							<input type="text" th:field="*{npersonal}" class="form-control"
-								th:errorclass="'form-control is-invalid'" />
-							<div class="invalid-feedback"
-								th:if="${#fields.hasErrors('npersonal')}"
-								th:errors="*{npersonal}"></div>
-						</div>
-
-
-						<label for="fechavencimiento" class="col-sm-2 col-form-label">F.
-							de Vencimiento</label>
-						<div class="col-sm-2">
-							<input class="form-control" id="date" name="fechavencimiento"
-								type="date" /><small class="form-text text-danger"
-								th:if="${#fields.hasErrors('fechavencimiento')}"
-								th:errors="*{fechavencimiento}"></small>
-						</div>
-
-					</div>
-					<hr>
-					<div class="row">
-						<label for="npagada_factura" class="col-sm-1">Pagada</label>
-						<div class="col-sm-2">
-							<input type="radio" id="npagada_factura1"
-								th:field="*{npagada_factura}" value="SI" th:text=" SI" /> <input
-								type="radio" id="npagada_factura2" th:field="*{npagada_factura}"
-								value="NO" th:text="NO" />
-						</div>
-
-						<label for="enviadoagestor" class="col-sm-1">Declara</label>
-						<div class="col-sm-2">
-							<input type="radio" id="enviadoagestor"
-								th:field="*{enviadoagestor}" value="SI" th:text=" SI" /> <input
-								type="radio" id="enviadoagestor2" th:field="*{enviadoagestor}"
-								value="NO" th:text="NO" />
-
-						</div>
-
-						<label for="vtrimenstre" class="col-sm-1">Trimestr</label>
-						<div class="col-sm-2">
-							<input type="radio" id="vtrimenstre1" th:field="*{vtrimenstre}"
-								value="1" th:text="1" /> <input type="radio" id="vtrimenstre2"
-								th:field="*{vtrimenstre}" value="2" th:text="2" /> <input
-								type="radio" id="vtrimenstre3" th:field="*{vtrimenstre}"
-								value="3" th:text="3" /> <input type="radio" id="vtrimenstre4"
-								th:field="*{vtrimenstre}" value="4" th:text="4" />
-						</div>
-							
-						<label for="nanticipo" class="col-sm-1"
-							th:text="'Anticipo'"></label>
-						<div class="col-sm-2">
-							<input type="text" value="0" th:field="*{nanticipo}" name="anticipo1" id="anticipo1" onblur="document.getElementById('anticipo').value=this.value" class="form-control"
-								th:errorclass="'form-control is-invalid'" />
-						</div>
-					</div>
-<hr>
-					<div class="form-group row">
-						<label for="buscar_producto" class="col-sm-2 col-form-label"
-							th:text="'Buscar producto'"></label>
-						<div class="col-sm-6">
-							<input type="text" name="buscar_producto" id="buscar_producto"
-								class="form-control" />
-					
-					</div>
-					</div>
-					
-
-					<table th:replace="factura/plantilla-items :: itemsFactura"></table>
-
-					<table id="cargarItemProductos"
-						class="table table-sm table-striped table-hover">
-						<thead>
-							<tr>
-								<th>Nombre</th>
-								<th>Precio</th>
-								<th>Cantidad</th>
-								<th>Descuento</th>
-								<th>Total</th>
-								<th>Eliminar</th>
-							</tr>
-						</thead>
-						<tbody>
-						</tbody>
-					</table>
-					<section>
-					
-				<div class="float-right">
-					<table
-						class="table table-striped table-hover table-bordered my-1">
-						<thead>
-							<tr>
-								<td >SubTotal</td>
-								<td width=75><h6>
-									<span class="col-sm-2" id="gran_total"></span>
-											</h6></td>
-
-							</tr>
-							<tr>
-								<td>Iva</td>
-								<td width=75><h6>
-
-										
-										<span class="col-sm-2" id="base_ival" ></span></h6></td>
-
-							</tr>
-							<tr>
-								
-								
-									
-
-							</tr>
-							<tr>
-								<th >Anticipo</th>
-								<th width=75>
-
-										<span class="col-sm-2" id="anticipo2"
-											></span>
-									</th>
-
-							</tr>
-							<tr>
-								<th >Total</th>
-								<th width=75>
-
-										<span  class="col-sm-2" id="gran_total_iva" 
-											></span>
-									</th>
-
-							</tr>
-						</thead>
-						<tbody>
-
-						</tbody>
-
-
-					</table>
-				</div>
-					</section>
-					
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-					<!--  <h5>
-						Base <span class="badge badge-secondary" id="gran_total">0</span>
-					</h5>
-					<h5>
-						Iva  <span class="badge badge-secondary" id="base_ival">0</span>
-					</h5>
-					<h5>
-						Total <span class="badge badge-secondary" id="gran_total_iva">0</span>
-					</h5>
--->
-
-					<hr>
-					
-					<div class="form-group row">
-						<label for="observacion" class="col-sm-2 col-form-label"
-							th:text="'Observación'"></label>
-						<div class="col-sm-4">
-							<textarea th:field="*{observacion}" class="form-control"></textarea>
-						</div>
-						<label for="vlugar" class="col-sm-1 col-form-label"
-							th:text="'Obra'"></label>
-						<div class="col-sm-5">
-							<input type="text" th:field="*{vlugar}" class="form-control"
-								th:errorclass="'form-control is-invalid'" />
-							<div class="invalid-feedback"
-								th:if="${#fields.hasErrors('vlugar')}" th:errors="*{vlugar}"></div>
-						</div>
-
-					</div>
-
-					
+                <table th:replace="factura/plantilla-items :: itemsFactura"></table>
+                <table id="cargarItemProductos" class="table table-sm table-striped table-hover">
+                    <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Precio</th>
+                        <th>Cantidad</th>
+                        <th></th>
+                        <th>Total</th>
+                        <th>Eliminar</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
 
 
 
-					<div class="form-group row">
-						<label for="vdomiciliacion" class="col-sm-2 col-form-label"
-							th:text="'Cuenta Bancaria'"></label>
-						<div class="col-sm-4">
-							<input type="text" th:field="*{vdomiciliacion}"
-								class="form-control" th:errorclass="'form-control is-invalid'" />
-							<div class="invalid-feedback"
-								th:if="${#fields.hasErrors('vdomiciliacion')}"
-								th:errors="*{vdomiciliacion}"></div>
-						</div>
-	</div>
-						<hr>
+                <div class="form-group row">
+                    <label for="observacion" class="col-sm-10 col-form-label" th:text="'Observación'"></label>
+                    <div class="col-sm-12">
+                        <textarea th:field="*{observacion}" class="form-control"></textarea>
+                    </div>
+                </div>
 
-						<div class="form-group row">
+                <div class="form-group row">
+                    <div class="col-sm-6">
+                        <input type="submit" th:value="${titulo}" class="btn btn-secondary"/>
+                    </div>
+                </div>
 
-							<label for="file" class="col-sm-2 col-form-label">Foto</label>
-						<div class="col-sm-10 ">
-								<input type="file" name="file" class="form-control" />
-							</div>
-						</div>
+                <input type="hidden" id="anticipo" value='0'/>
+                <input type="hidden" th:field="*{total}" id="total_iva"/>
+                <input type="hidden" th:field="*{ivaTotal}" id="ivaprecio"/>
 
+            </form>
+            <section>
+                <div class="clearfix"></div>
 
+                <div class="float-right">
+                    <table class="table table-striped table-hover table-bordered my-1">
+                        <thead>
+                        <tr>
+                            <td class="col-sm-2">SubTotal</td>
+                            <td width=75><h6><span class="col-sm-2" id="gran_total"></span></h6></td>
+                        </tr>
+                        <tr>
+                            <td class="col-sm-2">Iva</td>
+                            <td width=75><h6><span type="hidden" class="col-sm-2" id="base_ival"></span></h6></td>
+                        </tr>
+                        <tr>
+                            <th class="col-sm-2">Total</th>
+                            <th width=75><span class="col-sm-2" id="gran_total_iva"></span></th>
+                        </tr>
+                        </thead>
 
-					<div class="form-group row">
-						<div class="col-sm-6">
-							<input type="submit" th:value="${titulo}"
-								class="btn btn-secondary" />
-						</div>
-					</div>
-		<input  type="hidden" id="anticipo" value='0' />
-    <input  type ="hidden"  th:field="*{total}"  id="total_iva" />
-    <input  type ="hidden"    th:field="*{ivaTotal}"    id="ivaprecio"/>
-    
-				</form>
+                    </table>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
 
+<footer th:replace="layout/layoutMcompras :: footer"></footer>
+<script th:replace="factura/js/autocomplete-productos :: javascript"></script>
 
-			</div>
-		</div>
-	</div>
-
-	<footer th:replace="layout/layoutMcompras :: footer"></footer>
-	<script th:replace="factura/js/autocomplete-productos :: javascript"></script>
-
-								
 </body>
 </html>
+<!-- Compare this snippet from src/main/resources/templates/factura/form.html: -->

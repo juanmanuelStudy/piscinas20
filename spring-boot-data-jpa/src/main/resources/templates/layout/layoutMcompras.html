@@ -5,20 +5,15 @@
     <title th:text="'Spring Boot: MVC + Thymeleaf + Data JPA - ' + ${titulo}"></title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"/>
     <link rel="stylesheet" th:href="@{/css/jquery-ui.min.css}"/>
-    <style>
-        /* Estilo para el contenido al lado */
-        .content {
-            margin-left: 250px; /* Ancho del menú */
-            padding: 20px;
-        }
 
+    <style>
         /* Estilo para el menú vertical */
         .vertical-menu {
-            width: 250px;
+            width: 200px;
             position: fixed;
             left: 0;
             top: 0;
-            background-color: #d0ba26; /* Color de fondo */
+            background-color: #1964d3; /* Color de fondo */
             overflow-y: auto; /* Para habilitar el desplazamiento vertical si el contenido es demasiado largo */
             height: 100%; /* Para que el menú tenga el mismo alto que la ventana del navegador */
             border-right: 1px solid #dee2e6; /* Borde derecho */
@@ -32,6 +27,7 @@
         .vertical-menu ul ul {
             display: none;
             padding-left: 10px;
+            background-color: #ffffff; /* Cambia el color de fondo del submenú a blanco */
         }
 
         .vertical-menu .nav-item:hover > ul {
@@ -39,26 +35,31 @@
         }
 
         .vertical-menu a {
-            padding: 10px; /* Espacio interior */
+            padding: 5px; /* Espacio interior */
             text-decoration: none; /* Quitar subrayado */
-            color: black; /* Color del texto */
+            color: #111110; /* Color del texto */
             display: block; /* Para que los enlaces ocupen todo el ancho del menú */
         }
 
         .vertical-menu a:hover {
-            background-color: #e9ecef; /* Color de fondo al pasar el ratón */
+            background-color: #ffffff; /* Color de fondo al pasar el ratón */
         }
+
         .special-link {
             color: #7e7641; /* Cambia el color del enlace "Compras" */
             font-weight: bold; /* O cualquier otro estilo que quieras aplicar */
-             background-color: #738129;
+            background-color: #1964d3;
         }
+
+        .vertical-menu a.nav-link {
+            background-color: #a7acb4; /* Cambia el color de fondo del encabezado del menú a un tono más suave de azul */
+        }
+
         .content {
             margin-left: 250px;
             padding: 20px;
             background-color: #bb5858; /* Cambia el color de fondo según tus preferencias */
         }
-
     </style>
 </head>
 <body>
@@ -87,29 +88,27 @@
                 <a class="nav-link special-link" th:href="'/balance/listarBalance'">Balance Gestion Piscinas</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link special-link" th:href="@{'/listar'}">Clientes</a>
+                <a class="nav-link special-link">Clientes</a>
                 <ul>
                     <li><a class="nav-link" th:href="@{'/listar'}">Lista De Clientes <span class="badge badge-secondary" th:text="${countCliente}"></span></a></li>
                     <li><a class="nav-link" th:href="@{'/form'}">Crear Cliente</a></li>
                 </ul>
             </li>
             <li class="nav-item">
-                <a class="nav-link special-link" th:href="@{'/form/{clienteId}'}">Trabajos</a>
+                <a class="nav-link special-link">Trabajos</a>
                 <ul>
-                    <li><a class="nav-link" th:href="@{'/form/{clienteId}'}">Crear Pedido <span class="badge badge-secondary" th:text="${countAlbaranes}"></span></a></li>
-                    <li><a class="nav-link" th:href="@{'/albaranes/listarAlbaranes'}">Listar Pedidos <span class="badge badge-secondary" th:text="${countAlbaranes}"></span></a></li>
-                    <li><a class="nav-link" th:href="@{'/albaranes/form'}">Crear Albaran <span class="badge badge-secondary" th:text="${countAlbaranes}"></span></a></li>
+
+                    <li><a class="nav-link" th:href="@{'/pedidos/listarPedidos'}">Listar Pedidos <span class="badge badge-secondary" th:text="${countAlbaranes}"></span></a></li>
                     <li><a class="nav-link" th:href="@{'/albaranes/listarAlbaranes'}">Listar Albaranes <span class="badge badge-secondary" th:text="${countAlbaranes}"></span></a></li>
                 </ul>
             </li>
             <li class="nav-item">
-                <a class="nav-link special-link" th:href="@{'/proveedor/form'}">Compras</a>
+                <a class="nav-link special-link" >Compras</a>
                 <ul>
                     <li><a class="nav-link" th:href="@{'/proveedor/form'}">Crear Proveedor</a></li>
                     <li><a class="nav-link" th:href="@{'/proveedor/listarProveedor'}">Listar Proveedor</a></li>
                     <li><a class="nav-link" th:href="@{'/materiales/form'}">Comprar Material</a></li>
                     <li><a class="nav-link" th:href="@{'/materiales/listarMaterial'}">Listar Material</a></li>
-                    <li><a class="nav-link" th:href="@{'/facturas/form/{clienteId}'}">Crear Factura Comprar</a></li>
                     <li><a class="nav-link" th:href="@{'/facturas/listarFacturasSinContabilizar'}">Listar Facturas de compra</a></li>
                 </ul>
             </li>
@@ -132,7 +131,6 @@
             </li>
         </ul>
     </nav>
-
 </header>
 <!-- Contenido al lado del menú -->
 <div class="content">
@@ -144,13 +142,21 @@
         <!-- Tu contenido aquí -->
     </div>
 </div>
+
 <footer th:fragment="footer" class="container">
-    <hr/>
+
     <!-- JavaScript -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
     <script th:src="@{/js/jquery-ui.min.js}"></script>
+
 </footer>
+<!-- Agregar jQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.css"/>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
 </body>
 </html>

@@ -30,6 +30,7 @@ public class UploadFileServiceImpl implements IUploadFileService {
 
 		Resource recurso = new UrlResource(pathFoto.toUri());
 
+		log.info("RECURSO"+recurso);
 		if (!recurso.exists() || !recurso.isReadable()) {
 			throw new RuntimeException("Error: no se puede cargar la imagen: " + pathFoto.toString());
 		}
@@ -62,6 +63,7 @@ public class UploadFileServiceImpl implements IUploadFileService {
 	}
 
 	public Path getPath(String filename) {
+
 		return Paths.get(UPLOADS_FOLDER).resolve(filename).toAbsolutePath();
 	}
 

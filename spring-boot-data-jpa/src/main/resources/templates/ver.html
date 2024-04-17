@@ -3,127 +3,117 @@
 <head th:replace="layout/layoutMcompras :: head"></head>
 <body>
 
-	<header th:replace="layout/layoutMcompras :: header"></header>
+<header th:replace="layout/layoutMcompras :: header"></header>
 
-	<div class="container py-8">
+<div class="container py-8">
 
-		<div class="card bg-light">
-			<div class="card-header" th:text="${titulo}"></div>
-			<div class="card-body">
+    <div class="card bg-light">
+        <div class="card-header" th:text="${titulo}"></div>
+        <div class="card-body">
 
-				<h4 class="card-title">
-					<a class="btn btn-success btn-sm"
-						th:href="@{'/facturas/form/' + ${cliente.id}}"
-						th:text="'Crear Factura'"></a>
-						<a class="btn btn-success btn-sm"
-						th:href="@{'/albaranes/form/' + ${cliente.id}}"
-						th:text="'Crear Albaran'"></a>
-				</h4>
-				
-
-				<!-- <img th:if="${#strings.length(cliente.foto) > 0}"
-					class="img-thumbnail rounded float-left" style="max-width: 25%;"
-					th:src="@{'/uploads/' + ${cliente.foto}}" th:alt="${cliente.foto}" />
- 					
- 					-->
-				<ul class="list-group">
-					<li class="list-group-item active" th:text="'Datos del Cliente'"></li>
-					<li class="list-group-item" th:text="'Dirección: '+${cliente.direccion}"></li>
-					<li class="list-group-item" th:text="'Telefóno: '+${cliente.telefono}"></li>
-					<li class="list-group-item" th:text="'Email: '+ ${cliente.email}"></li>
-					<li class="list-group-item" th:text="'Fecha de Alta: '+${cliente.createAt}"></li>
-				</ul>
-
-<br>
-<ul  th:if="${not #lists.isEmpty(cliente.albaranes)}"  class="list-group">
-					<li class="list-group-item active" th:text="'Lista de Albaranes del Cliente'"></li></ul>
-					
-				<div th:if="${#lists.isEmpty(cliente.albaranes)}"
-					class="alert alert-info my-4"
-					th:text="'No hay Albaranes asignadas para el cliente ' + ${cliente.nombre} + ' ' + ${cliente.apellido}"></div>
-
-	<table th:if="${not #lists.isEmpty(cliente.albaranes)}"
-					class="table table-bordered table-striped my-4">
-					<thead class="thead-dark">
-						<tr>
-							<th>Albaran</th>
-							<th>Nº Albaran</th>
-							<th>Proveedor</th>
-							<th>Lugar</th>
-							<th>Fecha de Albaran</th>
-							<th>ver</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr th:each="factura: ${cliente.albaranes}">
-							<td th:text="${factura.id}"></td>
-							<td th:text="${factura.numeroAlbaran}"></td>
-							<td th:text="${factura.proveedor.vnombre}"></td>
-							<td th:text="${factura.lugar}"></td>
-							<td th:text="${factura.dfechavenci}"></td>
-						<td><a class="btn btn-primary btn-sm" th:href="@{'/albaranes/ver/' + ${factura.id}}" th:text="'detalle'"></a></td>
-						<!-- <td><a class="btn btn-danger btn-sm" th:href="@{'/albaran/eliminar/' + ${factura.id}}" th:text="'eliminar'"
-							 onclick="return confirm('¿Estas seguro que desea eliminar la factura?');"></a></td>	
-							 --></tr>
-					</tbody>
-
-				</table>
+            <h4 class="card-title">
+                <!--<a class="btn btn-success btn-sm"
+                    th:href="@{'/facturas/form/' + ${cliente.id}}"
+                    th:text="'Crear Factura'"></a>
+                <a class="btn btn-success btn-sm"
+                    th:href="@{'/albaranes/form/' + ${cliente.id}}"
+                    th:text="'Crear Albaran'"></a>
+                <a class="btn btn-success btn-sm"
+                   th:href="@{'/pedidos/form/' + ${cliente.id}}"
+                   th:text="'Crear Pedido'"></a>-->
+            </h4>
 
 
-<br>
-<ul  th:if="${not #lists.isEmpty(cliente.facturas)}" class="list-group">
-					<li class="list-group-item active" th:text="'Listado de Facturas del Cliente'"></li></ul>
+            <!-- <img th:if="${#strings.length(cliente.foto) > 0}"
+                class="img-thumbnail rounded float-left" style="max-width: 25%;"
+                th:src="@{'/uploads/' + ${cliente.foto}}" th:alt="${cliente.foto}" />
 
-<div th:if="${#lists.isEmpty(cliente.facturas)}"
-					class="alert alert-info my-4"
-					th:text="'No hay Facturas asignadas para el cliente ' + ${cliente.nombre} + ' ' + ${cliente.apellido}"></div>
+                 -->
+            <ul class="list-group">
+                <li class="list-group-item active" th:text="'Datos del Cliente'"></li>
+                <li class="list-group-item" th:text="'Dirección: '+${cliente.direccion}"></li>
+                <li class="list-group-item" th:text="'Telefóno: '+${cliente.telefono}"></li>
+                <li class="list-group-item" th:text="'Email: '+ ${cliente.email}"></li>
+                <li class="list-group-item" th:text="'Fecha de Alta: '+${cliente.createAt}"></li>
+            </ul>
 
-				<table th:if="${not #lists.isEmpty(cliente.facturas)}"
-					class="table table-bordered table-striped my-4">
-					
-										<thead class="thead-dark">
-						<tr>
-							<th>Factura</th>
-							<th>Nº Factura</th>
-							<th>Nº Albaran</th>
-							<th>Lugar</th>
-							<th>Fecha de Vencimiento</th>										
-							<th>Proveedor</th>
-							<th>T</th>
-							<th>D</th>													
-							<th>total</th>
-							<th>ver</th>
-							
-						</tr>
-					</thead>
-					<tbody>
-						<tr th:each="factura: ${cliente.facturas}">
-							<td th:text="${factura.id}"></td>
-							<td th:text="${factura.npersonal}"></td>
-							<td th:text="${factura.numeroAlbaran}"></td>
-							<td th:text="${factura.vlugar}"></td>
-							<td th:text="${factura.fechavencimiento}"></td>														
-							<td th:text="${factura.nproveedor.vnombre}"></td>
-							<td th:text="${factura.vtrimenstre}+' / '+${fechadefactura}"></td>	
-						
-							<td th:text="${factura.enviadoagestor}"></td>
-					<td th:text="${#numbers.formatDecimal(factura.total, 0, 'DEFAULT', 2, 'DEFAULT')}+' €'"></td>					<td><a class="btn btn-primary btn-sm" th:href="@{'/facturas/ver/' + ${factura.id}}" th:text="'detalle'"></a></td>
-							<!--  <td><a class="btn btn-danger btn-sm" th:href="@{'/facturas/eliminar/' + ${factura.id}}" th:text="'eliminar'"
-							 onclick="return confirm('¿Estas seguro que desea eliminar la factura?');"></a></td>
-						-->
-						</tr>
-					</tbody>
-					
-					
+            <br>
+            <ul th:if="${not #lists.isEmpty(cliente.pedido)}" class="list-group">
+                <li class="list-group-item active" th:text="'Lista de Pedidos Creados'"></li>
+            </ul>
 
-				</table>
-				
+            <div th:if="${#lists.isEmpty(cliente.pedido)}"
+                 class="alert alert-info my-4"
+                 th:text="'No hay Pedidos asignados para el cliente ' + ${cliente.nombre} + ' ' + ${cliente.apellido}"></div>
 
-			</div>
-		</div>
+            <div class="table-responsive">
+                <table id="table" class="table mt-2">
+                    <thead class="thead-dark">
+                    <tr>
+                        <th>Nº Pedido</th>
+                        <th>Cliente</th>
+                        <th>Estado</th>
+                        <th>T.Pedido</th>
+                        <th>F.Pedido</th>
+                        <th>Ver</th>
+                        <th>Editar</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="pedido:${pedido}">
+                        <td th:text="${pedido.npedido}"></td>
+                        <td th:text="${pedido.cliente.nombre}"></td>
+                        <td th:text="${pedido.estado}"></td>
+                        <td th:text="${pedido.tipoPedido}"></td>
+                        <td th:text=" ${#dates.format(pedido.dfecha, 'dd/MM/yyyy')}"></td>
+                        <td><a class="btn btn-primary btn-sm" th:href="@{'/pedidos/ver/' + ${pedido.npedido}}" th:text="'detalle'"></a></td>
+                        <td><a class="btn btn-primary btn-sm" th:href="@{'/pedidos/formEditar/' + ${pedido.npedido}}" th:text="'Editar'"></a></td>
+                    </tr>
+                    </tbody>
+                </table>
+                <nav th:replace="paginator-navVerPedido ::paginatorPedido"></nav>
+            </div>
+        </div>
+        <br>
+        <ul th:if="${not #lists.isEmpty(cliente.facturas)}" class="list-group">
+            <li class="list-group-item active" th:text="'Listado de albaranes del Cliente'"></li>
+        </ul>
 
-	</div>
+        <div th:if="${#lists.isEmpty(cliente.facturas)}"
+             class="alert alert-info my-4"
+             th:text="'No hay Albarenes asignadas para el cliente ' + ${cliente.nombre} + ' ' + ${cliente.apellido}"></div>
 
-	<footer th:replace="layout/layoutMcompras :: footer"></footer>
+        <div class="table-responsive">
+            <table id="tableAlbaran" class="table mt-2">
+                <thead class="thead-dark">
+                <tr>
+                    <th>Nº Albaran</th>
+                    <th>F.Albaran</th>
+                    <th>Cliente</th>
+                    <th>Tipo de Pedido</th>
+                    <th>Total</th>
+                    <th>Ver</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="factura:${factura}">
+                    <td th:text="${factura.id}"></td>
+                    <td th:text="${factura.dfechaAlbaran}"></td>
+                    <td th:text="${factura.cliente.nombre}"></td>
+                    <td th:text="${factura.tipoPedido}"></td>
+                    <td th:text="${#numbers.formatDecimal(factura.subTotal, 0, 'DEFAULT', 2, 'DEFAULT')}+' €'"></td>
+                    <td><a class="btn btn-primary btn-sm" th:href="@{'/facturas/ver/' + ${factura.id}}" th:text="'Ver'"></a></td>
+                </tr>
+                </tbody>
+            </table>
+            <nav th:replace="paginator-navVerFactura ::paginatorFactura"></nav>
+        </div>
+
+    </div>
+
+</div>
+
+
+<footer th:replace="layout/layoutMcompras :: footer"></footer>
 </body>
 </html>

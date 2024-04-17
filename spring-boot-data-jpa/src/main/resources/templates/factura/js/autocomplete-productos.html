@@ -39,7 +39,7 @@
 					linea = linea.replace(/{NOMBRE}/g, ui.item.label);
 					linea = linea.replace(/{PRECIO}/g, ui.item.precio);
 					linea = linea.replace(/{DESCUENTO}/g, ui.item.descuento);
-//coge los valores para poder calcular
+					//coge los valores para poder calcular
 					$("#cargarItemProductos tbody").append(linea);
 					//tiene que tener el mismo orden que la funcion
 					itemsHelper.calcularImporte(ui.item.value, ui.item.precio,1,ui.item.descuento);
@@ -47,6 +47,7 @@
 					return false;
 				}
 			});
+
 
 			$("form").submit(function(){
 				$("#plantillaItemsFactura").remove();
@@ -112,7 +113,8 @@
 				},
 				calcularBaseIva: function(){
 					var total = 0;
-					var div =21/100;
+					//todo calcular el iva modificar el valor de la base iva
+					var div =0/100;
 					$('span[id^="total_importe_"]').each(function(){
 						total += parseFloat($(this).html());
 					});
@@ -129,17 +131,12 @@
 					
 					
 					if(anticipo!=null){
-						
 						$('span[id^="total_importe_"]').each(function(){
 							total += parseFloat($(this).html());
 						});
 						
-						
 						$('#gran_total_iva').html((total+parseFloat(valorAn)).toFixed(2));
 						$('#anticipo2').html((parseFloat(anticipo)).toFixed(2));
-					
-						
-						
 
 					}else 
 						{		$('span[id^="total_importe_"]').each(function(){

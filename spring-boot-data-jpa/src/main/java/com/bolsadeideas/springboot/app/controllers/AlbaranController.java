@@ -4,13 +4,19 @@ package com.bolsadeideas.springboot.app.controllers;
 import java.io.IOException;
 
 import java.net.MalformedURLException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 
+import com.bolsadeideas.springboot.app.models.entity.*;
+import lombok.extern.log4j.Log4j2;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperPrint;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
@@ -34,20 +40,17 @@ import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.bolsadeideas.springboot.app.models.entity.Albaran;
-import com.bolsadeideas.springboot.app.models.entity.Cliente;
-
-import com.bolsadeideas.springboot.app.models.entity.ItemAlbaran;
-import com.bolsadeideas.springboot.app.models.entity.Producto;
 import com.bolsadeideas.springboot.app.models.service.AlbaranServiceImpl;
 import com.bolsadeideas.springboot.app.models.service.IClienteService;
 import com.bolsadeideas.springboot.app.models.service.IUploadFileService;
 
 import com.bolsadeideas.springboot.app.models.service.ProveedorServiceImpl;
 import com.bolsadeideas.springboot.app.util.paginator.PageRender;
+
 @Controller
 @RequestMapping("/albaranes")
 @SessionAttributes("albaran")
+@Log4j2
 public class AlbaranController {
 
     //ACCESO A SERVICIOS
@@ -57,6 +60,8 @@ public class AlbaranController {
     private ProveedorServiceImpl proveedorService;
     @Autowired
     private AlbaranServiceImpl albaranService;
+
+
     @Autowired
     private IUploadFileService uploadFileService;
 
@@ -103,12 +108,19 @@ public class AlbaranController {
     public String listar(@RequestParam(name = "page", defaultValue = "0") int page, Model model) {
 
         Pageable pageRequest = PageRequest.of(page, 4);
-        Page<Albaran> albaranes = albaranService.findAll(pageRequest);
-        PageRender<Albaran> pageRender = new PageRender<>("/listarAlbaranes", albaranes);
+        // Page<Albaran> albaranes = albaranService.findAll(pageRequest);
+        Page<Factura> factura = clienteService.findFacturaAll(pageRequest);
+        PageRender<Factura> pageRender = new PageRender<>("/listarfactura", factura);
+
+        List<String> tipos = Arrays.asList("REDISEÑO", "DISEÑO NUEVO", "ARREGLO");
+        //cargramos los clientes para el filtro y tipo de pedido
+        model.addAttribute("clientes", clienteService.findAll());
+        model.addAttribute("tipos", tipos);
+
         model.addAttribute(TITULO, "Listado de Albaranes");
-        model.addAttribute("albaranes", albaranes);
+        model.addAttribute("facturas", factura);
         model.addAttribute("page", pageRender);
-        return "albaran/listarAlbaranes";
+        return "factura/listarFactura";
     }
 
     @GetMapping("/ver/{id}")
@@ -249,9 +261,7 @@ public class AlbaranController {
      * Filtro para buscar los ALBARANES
      *
      * @param page
-     * @param proveedor
      * @param cliente
-     * @param lugar
      * @param pageable
      * @param model
      * @return
@@ -259,22 +269,66 @@ public class AlbaranController {
     @PostMapping("/buscar")
     public String buscar(
             @RequestParam(name = "page", defaultValue = "0") int page,
-            @RequestParam(name = "proveedor") String proveedor,
             @RequestParam(name = "cliente") String cliente,
-            @RequestParam(name = "lugar") String lugar,
+            @RequestParam(name = "tipo") String tipo,
             Pageable pageable, Model model) {
 
-        Page<Albaran> albaran = albaranService.findByClienteAndProveedorAndLugar(cliente, lugar, proveedor, pageable);
-        PageRender<Albaran> pageRender = new PageRender<>("/listarAlbaran", albaran);
+
+        log.info("cliente: " + cliente);
+        log.info("tipo: " + tipo);
+
+        //paginacion de las busquedas
+        // Page<Albaran> albaran = albaranService.findByClienteAndProveedorAndLugar(cliente, lugar, proveedor, pageable);
+        // PageRender<Albaran> pageRender = new PageRender<>("/listarAlbaran", albaran);
+        // Page<Albaran> albaranes = albaranService.findAll(pageRequest);
+
+        //paginacion de las busquedas totales
+        Pageable pageRequest = PageRequest.of(page, 6);
+        Page<Factura> factura = clienteService.findByClienteAndProveedorAndTipo(cliente, tipo, pageRequest);
+        PageRender<Factura> pageRender = new PageRender<>("listarAlbaranes", factura);
+
+        List<String> tipos = Arrays.asList("REDISEÑO", "DISEÑO NUEVO", "ARREGLO");
+        //cargamos los clientes para el filtro y tipo de pedido
+        model.addAttribute("clientes", clienteService.findAll());
+        model.addAttribute("tipos", tipos);
+
 
         //captura la candidad buscada en el filtro
-        model.addAttribute("cantidad", albaranService.findByClienteAndProveedorAndLugar(cliente, lugar, proveedor, pageable).getNumberOfElements());
-        model.addAttribute(TITULO, "Lista de ALbaranes Encontradas ");
+        // model.addAttribute("cantidad", albaranService.findByClienteAndProveedorAndLugar(cliente, tipo, proveedor, pageable).getNumberOfElements());
+        model.addAttribute(TITULO, "Lista de Albaranes Encontradas ");
         model.addAttribute("textoR", "Resultados Encontrados: ");
-        model.addAttribute("albaranes", albaran);
+        model.addAttribute("facturas", factura);
         model.addAttribute("page", pageRender);
         model.addAttribute("countProveedor", proveedorService.count());
-        return "albaran/listarAlbaranes";
+        return "factura/listarFactura";
+    }
+
+    @PostMapping("/report")
+    public ResponseEntity<?> generateReport(HttpServletResponse response,
+                                            @RequestParam(name = "cliente") String cliente,
+                                            @RequestParam(name = "tipo") String tipo) {
+
+        try {
+            // Generar el informe
+            JasperPrint jasperPrint = clienteService.generateJasperPrints(cliente, tipo);
+            //recorrer el informe
+            jasperPrint.getPages().forEach(System.out::println);
+
+            // Convertir el informe a un arreglo de bytes en formato PDF
+            byte[] pdfBytes = JasperExportManager.exportReportToPdf(jasperPrint);
+
+            // Configurar la respuesta HTTP para la descarga del PDF
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("Content-Disposition", "attachment; filename=pedido_report.pdf");
+
+            // Enviar el arreglo de bytes en la respuesta
+            return new ResponseEntity<>(pdfBytes, headers, HttpStatus.OK);
+            //redirigir a lista de pedidos
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
 }
