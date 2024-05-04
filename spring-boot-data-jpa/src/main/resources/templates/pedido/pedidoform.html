@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="layout/layoutMcompras :: head"></head>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="/admin/admin_layout">
+<head>
 <!-- Agregar jQuery -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+</head>
 <style>
     .bootstrap-iso .formden_header h2, .bootstrap-iso .formden_header p,
     .bootstrap-iso form {
@@ -62,9 +63,9 @@
     }
 </style>
 <body>
-<header th:replace="layout/layoutMcompras :: header"></header>
 
 
+<div layout:fragment="content">
 <div id="container" class="container py-4">
 <div id="messege">
 
@@ -72,29 +73,32 @@
 
     <div class="card bg-light">
         <div class="card-header" th:text="${titulo}"></div>
-
+        <h4 class="card-title">
+            <a class="btn btn-light"
+               th:href="@{'/listar'}"
+               th:text="'&laquo; volver'"></a>
+        </h4>
         <div class="card-body">
-            <h4 class="card-title">
-                <a class="btn btn-light"
-                   th:href="@{'/listar'}"
-                   th:text="'&laquo; volver'"></a>
-            </h4>
+
 
             <form  id="pedidoForm" th:action="@{/pedidos/form/}"  enctype="multipart/form-data" th:object="${pedido}" method="post">
 
                 <div class="form-group row">
-                    <label class="col-sm-2 col-form-label">Nº Pedido</label>
-                    <div class="col-sm-2">
-                        <!-- Mostrar el número de pedido -->
+                    <!-- Campo para el número de pedido -->
 
+                        <label class="col-sm-2 col-form-label">Nº Pedido</label>
+
+                        <div class="col-sm-4">    <!-- Si el número de pedido existe en el modelo -->
                         <input type="text" th:if="${pedido.npedido != null}" th:field="*{npedido}" id="npedido" class="form-control" readonly="readonly" th:value="${pedido.npedido}" />
-                        <input type="text" th:unless="${pedido.npedido != null}" readonly="readonly" th:value="${numeroPedido}" name="npedido" id="npedido"/>
+                        <!-- Si el número de pedido no existe en el modelo -->
+                        <input type="text" th:unless="${pedido.npedido != null}" readonly="readonly" th:value="${numeroPedido}" name="npedido" id="npedido" class="form-control"/>
                         <small class="form-text text-danger" th:if="${#fields.hasErrors('npedido')}" th:errors="*{npedido}"></small>
                     </div>
                 </div>
 
 
-             <div class="form-group row">
+
+                <div class="form-group row">
                  <label for="cliente" class="col-sm-2 col-form-label"
                         th:text="'Cliente'"></label>
                  <div class="col-sm-4">
@@ -392,6 +396,7 @@
 </script>
 
 
-<footer th:replace="layout/layoutMcompras :: footer"></footer>
+
+    </div>
 </body>
 </html>

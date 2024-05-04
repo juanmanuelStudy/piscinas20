@@ -1,133 +1,128 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="layout/layoutMcompras :: head"></head>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="/admin/admin_layout">
 
 <body>
 
-<header th:replace="layout/layoutMcompras :: header"></header>
-	<div class="container py-4">
-		<div class="card bg-dark text-white">
-			<div class="card-header" th:text="${titulo}"></div>
-			<div class="card-body">
+<div layout:fragment="content">
+    <div class="container py-4">
+        <div class="card bg-dark text-white">
+            <div class="card-header" th:text="${titulo}"></div>
+            <div class="card-body">
 
-				<div th:object="${material}" th:remove="tag">
-					<ul th:if="${#fields.hasErrors('*')}" class="alert alert-danger">
-						<li th:each="err: ${#fields.errors('*')}" th:text="${err}"></li>
-					</ul>
-				</div>
-				<form th:action="@{/materiales/form}" th:object="${material}" method="post"
-					enctype="multipart/form-data">
-					
-					<div class="form-group row">
-						<label class="col-sm-2 col-form-label">Codigo</label>
-						<div class="col-sm-6">
-							<input type="text" th:field="*{codigo}" class="form-control"
-								th:errorclass="'form-control alert-danger'" /> <small
-								class="form-text text-danger"
-								th:if="${#fields.hasErrors('codigo')}"
-								th:errors="*{codigo}"></small>
-						</div>
-					</div>
-					
-					
-					<div class="form-group row">
-						<label class="col-sm-2 col-form-label">Nombre</label>
-						<div class="col-sm-6">
-							<input type="text" th:field="*{nombre}" class="form-control"
-								th:errorclass="'form-control alert-danger'" /> <small
-								class="form-text text-danger"
-								th:if="${#fields.hasErrors('nombre')}"
-								th:errors="*{nombre}"></small>
-						</div>
-					</div>
-					<div class="form-group row">
-						<label class="col-sm-2 col-form-label">Marca</label>
-						<div class="col-sm-6">
-							<input type="text" th:field="*{marca}" class="form-control"
-								th:errorclass="'form-control alert-danger'" /> <small
-								class="form-text text-danger"
-								th:if="${#fields.hasErrors('marca')}"
-								th:errors="*{marca}"></small>
-						</div>
-					</div>
-					
-					
-					 <div class="form-group row">
-						<label class="col-sm-2 col-form-label">Descuento</label>
-						<div class="col-sm-6">
-							<input type="text" th:field="*{descuento}" class="form-control"
-								th:errorclass="'form-control alert-danger'" />
-								 <small
-								class="form-text text-danger"
-								th:if="${#fields.hasErrors('descuento')}"
-								th:errors="*{descuento}"></small>
-						</div>
-					</div>
- 
- 
- 
-						<div class="form-group row">
-						<label class="col-sm-2 col-form-label">Precio PVP</label>
-						<div class="col-sm-6">
-							<input type="text" th:field="*{precio}" class="form-control" /> <small
-								class="form-text text-danger"
-								th:if="${#fields.hasErrors('precio')}"
-								th:errors="*{precio}"></small>
-						</div>
-					</div>
-					
-						<div class="form-group row">
-						<label class="col-sm-2 col-form-label">Proveedor</label>
-						<div class="col-sm-6">
-							<select class="form-control"  th:field="*{nproveedor}">
-								<option th:each="proveedor:${proveedores}"
-									th:value="${proveedor.nproveedor}" th:text="${proveedor.vnombre}"
-									th:selected="false" />
-							</select> 
-						</div>
-					</div>
-					
-					<div class="form-group row">
-						<label class="col-sm-2 col-form-label">Detalle</label>
-						<div class="col-sm-6">
-							<input type="text" th:field="*{vdetalle}" class="form-control"
-								th:errorclass="'form-control alert-danger'" /> <small
-								class="form-text text-danger"
-								th:if="${#fields.hasErrors('vdetalle')}"
-								th:errors="*{vdetalle}"></small>
-						</div>
-					</div>
-					<!-- FALTARA PONER LA FOTO AL FINAL CUANDO TENGAMOS EL MODULO COMPLETO -->
+                <div th:object="${material}" th:remove="tag">
+                    <ul th:if="${#fields.hasErrors('*')}" class="alert alert-danger">
+                        <li th:each="err: ${#fields.errors('*')}" th:text="${err}"></li>
+                    </ul>
+                </div>
+                <form th:action="@{/materiales/form}" th:object="${material}" method="post"
+                      enctype="multipart/form-data">
 
-					<!-- HTML Form (wrapped in a .bootstrap-iso div) 
-
-					<div class="form-group row">
-						<label class="col-sm-2 col-form-label" for="date">Fecha</label>
-						<div class="col-sm-6">
-							<input class="form-control" id="date" name="date"
-								placeholder="DD/MM/YYYY" type="text" /> <small
-								class="form-text text-danger"
-								th:if="${#fields.hasErrors('dfecha_fin')}"
-								th:errors="*{dfecha_fin}"></small>
-						</div>
-					</div>
-							-->
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Codigo</label>
+                        <div class="col-sm-6">
+                            <input type="text" th:field="*{codigo}" class="form-control"
+                                   th:errorclass="'form-control alert-danger'" required/> <small
+                                class="form-text text-danger"
+                                th:if="${#fields.hasErrors('codigo')}"
+                                th:errors="*{codigo}"></small>
+                        </div>
+                    </div>
 
 
-					<div class="form-group row">
-						<div class="col-sm-6">
-							<input type="submit" value="Crear Material"
-								class="btn btn-secondary" />
-							<button type="reset" class="btn btn-secondary">Resetear</button>
-							<a th:href="@{/materiales/listarMaterial}" class="btn btn-secondary">Listar Material</a>
-						</div>
-					</div>
-					<input type="hidden" th:field="*{id}"/>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Nombre</label>
+                        <div class="col-sm-6">
+                            <input type="text" th:field="*{nombre}" class="form-control"
+                                   th:errorclass="'form-control alert-danger'" required/> <small
+                                class="form-text text-danger"
+                                th:if="${#fields.hasErrors('nombre')}"
+                                th:errors="*{nombre}"></small>
+                        </div>
+                    </div>
 
-				</form>
-			</div>
-		</div>
-	</div>
-	<footer th:replace="layout/layoutMcompras :: footer"></footer>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Precio Compra</label>
+                        <div class="col-sm-6">
+                            <input type="text" th:field="*{precioCompra}" class="form-control" required/> <small
+                                class="form-text text-danger"
+                                th:if="${#fields.hasErrors('precioCompra')}"
+                                th:errors="*{precioCompra}"></small>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Cantidad</label>
+                        <div class="col-sm-6">
+                            <input type="text" th:field="*{cantidad}" class="form-control" required/> <small
+                                class="form-text text-danger"
+                                th:if="${#fields.hasErrors('cantidad')}"
+                                th:errors="*{cantidad}"></small>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Precio PVP</label>
+                        <div class="col-sm-6">
+                            <input type="text" th:field="*{precio}" class="form-control" required/> <small
+                                class="form-text text-danger"
+                                th:if="${#fields.hasErrors('precio')}"
+                                th:errors="*{precio}"></small>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Proveedor</label>
+                        <div class="col-sm-6">
+                            <select class="form-control" th:field="*{nproveedor}" required>
+                                <option th:each="proveedor:${proveedores}"
+                                        th:value="${proveedor.nproveedor}" th:text="${proveedor.vnombre}"
+                                        th:selected="false"/>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Detalle</label>
+                        <div class="col-sm-6">
+                            <input type="text" th:field="*{vdetalle}" class="form-control"
+                                   th:errorclass="'form-control alert-danger'"/> <small
+                                class="form-text text-danger"
+                                th:if="${#fields.hasErrors('vdetalle')}"
+                                th:errors="*{vdetalle}"></small>
+                        </div>
+                    </div>
+                    <!-- FALTARA PONER LA FOTO AL FINAL CUANDO TENGAMOS EL MODULO COMPLETO -->
+
+                    <!-- HTML Form (wrapped in a .bootstrap-iso div)
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label" for="date">Fecha</label>
+                        <div class="col-sm-6">
+                            <input class="form-control" id="date" name="date"
+                                placeholder="DD/MM/YYYY" type="text" /> <small
+                                class="form-text text-danger"
+                                th:if="${#fields.hasErrors('dfecha_fin')}"
+                                th:errors="*{dfecha_fin}"></small>
+                        </div>
+                    </div>
+                            -->
+
+
+                    <div class="form-group row">
+                        <div class="col-sm-6">
+                            <input type="submit" value="Crear Material"
+                                   class="btn btn-secondary"/>
+                            <button type="reset" class="btn btn-secondary">Resetear</button>
+                            <a th:href="@{/materiales/listarMaterial}" class="btn btn-secondary">Listar Material</a>
+                        </div>
+                    </div>
+                    <input type="hidden" th:field="*{id}"/>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 </html>

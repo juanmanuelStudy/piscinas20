@@ -16,7 +16,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/css/**", "/js/**", "/images/**").permitAll() // Permitir acceso a recursos estáticos sin autenticación
+                .antMatchers("/css/**","/dist/**","/plugins/**", "/js/**", "/images/**").permitAll() // Permitir acceso a recursos estáticos sin autenticación
                 .antMatchers("/login").permitAll() // Permitir acceso a la página de login
                 .anyRequest().authenticated() // Cualquier otra solicitud requiere autenticación
                 .and()

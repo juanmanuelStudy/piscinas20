@@ -1,47 +1,58 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="layout/layoutMcompras :: head">
-<meta charset="utf-8" />
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorator="/admin/admin_layout">
+<head>
+	<meta charset="utf-8" />
+	<title>Spring Boot + JPA + Datatables</title>
 
-<title>Spring Boot + JPA + Datatables</title>
-<link rel="stylesheet" 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-<script 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-<script 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<link rel="stylesheet" 	href="https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css">
-<script 	src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
-<link rel="stylesheet" href="../css/table.css">
+	<script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+
+	<link rel="stylesheet" href="../css/table.css">
+	<!--  Bootstrap  -->
+	<link rel="stylesheet"
+		  href="cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js">
+	<link rel="stylesheet"
+		  href="cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
+	<!-- Plugin Leaflet.awesome-markers  -->
+	<link rel="stylesheet" href="../dist/leaflet.awesome-markers.css">
+
+	<link rel="stylesheet" href="../css/table.css">
+
+
 
 </head>
 <body>
 
-	<header th:replace="layout/layoutMcompras :: header"></header>
+<div layout:fragment="content">
 
-	<div class="container p-lg-1">
+	<div class="container py-4">
 
 		<div class="card bg-light">
 			<div class="card-header" th:text="${titulo}"></div>
 			<div class="card-body">
-			<div class="form-group row">
+				<div class="form-group row">
 
-				<h4 class="card-title">
-					<a th:href="@{/form}" class="btn btn-primary btn-sm">Crear Cliente</a>
-				</h4>
-				<div class="col-sm-6">
+					<h4 class="card-title">
+						<a th:href="@{/form}" class="btn btn-primary btn-sm">Crear Cliente</a>
+					</h4>
+					<div class="col-sm-6">
 						<form th:action="@{/buscar}" method="post">
-							<label for="nombre" class="card-title" th:text="'Buscar Cliente'"></label>
+							<label for="nombre"  th:text="'Buscar Cliente'"></label>
 							<input type="text" id="nombre" name="nombre"> <input
-								type="submit" class="btn btn-primary btn-sm" value="Buscar">							
+								type="submit" class="btn btn-primary btn-sm" value="Buscar">
 						</form>
-					</div>		
+					</div>
 
-				<table id="table" class="table mt-2">
+					<table id="table" class="table mt-2">
 						<thead class="thead-dark" >
 						<tr>
 							<th>#</th>
-							<th>Nombre</th>						
-							<th>Email</th>							
+							<th>Nombre</th>
+							<th>Email</th>
 							<th>Teléfono</th>
 							<th>Direccion</th>
 							<th>Crear </th>
@@ -49,51 +60,47 @@
 							<th>Editar</th>
 							<th>Eliminar</th>
 						</tr>
-					</thead>
-					<tbody>
+						</thead>
+						<tbody>
 						<tr th:each="cliente: ${clientes}">
 							<td><a class="btn btn-primary btn-xs"
-								th:href="@{/ver/} + ${cliente.id}" th:text="${cliente.id}"></a></td>
-							<td th:text="${cliente.nombre}+' '+${cliente.apellido}"></td>							
+								   th:href="@{/ver/} + ${cliente.id}" th:text="${cliente.id}"></a></td>
+							<td th:text="${cliente.nombre}+' '+${cliente.apellido}"></td>
 							<td th:text="${cliente.email}"></td>
 							<!-- <td th:text="${#dates.format(cliente.createAt,'dd-MM-yyyy')}"></td> -->
 							<td th:text="${cliente.telefono}"></td>
 							<td th:text="${cliente.direccion}"></td>
-							
+
 							<td ><a class="btn btn-success btn-sm"
-								th:href="@{'/pedidos/form/' + ${cliente.id}}"
-								th:text="'Pedido'"></a></td>
+									th:href="@{'/pedidos/form/' + ${cliente.id}}"
+									th:text="'Pedido'"></a></td>
 							<td>
 								<a class="btn btn-success btn-sm albaran-modal-btn" data-toggle="modal" data-target="#albaranesModal" th:data-cliente-id="${cliente.id}">
 									Albaran
 								</a>
 							</td>
 							<td><a class="btn btn-primary btn-sm"
-								th:href="@{/form/} + ${cliente.id}" th:text="'Editar'"></a></td>
+								   th:href="@{/form/} + ${cliente.id}" th:text="'Editar'"></a></td>
 							<td><a class="btn btn-danger btn-sm"
-								th:href="@{/eliminar/} + ${cliente.id}" th:text="'Eliminar'"
-								onclick="return confirm('Est�s seguro que quieres eliminar?');"></a></td>
+								   th:href="@{/eliminar/} + ${cliente.id}" th:text="'Eliminar'"
+								   onclick="return confirm('Est�s seguro que quieres eliminar?');"></a></td>
 						</tr>
-					</tbody>
+						</tbody>
 
-				</table>
-				<nav th:replace="paginator-nav :: paginator"></nav>
+					</table>
+					<nav th:replace="paginator-nav :: paginator"></nav>
+				</div>
 			</div>
 		</div>
-</div>
 	</div>
 
-	<footer th:replace="layout/layoutMcompras :: footer"></footer>
-</body>
 
-<!-- ordenar la tabla poner en un archivo par poder luego llamar -->
-<script type="text/javascript">
-	
-</script>
+
 
 <script>
 	//todo falta crear el controlador que se obtiene todos los albaraens por cliete y pasar por json realizar un dto de estos datos
 	$(document).ready(function () {
+		console.log('ready');
 		$('.albaran-modal-btn').click(function () {
 			var clienteId = $(this).data('cliente-id');
 			// AJAX request para cargar los albaranes del cliente
@@ -144,43 +151,32 @@
 		}
 	}
 
-
-
-
-
-
-
-
-
-
-
-
 </script>
 
 
 <style>
-table tr th {
-	cursor: pointer;
-	-webkit-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
-	user-select: none;
-}
+	table tr th {
+		cursor: pointer;
+		-webkit-user-select: none;
+		-moz-user-select: none;
+		-ms-user-select: none;
+		user-select: none;
+	}
 
-.sorting {
-	background-color: #D4D4D4;
-}
+	.sorting {
+		background-color: #D4D4D4;
+	}
 
-.asc:after {
-	content: ' ↑';
-}
+	.asc:after {
+		content: ' ↑';
+	}
 
-.desc:after {
-	content: " ↓";
-}
+	.desc:after {
+		content: " ↓";
+	}
 </style>
-</html>
-<!-- Al final del HTML -->
+
+<!-- Modal -->
 <div class="modal fade" id="albaranesModal" tabindex="-1" role="dialog" aria-labelledby="albaranesModalLabel" aria-hidden="true">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
@@ -200,6 +196,10 @@ table tr th {
 			<div class="modal-footer">
 				<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
 			</div>
+		 </div>
 		</div>
-	</div>
+     </div>
 </div>
+
+</body>
+</html>

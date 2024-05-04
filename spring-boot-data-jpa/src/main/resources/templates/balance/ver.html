@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="layout/layoutMcompras :: head"></head>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="/admin/admin_layout">
+
 <body>
 
-	<header th:replace="layout/layoutMcompras :: header"></header>
+<div layout:fragment="content">
 
 	<div class="container py-8">
 
@@ -21,6 +21,6 @@
 
 	</div>
 
-	<footer th:replace="layout/layoutMcompras :: footer"></footer>
+</div>
 </body>
 </html>

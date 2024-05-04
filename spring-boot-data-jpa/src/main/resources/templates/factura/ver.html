@@ -1,21 +1,20 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="/admin/admin_layout">
 
-<head th:replace="layout/layoutMcompras :: head">
+<head>
     <meta charset="utf-8"/>
 
-    <title>Gestion Piscinas</title>
-    <link rel="stylesheet"
-          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <script
-            src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-    <script
-            src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <title>Ver Factura</title>
+
     <link rel="stylesheet"
           href="https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css">
     <script
             src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
     <link rel="stylesheet" href="../css/table.css">
+    <!-- Plugin Leaflet.awesome-markers  -->
+    <link rel="stylesheet" href="../dist/leaflet.awesome-markers.css">
 </head>
 
 <style>
@@ -30,8 +29,8 @@
 
 <body>
 
-<header th:replace="layout/layoutMcompras :: header"></header>
 
+<div layout:fragment="content">
 <div class="container py-4">
 
 
@@ -354,6 +353,7 @@
 </div>
 
 </div>
-<footer th:replace="layout/layoutMcompras :: footer"></footer>
+</div>
+</div>
 </body>
 </html>

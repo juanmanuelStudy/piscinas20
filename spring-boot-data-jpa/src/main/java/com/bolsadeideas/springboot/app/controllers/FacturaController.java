@@ -1,11 +1,13 @@
 package com.bolsadeideas.springboot.app.controllers;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.IntStream;
 
 import javax.validation.Valid;
 
@@ -66,6 +68,9 @@ public class FacturaController {
     @Autowired
     private FacturaMapper facturaMapper;
 
+    @Autowired
+    private NotificacionService notificacionService;
+
     private String fechadefactura;
     private Double total;
     private Double anticipo;
@@ -85,9 +90,7 @@ public class FacturaController {
             e.printStackTrace();
         }
 
-        return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + recurso.getFilename() + "\"")
-                .body(recurso);
+        return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + recurso.getFilename() + "\"").body(recurso);
     }
 
 
@@ -104,7 +107,7 @@ public class FacturaController {
         model.addAttribute("clientes", clienteService.findAll());
         model.addAttribute("tipos", tipos);
 
-        PageRender<Factura> pageRender = new PageRender<Factura>("/listarFactura", facturas);
+        PageRender<Factura> pageRender = new PageRender<Factura>("listarFactura", facturas);
         model.addAttribute("titulo", "Listado de Facturas Sin Contabilizar");
         model.addAttribute("facturas", facturas);
         model.addAttribute("page", pageRender);
@@ -128,9 +131,7 @@ public class FacturaController {
 
 
     @GetMapping("/ver/{id}")
-    public String ver(@PathVariable(value = "id") Long id,
-                      Model model,
-                      RedirectAttributes flash) {
+    public String ver(@PathVariable(value = "id") Long id, Model model, RedirectAttributes flash) {
         Factura factura = clienteService.findFacturaById(id);
 
         if (factura == null) {
@@ -151,8 +152,7 @@ public class FacturaController {
     }
 
     @GetMapping("/form/{clienteId}")
-    public String crear(@PathVariable(value = "clienteId") Long clienteId, Map<String, Object> model,
-                        RedirectAttributes flash) {
+    public String crear(@PathVariable(value = "clienteId") Long clienteId, Map<String, Object> model, RedirectAttributes flash) {
 
 
         Pedido pedido = pedidoService.findOne(clienteId);
@@ -176,6 +176,13 @@ public class FacturaController {
 
     }
 
+    @GetMapping("cargar-productos")
+    public @ResponseBody List<Producto> cargarProductos() {
+        log.info(clienteService.findAllProducto().toString());
+        return clienteService.findAllProducto();
+    }
+
+
     @GetMapping(value = "/cargar-productos/{term}", produces = {"application/json"})
     public @ResponseBody List<Producto> cargarProductos(@PathVariable String term) {
         return clienteService.findByNombre(term);
@@ -188,14 +195,10 @@ public class FacturaController {
                           @RequestParam(name = "cantidad[]", required = false) Integer[] cantidad,
                           @RequestParam(value = "npedido") Long npedido,
                           RedirectAttributes flash,
-                          SessionStatus status
-    ) {
-        // Convertir el valor de cadena a Long
+                          SessionStatus status) {
 
-
-        //Obtener el numero de pedido por npedido
+        // Obtener el numero de pedido por npedido
         Pedido pedido = pedidoService.findOne(npedido);
-
         pedido.setFacturado(true);
         pedidoService.save(pedido);
 
@@ -212,23 +215,33 @@ public class FacturaController {
 
         for (int i = 0; i < itemId.length; i++) {
             Producto producto = clienteService.findProductoById(itemId[i]);
+
             ItemFactura linea = new ItemFactura();
             linea.setCantidad(cantidad[i]);
             linea.setProducto(producto);
             factura.addItemFactura(linea);
+
             log.info("ID: " + itemId[i].toString() + ", cantidad: " + cantidad[i].toString());
         }
 
+        // Iteramos sobre los ítems para restar la cantidad de material
+        IntStream.range(0, itemId.length)
+                .forEach(i -> {
+                    Producto producto = clienteService.findProductoById(itemId[i]);
+                    producto.setCantidad(producto.getCantidad() - cantidad[i]);
+                    materialService.save(producto);
+                });
+
         clienteService.saveFactura(factura);
+        notificacionService.verificarStock();
         status.setComplete();
+        flash.addFlashAttribute("success", "Factura'"+ factura.getNpersonal()+"'"+" creada con éxito!");
 
-        pedido.setFacturado(true);
-
-        flash.addFlashAttribute("success", "Factura'" + factura.getNpersonal() + "'" + " creada con éxito!");
         //return "redirect:/ver/" + factura.getCliente().getId();
+        //redirigue a la lista de clientes
         return "redirect:/listar";
-
     }
+
 
 
     @GetMapping("/eliminar/{id}")
@@ -249,15 +262,13 @@ public class FacturaController {
 
     //filtro de busqueda de facturas
     @PostMapping("/buscar")
-    public String buscar(
-            @RequestParam(name = "page", defaultValue = "0") int page,
-            //@RequestParam(name= "proveedor") String proveedor,
-            @RequestParam(name = "cliente") String cliente,
-            @RequestParam(name = "tipo") String tipo,
-            //	@RequestParam(name = "lugar")String lugar,
-            // @RequestParam(name = "desde")String desde,
-            //@RequestParam(name = "hasta")String hasta,
-            Model model) {
+    public String buscar(@RequestParam(name = "page", defaultValue = "0") int page,
+                         //@RequestParam(name= "proveedor") String proveedor,
+                         @RequestParam(name = "cliente") String cliente, @RequestParam(name = "tipo") String tipo,
+                         //	@RequestParam(name = "lugar")String lugar,
+                         // @RequestParam(name = "desde")String desde,
+                         //@RequestParam(name = "hasta")String hasta,
+                         Model model) {
 
 //paginacion de las busquedas totales
         Pageable pageRequest = PageRequest.of(page, 10);
@@ -288,17 +299,13 @@ public class FacturaController {
 
     //filtro de busqueda de facturas
     @PostMapping("/buscarCon")
-    public String buscarCon(
-            @RequestParam(name = "page", defaultValue = "0") int page,
-            @RequestParam(name = "proveedor") String proveedor,
-            @RequestParam(name = "cliente") String cliente,
-            @RequestParam(name = "lugar") String lugar,
+    public String buscarCon(@RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "proveedor") String proveedor, @RequestParam(name = "cliente") String cliente, @RequestParam(name = "lugar") String lugar,
 
-            @RequestParam(name = "desde") String desde,
+                            @RequestParam(name = "desde") String desde,
 
-            @RequestParam(name = "hasta") String hasta,
+                            @RequestParam(name = "hasta") String hasta,
 
-            Model model) {
+                            Model model) {
 
 
         Pageable pageRequest = PageRequest.of(page, 10);
@@ -329,8 +336,7 @@ public class FacturaController {
     }
 
     @GetMapping("/contabilizar/{npersonal}")
-    public String crearConta(@PathVariable(value = "npersonal") Long npersonal, Map<String, Object> model,
-                             RedirectAttributes flash) {
+    public String crearConta(@PathVariable(value = "npersonal") Long npersonal, Map<String, Object> model, RedirectAttributes flash) {
 
         Optional<Factura> numerofactura = clienteService.findOneBy(npersonal);
 

@@ -110,7 +110,7 @@ public class AlbaranController {
         Pageable pageRequest = PageRequest.of(page, 4);
         // Page<Albaran> albaranes = albaranService.findAll(pageRequest);
         Page<Factura> factura = clienteService.findFacturaAll(pageRequest);
-        PageRender<Factura> pageRender = new PageRender<>("/listarfactura", factura);
+        PageRender<Factura> pageRender = new PageRender<>("listarAlbaranes", factura);
 
         List<String> tipos = Arrays.asList("REDISEÑO", "DISEÑO NUEVO", "ARREGLO");
         //cargramos los clientes para el filtro y tipo de pedido
@@ -129,7 +129,7 @@ public class AlbaranController {
                       RedirectAttributes flash) {
         Albaran albaran = clienteService.findAlbaranById(id);
         if (albaran == null) {
-            flash.addFlashAttribute(ERROR, "La albaran no existe en la base de datos!");
+            flash.addFlashAttribute(ERROR, "El albaran no existe en la base de datos!");
             return REDIRECTLISTAR;
         }
         model.addAttribute("albaran", albaran);
@@ -161,13 +161,7 @@ public class AlbaranController {
         return ALBARANFORM;
     }
 
-    /**
-     * Muestra la lista de Productos creados
-     */
-    @GetMapping(value = "/cargar-productos/{term}", produces = {"application/json"})
-    public @ResponseBody List<Producto> cargarProductos(@PathVariable String term) {
-        return clienteService.findByNombre(term);
-    }
+
 
     /**
      * Guarda los albaranes desde el formulario
@@ -319,7 +313,7 @@ public class AlbaranController {
 
             // Configurar la respuesta HTTP para la descarga del PDF
             HttpHeaders headers = new HttpHeaders();
-            headers.add("Content-Disposition", "attachment; filename=pedido_report.pdf");
+            headers.add("Content-Disposition", "attachment; filename=albaran_report.pdf");
 
             // Enviar el arreglo de bytes en la respuesta
             return new ResponseEntity<>(pdfBytes, headers, HttpStatus.OK);

@@ -123,6 +123,7 @@ public class ClienteController {
         model.addAttribute("titulo", "Listado de clientes");
         model.addAttribute("clientes", clientes);
         model.addAttribute("page", pageRender);
+        //return "listar";
         return "listar";
     }
 

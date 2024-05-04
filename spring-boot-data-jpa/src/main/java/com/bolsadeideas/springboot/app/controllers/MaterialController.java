@@ -4,6 +4,7 @@ import java.util.Map;
 
 import javax.validation.Valid;
 
+import com.bolsadeideas.springboot.app.models.service.NotificacionService;
 import org.hibernate.annotations.common.util.impl.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -11,6 +12,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,7 +24,6 @@ import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.bolsadeideas.springboot.app.models.entity.Producto;
-import com.bolsadeideas.springboot.app.models.entity.Proveedor;
 import com.bolsadeideas.springboot.app.models.service.ClienteServiceImpl;
 import com.bolsadeideas.springboot.app.models.service.ProductoServiceImpl;
 import com.bolsadeideas.springboot.app.models.service.ProveedorServiceImpl;
@@ -33,8 +34,9 @@ import com.bolsadeideas.springboot.app.util.paginator.PageRender;
 @SessionAttributes("Materiales")
 @RequestMapping("/materiales")
 public class MaterialController {
-	
-	
+
+	@Autowired
+	private NotificacionService notificacionService;
 	@Autowired
 	private ProveedorServiceImpl proveedorService;
 	@Autowired
@@ -49,7 +51,7 @@ public class MaterialController {
 				
 		PageRequest pageRequest =  PageRequest.of(page,5);
 		Page <Producto> material = materialService.findAll(pageRequest);
-		PageRender<Producto> pageRender = new PageRender<>("/listarMaterial",material);
+		PageRender<Producto> pageRender = new PageRender<>("listarMaterial",material);
 		model.addAttribute("material",material);
 		model.addAttribute("page",pageRender);
 		model.addAttribute("titulo", "Listado de Material");
@@ -72,8 +74,7 @@ public class MaterialController {
 	public String crear( Map<String, Object> model) {
 		
 		//se añade todos los findAll que tenga los select en el formulario para poder selecionar
-			Producto material = new Producto();	
-		
+			Producto material = new Producto();
 			
 			model.put("material", material);
 			model.put("proveedores",proveedorService.findAll());
@@ -84,23 +85,17 @@ public class MaterialController {
 	
 	@RequestMapping(value="/form/{id}")
 	public String editar(@PathVariable(value="id") Long id, Map<String, Object> model) {
-		
-		Producto material = null;
-		Proveedor proveedor = null;
-		proveedor = proveedorService.findOne(id);
-		if(id > 0) {
-			material = materialService.findOne(id);
-			proveedor = proveedorService.findOne(id);
-			model.put("material", material);
+
+			Producto material = materialService.findOne(id);
+			//revisa el stock de los productos
+			notificacionService.verificarStock();
+			//se añade todos los findAll que tenga los select en el formulario para poder selecionar
+			model.put("proveedores",proveedorService.findOne(material.getNproveedor().getNproveedor()));
+			model.put("material",  materialService.findOne(id));
 			model.put("titulo", "Editar material");
-			model.put("proveedores",proveedor);
-		} else {
-			return "redirect:/listarMaterial";
-		}
-		model.put("material", material);
-		model.put("titulo", "Editar material");
-		model.put("proveedores",proveedor);
-		return "productos/materialForm";
+
+			return "productos/materialForm";
+
 	}
 	
 
@@ -129,19 +124,28 @@ public class MaterialController {
 			model.addAttribute("countProveedor", proveedorService.count());
 			return "productos/listarMaterial";
 }
-	
-	
+
+
+
 	@RequestMapping(value = "/form", method = RequestMethod.POST)
-	public String guardar(@Valid Producto material, BindingResult result, Model model, SessionStatus status,RedirectAttributes flash) {
-		
+	public String guardar(@Valid Producto material, BindingResult result, Model model, SessionStatus status, RedirectAttributes flash) {
+
 		if(result.hasErrors()) {
-			
 			model.addAttribute("titulo", "Formulario de Material");
+			flash.addFlashAttribute("error", "Faltan campos por rellenar");
 			return "/productos/materialForm";
 		}
-		
+
+		// Additional validation to check if required fields are empty
+		if(StringUtils.isEmpty(material.getCodigo()) || StringUtils.isEmpty(material.getNombre()) || StringUtils.isEmpty(material.getPrecio())) {
+			model.addAttribute("titulo", "Formulario de Material");
+			flash.addFlashAttribute("error", "Los campos Código, Nombre y Precio son obligatorios");
+			return "/productos/materialForm";
+		}
+
 		materialService.save(material);
-		flash.addFlashAttribute("success", "Creado el material con exito");
+		flash.addFlashAttribute("success", "Creado el material con éxito");
+
 		status.setComplete();
 		return "redirect:/materiales/form";
 	}

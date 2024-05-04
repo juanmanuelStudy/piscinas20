@@ -23,6 +23,8 @@ public interface IClienteService {
 	public void delete(Long id);
 
 	public List<Producto> findByNombre(String term);
+
+	public List	<Producto> findAllProducto();
 	
 	public void saveFactura(Factura factura);
 	

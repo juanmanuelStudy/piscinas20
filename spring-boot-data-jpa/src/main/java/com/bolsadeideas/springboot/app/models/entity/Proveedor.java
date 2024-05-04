@@ -1,5 +1,8 @@
 package com.bolsadeideas.springboot.app.models.entity;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -13,13 +16,15 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+@Getter
+@Setter
 @Entity
 @Table(name="PROVEEDOR")
 public class Proveedor implements Serializable{
 
-	
+
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
 	
@@ -29,29 +34,19 @@ public class Proveedor implements Serializable{
 	private Long nproveedor;
 	
 	private String 	vnombre;
-	
 	private String 	vdireccion;
-	
 	private String 	vlocalidad;
-	
 	private String 	vprovincia;
-	
 	private String 	vpais;
-	
 	private String 	ntelefono;
-	
 	private String vemail;
-	
 	private String cif;
-	
 	@Temporal(TemporalType.DATE)	
 	private Date dfecha_alta;
 	
 	@Temporal(TemporalType.DATE)	
 	private Date dfecha_baja;
-	
-	
-	
+
 	@PrePersist
 	public void prePersit() {
 		dfecha_alta =new Date();
@@ -62,8 +57,6 @@ public class Proveedor implements Serializable{
 	
 		super();
 	}
-	
-	
 
 	public String getCif() {
 		return cif;

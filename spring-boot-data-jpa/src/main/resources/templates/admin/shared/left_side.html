@@ -1,0 +1,139 @@
+<!-- Main Sidebar Container -->
+<aside class="main-sidebar sidebar-dark-primary elevation-4">
+    <!-- Brand Logo -->
+    <a th:href="@{/listar}" class="brand-link">
+        <img src="/admin/dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
+             style="opacity: .8">
+        <span class="brand-text font-weight-light">Taller de Joyeria</span>
+    </a>
+
+    <!-- Sidebar -->
+
+
+        <!-- Sidebar Menu -->
+        <nav class="mt-2">
+
+            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                <!-- Add icons to the links using the .nav-icon class
+                     with font-awesome or any other icon font library -->
+
+                <li class="nav-item">
+                    <a href="/admin/dashboard" class="nav-link">
+                        <i class="nav-icon fas fa-th"></i>
+                        <p>Dashboard</p>
+                    </a>
+                </li>
+
+                <li class="nav-item has-treeview">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-copy"></i>
+                        <p>
+                            User
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="/admin/user/list" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>List User</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/admin/user/add" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Add User</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <aside class="main-sidebar sidebar-dark-primary elevation-4">
+                    <!-- Brand Logo -->
+                    <a href="/admin/dashboard" class="brand-link">
+                        <img src="/admin/dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
+                             style="opacity: .8">
+                        <span class="brand-text font-weight-light">Gestion Taller Artesanal</span>
+                    </a>
+
+                    <!-- Sidebar -->
+
+                        <!-- Sidebar Menu -->
+                        <nav class="mt-2">
+                            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
+                                data-accordion="false">
+                                <li class="nav-item">
+                                    <a class="nav-link special-link" th:href="'/balance/listarBalance'">Balance Gestion
+                                        Piscinas</a>
+                                </li>
+                                <li class="nav-item">
+
+                                    <a class="nav-link special-link">Clientes<i class="right fas fa-angle-left"></i></a>
+
+                                    <ul class="nav item nav-treeview">
+
+                                        <li class="nav-item"><a class="nav-link"
+                                                                th:href="@{'/listar'}">Lista De Clientes <span
+                                                class="badge badge-secondary" th:text="${countCliente}"></span></a></li>
+                                        <li class="nav-item"><a class="nav-link" th:href="@{'/form'}">Crear Cliente</a></li>
+                                    </ul>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link special-link">Trabajos<i class="right fas fa-angle-left"></i></a>
+                                    <ul class="nav nav-treeview">
+                                        <li class="nav-item"><a class="nav-link"
+                                                                th:href="@{'/pedidos/listarPedidos'}">Listar Pedidos <span
+                                                class="badge badge-secondary" th:text="${countAlbaranes}"></span></a></li>
+                                        <li class="nav-item"><a class="nav-link"
+                                                                th:href="@{'/albaranes/listarAlbaranes'}">Listar Albaranes <span
+                                                class="badge badge-secondary" th:text="${countAlbaranes}"></span></a></li>
+                                    </ul>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link special-link">Compras<i class="right fas fa-angle-left"></i></a>
+                                    <ul class="nav nav-treeview">
+                                        <li class="nav-item"><a class="nav-link"
+                                                                th:href="@{'/proveedor/form'}">Crear Proveedor</a></li>
+                                        <li class="nav-item"><a class="nav-link"
+                                                                th:href="@{'/proveedor/listarProveedor'}">Listar Proveedor</a></li>
+                                        <li class="nav-item"><a class="nav-link"
+                                                                th:href="@{'/materiales/form'}">Comprar Material</a></li>
+                                        <li class="nav-item"><a class="nav-link"
+                                                                th:href="@{'/materiales/listarMaterial'}">Listar Material</a></li>
+                                        <li class="nav-item"><a class="nav-link"
+                                                                th:href="@{'/facturas/listarFacturasSinContabilizar'}">Listar
+                                            Facturas
+                                            de compra</a></li>
+                                    </ul>
+                                </li>
+                                <li class="nav-item" hidden="hidden">
+                                    <a class="nav-link special-link" href="#">Cobros Clientes</a>
+                                    <ul class="nav nav-treeview">
+                                        <li class="nav-item"><a class="nav-link" href="#">Pagados</a></li>
+                                        <li class="nav-item"><a class="nav-link" href="#">Pendientes</a></li>
+                                    </ul>
+                                </li>
+                                <li class="nav-item" hidden="hidden">
+                                    <a class="nav-link special-link" href="#">Incidencias</a>
+                                    <ul class="nav nav-treeview">
+                                        <li class="nav-item"><a class="nav-link" href="#">Proceso</a></li>
+                                        <li class="nav-item"><a class="nav-link" href="#">Terminadas</a></li>
+                                    </ul>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" th:href="@{'/notifications/notifications'}">Notificaciones <span
+                                            class="badge badge-secondary" th:text="${count}"></span></a>
+                                </li>
+                            </ul>
+                        </nav>
+                        <!-- /.sidebar-menu -->
+                    </div>
+                    <!-- /.sidebar -->
+                </aside>
+
+
+            </ul>
+        </nav>
+        <!-- /.sidebar-menu -->
+    </div>
+    <!-- /.sidebar -->
+</aside>

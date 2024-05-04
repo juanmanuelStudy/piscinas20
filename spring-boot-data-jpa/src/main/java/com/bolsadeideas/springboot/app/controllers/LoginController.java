@@ -12,7 +12,6 @@ public class LoginController {
         //como compribar si el usuario esta logeado y e correcto
 
 
-
         return "login"; // Devolver el nombre de la plantilla HTML de login
     }
 
@@ -23,7 +22,7 @@ public class LoginController {
         if (usuario.equals("admin") && contraseña.equals("admin")){
             System.out.println("Usuario y contraseña correctos");
 
-            return  "redirect:/listar";
+            return  "listar";
         }else{
             System.out.println("Usuario y contraseña incorrectos");
         }

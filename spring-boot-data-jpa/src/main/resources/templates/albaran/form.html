@@ -81,8 +81,8 @@
 						<div class="col-sm-4">
 							<select class="form-control"  th:field="*{proveedor}">
 								<option th:each="proveedor:${proveedores}"
-									th:value="${proveedor.nproveedor}" th:text="${proveedor.vnombre}"
-									th:selected="false" />
+										th:value="${proveedor.id}" th:text="${proveedor.vnombre}"
+										th:selected="false" />
 							</select> <small class="form-text text-danger"
 								th:if="${#fields.hasErrors('proveedor')}" th:errors="*{proveedor}"></small>
 						</div>
@@ -135,6 +135,6 @@
 		</div>
 	</div>
 	<footer th:replace="layout/layoutMcompras :: footer"></footer>
-	<script th:replace="factura/js/autocomplete-productos :: javascript"></script>
+	<script th:replace="factura/js/listarproductos :: javascript"></script>
 </body>
 </html>

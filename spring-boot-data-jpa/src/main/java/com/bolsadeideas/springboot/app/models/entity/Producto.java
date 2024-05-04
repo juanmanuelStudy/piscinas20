@@ -1,5 +1,9 @@
 package com.bolsadeideas.springboot.app.models.entity;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -14,10 +18,13 @@ import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 
-
+@Getter
+@Setter
+@NoArgsConstructor
 @Entity
 @Table(name = "productos")
 public class Producto implements Serializable {
@@ -26,24 +33,32 @@ public class Producto implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	
+
 	@ManyToOne
 	@JoinColumn(name="NPROVEEDOR")
 	private Proveedor nproveedor;
-	
+
+	@NotNull
 	private String nombre;
-	
+
 	private String marca;
 
 	private String foto;
-	
-	private String codigo;	
-	
-	
+	@NotNull
+	private String codigo;
+
+	@NotNull
 	private Double precio;
-	
+
+	@NotNull
+	private Double precioCompra;
+
+	@NotNull
+	private Double cantidad;
+
+
 	private int descuento;
-	
+
 	private String vdetalle;
 
 	@Temporal(TemporalType.DATE)
@@ -70,8 +85,8 @@ public class Producto implements Serializable {
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
-	
-	
+
+
 
 
 	public String getMarca() {
@@ -91,7 +106,7 @@ public class Producto implements Serializable {
 	}
 
 	public Double getPrecio() {
-		
+
 		return precio;
 	}
 
@@ -125,7 +140,7 @@ public class Producto implements Serializable {
 		this.foto = foto;
 	}
 
-	
+
 
 
 	public String getVdetalle() {

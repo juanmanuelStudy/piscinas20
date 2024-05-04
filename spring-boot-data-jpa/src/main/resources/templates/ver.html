@@ -1,9 +1,11 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="layout/layoutMcompras :: head"></head>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="/admin/admin_layout">
+<head ></head>
 <body>
 
-<header th:replace="layout/layoutMcompras :: header"></header>
+<div layout:fragment="content">
 
 <div class="container py-8">
 
@@ -42,9 +44,6 @@
                 <li class="list-group-item active" th:text="'Lista de Pedidos Creados'"></li>
             </ul>
 
-            <div th:if="${#lists.isEmpty(cliente.pedido)}"
-                 class="alert alert-info my-4"
-                 th:text="'No hay Pedidos asignados para el cliente ' + ${cliente.nombre} + ' ' + ${cliente.apellido}"></div>
 
             <div class="table-responsive">
                 <table id="table" class="table mt-2">
@@ -71,17 +70,18 @@
                     </tr>
                     </tbody>
                 </table>
+                <div th:if="${#lists.isEmpty(cliente.pedido)}"
+                     class="alert alert-info my-4"
+                     th:text="'No hay Pedidos asignados para el cliente ' + ${cliente.nombre} + ' ' + ${cliente.apellido}"></div>
                 <nav th:replace="paginator-navVerPedido ::paginatorPedido"></nav>
             </div>
-        </div>
+
         <br>
         <ul th:if="${not #lists.isEmpty(cliente.facturas)}" class="list-group">
             <li class="list-group-item active" th:text="'Listado de albaranes del Cliente'"></li>
         </ul>
 
-        <div th:if="${#lists.isEmpty(cliente.facturas)}"
-             class="alert alert-info my-4"
-             th:text="'No hay Albarenes asignadas para el cliente ' + ${cliente.nombre} + ' ' + ${cliente.apellido}"></div>
+
 
         <div class="table-responsive">
             <table id="tableAlbaran" class="table mt-2">
@@ -106,14 +106,17 @@
                 </tr>
                 </tbody>
             </table>
+            <div th:if="${#lists.isEmpty(cliente.facturas)}"
+                 class="alert alert-info my-4"
+                 th:text="'No hay Albarenes asignados para el cliente ' + ${cliente.nombre} + ' ' + ${cliente.apellido}"></div>
             <nav th:replace="paginator-navVerFactura ::paginatorFactura"></nav>
         </div>
-
+        </div>
     </div>
 
 </div>
 
 
-<footer th:replace="layout/layoutMcompras :: footer"></footer>
+</div>
 </body>
 </html>

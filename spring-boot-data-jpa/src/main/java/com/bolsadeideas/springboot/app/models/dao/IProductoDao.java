@@ -11,6 +11,9 @@ import com.bolsadeideas.springboot.app.models.entity.Producto;
 
 public interface IProductoDao extends PagingAndSortingRepository<Producto, Long> {
 
+
+	List<Producto> findByCantidadLessThan(Double cantidad);
+
 	@Query("select p from Producto p where p.codigo like %?1%")
 	public List<Producto> findByCodigo(String term);
 	

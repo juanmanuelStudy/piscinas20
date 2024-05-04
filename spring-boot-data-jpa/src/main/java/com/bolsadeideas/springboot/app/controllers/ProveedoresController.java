@@ -50,7 +50,7 @@ public class ProveedoresController {
 				
 		PageRequest pageRequest =  PageRequest.of(page,5);
 		Page <Proveedor> proveedor = proveedorService.findAll(pageRequest);
-		PageRender<Proveedor> pageRender = new PageRender<>("/listarProveedor",proveedor);
+		PageRender<Proveedor> pageRender = new PageRender<>("listarProveedor",proveedor);
 		model.addAttribute("proveedor",proveedor);
 		model.addAttribute("page",pageRender);
 		model.addAttribute("titulo", "Listado de Proveedores");

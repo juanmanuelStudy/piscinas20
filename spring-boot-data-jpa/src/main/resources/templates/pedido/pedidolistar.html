@@ -1,44 +1,43 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="/admin/admin_layout">
 
 
-<head th:replace="layout/layoutMcompras :: head">
+<head>
     <meta charset="utf-8" />
 
-    <title>Spring Boot + JPA + Datatables</title>
-    <link rel="stylesheet"
-          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <script
-            src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-    <script
-            src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <link rel="stylesheet"
-          href="https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css">
-    <script
-            src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+    <title>Listar Pedidos</title>
     <link rel="stylesheet" href="../css/table.css">
+    <!--  Bootstrap  -->
+    <link rel="stylesheet"
+          href="cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js">
+    <link rel="stylesheet"
+          href="cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
+    <!-- Plugin Leaflet.awesome-markers  -->
+    <link rel="stylesheet" href="../dist/leaflet.awesome-markers.css">
 
 
+
+    <script type="text/javaScript" src="/js/pedidolistar.js"></script>
 </head>
 <body>
-<script type="text/javaScript" src="/js/pedidolistar.js"></script>
-<aside th:replace="layout/layoutMcompras :: header"> </aside>
 
+
+<div layout:fragment="content">
 <div class="container py-4">
 
     <div class="card bg-light">
         <div class="card-header" th:text="${titulo}"></div>
         <div class="card-body">
             <div class="form-group row">
-                <div class="col-sm-12">
+                <div class="col-sm-14">
                     <form th:action="@{'/pedidos/buscar'}" id="formBusqueda"  method="post" enctype="multipart/form-data">
 
-                        <label for="cliente" class="card-title" th:text="'Cliente'"></label>
+                        <label for="cliente"  th:text="'Cliente'"></label>
                         <select id="cliente" name="cliente">
                             <option value="">Seleccione</option>
                             <option th:each="cliente:${clientes}" th:value="${cliente.nombre}" th:text="${cliente.nombre}"></option>
                         </select>
-                        <label for="estado" class="card-title" th:text="'Estado'"></label>
+                        <label for="estado"  th:text="'Estado'"></label>
                         <select id="estado" name="estado">
                             <option value="">Seleccione</option>
                             <option th:each="estado:${estados}" th:value="${estado}" th:text="${estado}"></option>
@@ -88,7 +87,8 @@
     </div>
 </div>
 
-<footer th:replace="layout/layoutMcompras :: footer"></footer>
+
+</div>
 </body>
 
 <script>

@@ -1,7 +1,8 @@
 
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="layout/layoutMcompras :: head"></head>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorator="/admin/admin_layout">
 
 
 <!-- Extra JavaScript/CSS added manually in "Settings" tab -->
@@ -47,7 +48,7 @@ $(function() {
 
 <body>
 
-	<header th:replace="layout/layoutMcompras :: header"></header>
+<div layout:fragment="content">
 
 	<div class="container py-4">
 
@@ -147,7 +148,7 @@ $(function() {
 			</div>
 		</div>
 	</div>
-	<footer th:replace="layout/layoutMcompras :: footer"></footer>
 
+</div>
 </body>
 </html>

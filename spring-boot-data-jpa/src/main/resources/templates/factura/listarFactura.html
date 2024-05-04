@@ -1,27 +1,23 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="/admin/admin_layout">
 
-
-<head th:replace="layout/layoutMcompras :: head">
+<head>
 <meta charset="utf-8" />
 
 <title>Spring Boot + JPA + Datatables</title>
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-<script
-	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<link rel="stylesheet"
-	href="https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css">
-<script
-	src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
-<link rel="stylesheet" href="../css/table.css">
+	<link rel="stylesheet" href="../css/table.css">
+	<!--  Bootstrap  -->
+	<link rel="stylesheet"
+		  href="cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js">
+	<link rel="stylesheet"
+		  href="cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
+	<!-- Plugin Leaflet.awesome-markers  -->
+	<link rel="stylesheet" href="../dist/leaflet.awesome-markers.css">
 
 </head>
 <body>
 
-	<header th:replace="layout/layoutMcompras :: header"> </header>
+<div layout:fragment="content">
 
 	<div class="container py-4">
 
@@ -55,12 +51,12 @@
                             </form>-->
 						<form th:action="@{'/albaranes/buscar'}" id="formBusqueda"  method="post" enctype="multipart/form-data">
 
-							<label for="cliente" class="card-title" th:text="'Cliente'"></label>
+							<label for="cliente" th:text="'Cliente'"></label>
 							<select id="cliente" name="cliente">
 								<option value="">Seleccione</option>
 								<option th:each="cliente:${clientes}" th:value="${cliente.nombre}" th:text="${cliente.nombre}"></option>
 							</select>
-							<label for="tipo" class="card-title" th:text="'Estado'"></label>
+							<label for="tipo" th:text="'Estado'"></label>
 							<select id="tipo" name="tipo">
 								<option value="">Seleccione</option>
 								<option th:each="tipo:${tipos}" th:value="${tipo}" th:text="${tipo}"></option>
@@ -120,7 +116,7 @@
                                     <td><a class="btn btn-primary btn-sm" th:href="@{'/facturas/contabilizar/' + ${facturas.id}}" th:text="'declarar'"></a></td>
 
       -->
-	<footer th:replace="layout/layoutMcompras :: footer"></footer>
+</div>
 </body>
 
 <!-- ordenar la tabla poner en un archivo par poder luego llamar -->
