@@ -223,6 +223,7 @@ public class ClienteServiceImpl implements IClienteService {
         //obtener el listado de pedidos con parametros de estado y cliente
         Iterable<Factura> pedido = findAllByClienteAndTipo(cliente, tipo);
 
+        log.info("servicio "+cliente+tipo);
         // Obtener la ruta del archivo JRXML desde el directorio static
         org.springframework.core.io.Resource resources = resourceLoader.getResource("classpath:static/jasperReport/albaran.jrxml");
         InputStream jrxmlFilePath = resources.getInputStream();

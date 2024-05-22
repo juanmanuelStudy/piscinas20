@@ -5,6 +5,7 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
+import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -83,6 +84,7 @@ public class PedidoController {
 
     @GetMapping(value = "/uploads/{filename:.+}")
     public ResponseEntity<Resource> verFoto(@PathVariable String filename) {
+        log.info("entra en uploas");
         Resource recurso = null;
         try {
             recurso = uploadFileService.load(filename);
@@ -142,27 +144,47 @@ public class PedidoController {
             return REDIRECTLISTAR;
         }
 
-        // Buscar los archivos adjuntos asociados al pedido
-        List<ArchivoAdjunto> archivosAdjuntos =  archivoAdjuntoService.findArchivosAdjuntosByPedidoId(pedido.getNpedido());
-        log.info("archivosAdjuntos: " + archivosAdjuntos.size());
-
-
-        // Obtener los nombres de las fotos de los archivos adjuntos y cargarlos en la vista
-        List<String> fotos = new ArrayList<>();
-        String rootPath = "C://temp//fotos";
-        for (ArchivoAdjunto archivoAdjunto : archivosAdjuntos) {
-            Path rutaFoto = Paths.get(rootPath + "//" + archivoAdjunto.getNombre());
-            if (Files.exists(rutaFoto)) {
-                log.info(archivoAdjunto.getNombre());
-                fotos.add(archivoAdjunto.getNombre()); // Agregar el nombre de la foto a la lista
-            }
-        }
 
         // Cargar los archivos adjuntos asociados al pedido en la vista
         model.addAttribute("pedido", pedido);
-        model.addAttribute("fotos", fotos); // Pasar la lista de nombres de fotos a la vista
+      //  model.addAttribute("fotos", fotos); // Pasar la lista de nombres de fotos a la vista
         model.addAttribute(TITULO, "Detalles del Pedido");
         return "pedido/pedidover";
+    }
+
+
+    @GetMapping("/cargarImagenes/{id}")
+    @ResponseBody
+    public List<String> cargarImagenes(@PathVariable(value = "id") Long id) {
+        log.info("entra en cargarImagenes");
+        // Lógica para cargar las rutas de las imágenes desde el servidor
+        List<String> urls = new ArrayList<>();
+        // Suponiendo que tienes una lista de nombres de archivos en la base de datos
+        List<ArchivoAdjunto> archivosAdjuntos = archivoAdjuntoService.findArchivosAdjuntosByPedidoId(id);
+        log.info("archivosAdjuntos: " + archivosAdjuntos.size());
+        for (ArchivoAdjunto archivo : archivosAdjuntos) {
+            urls.add(String.valueOf(archivo.getNombre())); // Agregar el nombre del archivo a la lista de URLs
+        }
+        return urls;
+    }
+
+    @GetMapping("/fotos/{nombreArchivo}")
+    public ResponseEntity<Resource> obtenerFoto(@PathVariable String nombreArchivo) {
+        Path rutaArchivo = Paths.get("C://temp//fotos/" + nombreArchivo); // Ruta local a tus imágenes
+        Resource recurso = null;
+        try {
+            recurso = new UrlResource(rutaArchivo.toUri());
+            if (recurso.exists() || recurso.isReadable()) {
+                return ResponseEntity.ok()
+                        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + recurso.getFilename() + "\"")
+                        .body(recurso);
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            return ResponseEntity.notFound().build();
+        }
     }
 
 

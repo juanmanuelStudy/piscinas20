@@ -35,7 +35,7 @@
                     </h4>
                     <div class="col-sm-10">
                         <form th:action="@{/materiales/buscar}" method="post">
-                            <label for="nombre"  th:text="'Material'"></label>
+                            <label for="nombre" th:text="'Material'"></label>
 
                             <input type="text" id="nombre" name="nombre">
 
@@ -90,22 +90,18 @@
 
                     </table>
                 </div>
-                <div>
-                    <label th:if="${cantidad != null}" class="btn btn-primary"
-                           th:text="${textoR}+${cantidad}">Resultados encontrados"</label>
-                </div>
+                 <label th:if="${cantidad != null}" class="btn btn-primary"
+                               th:text="${textoR}+${cantidad}">Resultados encontrados"</label>
+                <nav th:replace="paginator-nav ::paginator"></nav>
             </div>
         </div>
-        <nav th:replace="paginator-nav ::paginator"></nav>
-
     </div>
-
 </div>
 
 </body>
 <style>
     table tr th {
-         cursor: pointer;
+        cursor: pointer;
         -webkit-user-select: none;
         -moz-user-select: none;
         -ms-user-select: none;

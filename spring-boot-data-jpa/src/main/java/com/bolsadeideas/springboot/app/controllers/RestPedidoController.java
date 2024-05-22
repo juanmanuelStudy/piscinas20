@@ -36,7 +36,7 @@ public class RestPedidoController {
     public ResponseEntity<List<PedidoDtos>>listar(@PathVariable(value = "clienteId") Long clienteId) {
 
         // Obtener los albaranes  de un cliente
-        Page<Pedido> pedido =  pedidoService.findPedidoByIdClienteAndFinalizados(clienteId, PageRequest.of(0, 5));
+        Page<Pedido> pedido =  pedidoService.findPedidoByIdClienteAndFinalizados(clienteId, PageRequest.of(0, 100));
 
         // Convertir las facturas a DTOs
         List<PedidoDtos> albaranDTOs = pedido.getContent().stream()

@@ -4,6 +4,8 @@
 <!-- Agregar jQuery -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <link rel="stylesheet"
+          href="cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
 </head>
 <style>
     .bootstrap-iso .formden_header h2, .bootstrap-iso .formden_header p,
@@ -73,13 +75,7 @@
 
     <div class="card bg-light">
         <div class="card-header" th:text="${titulo}"></div>
-        <h4 class="card-title">
-            <a class="btn btn-light"
-               th:href="@{'/listar'}"
-               th:text="'&laquo; volver'"></a>
-        </h4>
         <div class="card-body">
-
 
             <form  id="pedidoForm" th:action="@{/pedidos/form/}"  enctype="multipart/form-data" th:object="${pedido}" method="post">
 
@@ -160,17 +156,12 @@
                     <div class="col-sm-6">
                         <input type="submit" th:value="${titulo}"
                                class="btn btn-secondary" />
+
                         <button type="reset" class="btn btn-secondary">Resetear</button>
                         <a th:href="@{/pedidos/listarPedidos}" class="btn btn-secondary">Listar Pedidos</a>
                     </div>
                 </div>
-
             </form>
-            <h4 class="card-title">
-                <a class="btn btn-light"
-                   th:href="@{'/listar'}"
-                   th:text="'&laquo; volver'"></a>
-            </h4>
         </div>
     </div>
 
@@ -394,9 +385,6 @@
 
 
 </script>
-
-
-
     </div>
 </body>
 </html>

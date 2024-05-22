@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
@@ -75,6 +76,8 @@ public class AlbaranController {
 
     //VARIABLES
 
+    @Autowired
+    private HttpServletRequest request;
     static final String TITULO = "titulo";
     static final String ERROR = "error";
 
@@ -113,6 +116,10 @@ public class AlbaranController {
         PageRender<Factura> pageRender = new PageRender<>("listarAlbaranes", factura);
 
         List<String> tipos = Arrays.asList("REDISEÑO", "DISEÑO NUEVO", "ARREGLO");
+
+        String urlActual = request.getRequestURI();
+        model.addAttribute("uriAnterior", urlActual);
+        log.info("urlActual: " + urlActual);
         //cargramos los clientes para el filtro y tipo de pedido
         model.addAttribute("clientes", clienteService.findAll());
         model.addAttribute("tipos", tipos);
@@ -132,10 +139,17 @@ public class AlbaranController {
             flash.addFlashAttribute(ERROR, "El albaran no existe en la base de datos!");
             return REDIRECTLISTAR;
         }
+        //obtener la URI del controlador anterior
+
+
+        String uriAnterior = "/ver/"+id;
+        log.info("uri_anterior: " + uriAnterior);
         model.addAttribute("albaran", albaran);
+        model.addAttribute("uriAnterior", uriAnterior); // Pasamos la URI del controlador anterior al modelo
         model.addAttribute(TITULO, "Detalles del Albaran");
         return "albaran/ver";
     }
+
 
     /**
      * Crear los albaranes para las facturas
@@ -303,6 +317,7 @@ public class AlbaranController {
                                             @RequestParam(name = "tipo") String tipo) {
 
         try {
+            log.info("albaran que vienes"+cliente+tipo);
             // Generar el informe
             JasperPrint jasperPrint = clienteService.generateJasperPrints(cliente, tipo);
             //recorrer el informe

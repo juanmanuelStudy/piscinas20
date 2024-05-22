@@ -68,23 +68,79 @@
 	<title>
 		<band height="164" splitType="Stretch">
 			<staticText>
-				<reportElement style="Title" x="580" y="20" width="212" height="67" uuid="77e5f357-287f-46bb-a2ca-428ae6225aa5"/>
+				<reportElement style="Title" x="520" y="0" width="252" height="67" uuid="77e5f357-287f-46bb-a2ca-428ae6225aa5"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="40" isBold="false"/>
+					<font size="54" isBold="false"/>
 				</textElement>
 				<text><![CDATA[PEDIDOS]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="SubTitle" x="129" y="27" width="410" height="60" uuid="8a2c39c1-4f53-44ef-be46-14e63a90b2f0"/>
-				<textElement textAlignment="Center">
-					<font size="26" isBold="true"/>
+				<reportElement style="SubTitle" x="490" y="67" width="310" height="37" uuid="8a2c39c1-4f53-44ef-be46-14e63a90b2f0"/>
+				<textElement textAlignment="Right">
+					<font size="26"/>
 				</textElement>
-				<text><![CDATA[Taller de Joyeria Artesanal Anselmo]]></text>
+				<text><![CDATA[Taller de Joyeria Anselmo]]></text>
 			</staticText>
 			<image onErrorType="Blank">
-				<reportElement x="10" y="0" width="150" height="120" uuid="49d4d5d1-bde0-4385-b55f-a6b1d36919b4"/>
-				<imageExpression><![CDATA["C:/Users/dahir/IdeaProjects/piscinas20/spring-boot-data-jpa/src/main/resources/static/jasperReport/logo.png"]]></imageExpression>
+				<reportElement x="40" y="10" width="90" height="94" uuid="49d4d5d1-bde0-4385-b55f-a6b1d36919b4"/>
+				<imageExpression><![CDATA["C:/Users/dahir/Pictures/LOGO/logo blanco y negro.jpeg"]]></imageExpression>
 			</image>
+			<staticText>
+				<reportElement x="180" y="35" width="80" height="20" uuid="b8b4ca12-bbc4-406a-a70f-be44b532d84d"/>
+				<textElement>
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Dirección:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="180" y="10" width="70" height="25" uuid="7f5e167b-d057-4b6d-ad0c-66a68c6e0664"/>
+				<textElement>
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Empresa :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="180" y="60" width="70" height="20" uuid="d84af192-89c7-44cc-b825-45fb75b5b151"/>
+				<textElement>
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Telf:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="270" y="12" width="120" height="20" uuid="7b98b432-da34-4b8e-98a4-b28293b40bfa"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<text><![CDATA[ANSEL JOYERO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="180" y="92" width="70" height="23" uuid="b59de47c-c9a3-40e8-acd1-ee4ba267ae33"/>
+				<textElement>
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Email:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="270" y="35" width="120" height="20" uuid="605c0194-4548-47cd-9887-88e8caf4cfb2"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<text><![CDATA[Geronico Pons]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="270" y="60" width="120" height="25" uuid="df6bc323-598b-4ec3-a3a2-1bcb7770a089"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<text><![CDATA[123456789]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="270" y="92" width="140" height="20" uuid="4de59d12-0884-4c6f-82f7-f2138fd2153e"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<text><![CDATA[ansel@hotmail.com]]></text>
+			</staticText>
 			<staticText>
 				<reportElement x="671" y="110" width="120" height="20" uuid="f77d7630-174f-4052-a547-80f1e74a1990"/>
 				<textElement>

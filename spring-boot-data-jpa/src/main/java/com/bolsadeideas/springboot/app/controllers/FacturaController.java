@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.IntStream;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import com.bolsadeideas.springboot.app.models.dto.mapper.FacturaMapper;
@@ -70,6 +71,9 @@ public class FacturaController {
 
     @Autowired
     private NotificacionService notificacionService;
+
+    @Autowired
+    private HttpServletRequest request;
 
     private String fechadefactura;
     private Double total;
@@ -138,10 +142,14 @@ public class FacturaController {
             flash.addFlashAttribute("error", "La factura no existe en la base de datos!");
             return "redirect:/listar";
         }
-
+        String urlActual = request.getRequestURI();
+        String uriAnterior = "/ver/"+id;
+        log.info("urlActual: " + urlActual);
         //fechadefactura = factura.getDfechaFactura().substring(2,4);
         //anticipo =factura.getNanticipo();
         total = factura.getTotal();
+
+        model.addAttribute("uriAnterior", urlActual); // Pasamos la URI del controlador anterior al modelo
 
         model.addAttribute("factura", factura);
         model.addAttribute("titulo", "FACTURA : ".concat(factura.getId().toString()));

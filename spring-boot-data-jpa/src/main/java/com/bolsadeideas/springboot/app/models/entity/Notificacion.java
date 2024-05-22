@@ -27,6 +27,8 @@ public class Notificacion implements Serializable {
 
     private boolean leida;
 
+    private Long total;
+
     @OneToOne
     private Producto materialAfectado;
 

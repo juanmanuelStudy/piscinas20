@@ -10,16 +10,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -62,13 +58,6 @@ public class MaterialController {
 	}
 		
 
-	@RequestMapping(value = "/layout", method = RequestMethod.GET)
-	public String count(Model model) {
-		
-		model.addAttribute("countMaterial", materialService.count());
-		
-		return "layoutMcompras";
-	}
 	
 	@RequestMapping(value = "/form")
 	public String crear( Map<String, Object> model) {
@@ -82,13 +71,18 @@ public class MaterialController {
 		
 		return "productos/materialForm";
 	}
-	
+
+
+	@GetMapping("/count")
+	public ResponseEntity<Long> getNotificationCount() {
+		Long count = notificacionService.getNotificationCount();
+		return ResponseEntity.ok(count);
+	}
+
 	@RequestMapping(value="/form/{id}")
 	public String editar(@PathVariable(value="id") Long id, Map<String, Object> model) {
 
 			Producto material = materialService.findOne(id);
-			//revisa el stock de los productos
-			notificacionService.verificarStock();
 			//se añade todos los findAll que tenga los select en el formulario para poder selecionar
 			model.put("proveedores",proveedorService.findOne(material.getNproveedor().getNproveedor()));
 			model.put("material",  materialService.findOne(id));

@@ -1,6 +1,11 @@
 
 window.onload = function() {
-
+	// Inicializar DataTables para la tabla de productos
+	$('#tableProducto').DataTable({
+		scrollY: '200px', // Ajusta la altura según tus necesidades
+		scrollCollapse: true,
+		paging: false
+	});
 	// Función para cargar los productos en el modal
 	var productosCargados = false; // Variable para controlar si los productos ya se han cargado
 
@@ -13,7 +18,7 @@ window.onload = function() {
 				dataType: "json",
 				success: function (data) {
 					// Limpiar el contenido anterior
-
+					$("#productosBody").empty();
 
 					// Iterar sobre los datos y agregarlos al modal
 					$.each(data, function (index, producto) {
@@ -27,8 +32,13 @@ window.onload = function() {
 						productoItem += "<td><button type='button' class='btn btn-primary' onclick='agregarProducto(" + producto.id + ", \"" + producto.nombre + "\", " + producto.precio + ", " + producto.descuento + ")'>Agregar</button></td>";
 						productoItem += "</tr>";
 						$("#productosBody").append(productoItem);
+					});
 
-
+					// Inicializar DataTables para la tabla de productos
+					$('#tableProducto').DataTable({
+						scrollY: '200px', // Ajusta la altura según tus necesidades
+						scrollCollapse: true,
+						paging: false
 					});
 
 					// Marcar que los productos han sido cargados
@@ -128,6 +138,8 @@ window.onload = function() {
 			});
 
 			$('#gran_total').html(total);
+			$('#gran_total_').val(total);
+			console.log("total"+$('#gran_total_').val(total));
 		},
 		calcularBaseIva: function () {
 			var total = 0;

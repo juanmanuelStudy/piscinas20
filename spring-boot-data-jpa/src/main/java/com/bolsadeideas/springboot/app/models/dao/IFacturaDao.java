@@ -28,7 +28,9 @@ public interface IFacturaDao extends PagingAndSortingRepository<Factura, Long>{
 
 	@Query("select  COUNT(*) FROM Factura")
 	public  long count();
-	
+
+	@Query("SELECT SUM(f.total) FROM Factura f")
+	Double findTotalFacturas();
 	
 	
 

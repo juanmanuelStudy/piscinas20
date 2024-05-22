@@ -59,7 +59,7 @@ article, aside, figcaption, figure, footer, header, hgroup, main, nav, section {
 }
 
 body {
-  margin: 0;
+  margin: 10;
   font-family: "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   font-size: 1rem;
   font-weight: 400;
@@ -6111,6 +6111,8 @@ a.close.disabled, a.disabled.mailbox-attachment-close {
   -ms-flex: 1 1 auto;
   flex: 1 1 auto;
   padding: 1rem;
+  max-height: 400px; /* Altura máxima */
+  overflow-y: auto; /* Habilita el desplazamiento vertical */
 }
 
 .modal-footer {
@@ -11459,7 +11461,7 @@ body.sidebar-collapse:not(.sidebar-mini-md):not(.sidebar-mini) .main-header::bef
 }
 
 .content-wrapper > .content {
-  padding: 0 0.5rem;
+  padding: 0 2.0rem;
 }
 
 .main-sidebar, .main-sidebar::before {
@@ -31095,87 +31097,3 @@ a.text-muted:hover {
 }
 /*# sourceMappingURL=adminlte.css.map */
 
-
-   /* Estilo para la capa de fondo oscuro */
- .overlay {
-   position: fixed; /* Fija la capa en la ventana del navegador */
-   top: 0;
-   left: 0;
-   width: 100%; /* Ocupa todo el ancho de la ventana */
-   height: 100%; /* Ocupa todo el alto de la ventana */
-   background-color: rgba(0, 0, 0, 0.5); /* Fondo negro con opacidad del 50% */
-   z-index: 999; /* Asegura que la capa esté encima de otros elementos */
- }
-#fotoMini img{
-  width: 100px;
-  height: 100px;
-  margin: 0 0px;
-}
-/* poner una al lado de la otra las imagenes muy juntas*/
-.slick-slide {
-  margin: 0 5px;
-}
-/* centra las fotos dentro de fotoCarrousel*/
-.slick-list {
-  text-align: center;
-}
-
-/* Estilo para las imágenes en el carrusel */
-#fotoCarousel {
-  display: flex;
-  justify-content: center; /* Centra horizontalmente */
-  align-items: center; /* Centra verticalmente */
-
-}
-
-#fotoCarousel img {
-  max-width: 50%; /* Asegura que la imagen no exceda el tamaño del contenedor */
-  max-height: 50%; /* Asegura que la imagen no exceda el tamaño del contenedor */
-  display: block; /* Evita que la imagen tenga espacio adicional debajo */
-  margin: auto; /* Centra la imagen horizontalmente */
-  transition: transform 0.5s; /* Agrega una transición suave */
-  width: 700px;
-  height: 350px;
-}
-
-/* Estilo para los botones de navegación */
-.slick-prev, .slick-next {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 1000; /* Asegura que los botones estén por encima de las imágenes */
-  background-color: rgba(255, 255, 255, 0.5); /* Cambia el color de fondo de los botones */
-  border: none;
-  padding: 10px;
-  border-radius: 50%;
-  cursor: pointer;
-}
-.slick-prev {
-  left: 10px; /* Ajusta la posición izquierda del botón previo */
-}
-/* Ajusta la posición derecha del botón siguiente  tiene que estar como la izquierda*/
-.slick-next {
-  right: 10px;
-}
-/* Estilo para el botón de volver */
-.btn-xs {
-  font-size: 0.8em;
-}
-/* Estilo para la imagen que se hace zoom hacia la parte de la imgen */
-.zoom {
-  transform: scale(2); /* Hace que la imagen se amplíe al doble */
-  transition: transform 0.5s; /* Agrega una transición suave */
-  z-index: 1000; /* Asegura que la imagen ampliada esté por encima de las demás */
-  position: fixed; /* Fija la imagen en la pantalla */
-  background-color: rgba(0, 0, 0, 0.5); /* Agrega un fondo oscuro */
-  /* Centrar la imagen */
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  margin: auto;
-  overflow: auto; /* Ajusta el desbordamiento */
-  width: 600px;
-  height: 400px;
-}
-/* Estilo para el botón de cerrar */

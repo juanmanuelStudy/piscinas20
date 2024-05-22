@@ -5,68 +5,64 @@ import com.bolsadeideas.springboot.app.models.dao.NotificacionRepository;
 import com.bolsadeideas.springboot.app.models.entity.Notificacion;
 import com.bolsadeideas.springboot.app.models.entity.Producto;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import java.util.ArrayList;
-import java.util.Collections;
+
 import java.util.List;
 
 @Service
-public class NotificacionService  {
+public class NotificacionService {
 
     @Autowired
     private NotificacionRepository notificacionRepository;
+
     @Autowired
     private IProductoDao productoService;
-    private List<String> notifications = new ArrayList<>();
 
+
+
+    public Long getNotificationCount() {
+        return notificacionRepository.count();
+    }
 
     public void guardar(Notificacion notificacion) {
         notificacionRepository.save(notificacion);
+    }
 
-
-}
     public List<Notificacion> getNotifications() {
         return notificacionRepository.findAll();
     }
 
     public Long totalNotificaciones() {
-        return  notificacionRepository.count();
+        Long total = notificacionRepository.count();
+        Notificacion notificacion = new Notificacion();
+        //alamcenar en base de datos el total de notificaciones
+        notificacion.setTotal(total);
+        return total;
     }
 
     public void clearNotifications() {
         notificacionRepository.deleteAll();
     }
 
-
     public void addNotification(String notification) {
-        notifications.add(notification);
-    }
+        Notificacion notificacion = new Notificacion();
+        notificacion.setMensaje(notification);
+        notificacion.setLeida(false);
 
+        guardar(notificacion);
+    }
 
     public void verificarStock() {
         List<Producto> productosBajoStock = productoService.findByCantidadLessThan(100.0);
-        //obtner las notificaciones
-        List <Notificacion> idnotificacion = getNotifications();
-        //recorrer las notificaciones
-        for (Notificacion notificacion : idnotificacion) {
-            //si la notificacion no ha sido leida
-            if (!notificacion.isLeida()) {
-                //agregar la notificacion a la lista de notificaciones
-                addNotification(notificacion.getMensaje());
-            }
-        }
-        //recorre la lista de productos con stock bajo
+
+        // Recorrer los productos con stock bajo y crear notificaciones si es necesario
         for (Producto producto : productosBajoStock) {
-            //crea un mensaje de notificacion
             Notificacion notificacion = new Notificacion();
-            notificacion.setMensaje("El producto " + producto.getNombre() +" tiene un stock de "+producto.getCantidad()+"bajo por debajo de 100gr. Recuerda reponer. ");
+            notificacion.setMensaje("El producto " + producto.getNombre() + " tiene un stock de " + producto.getCantidad() + " bajo por debajo de 100gr. Recuerda reponer.");
             notificacion.setMaterialAfectado(producto);
             notificacion.setLeida(false);
             guardar(notificacion);
         }
     }
-
-
 }
-
+// Compare this snippet from src/main/java/com/bolsadeideas/springboot/app/models/service/NotificacionService.java:

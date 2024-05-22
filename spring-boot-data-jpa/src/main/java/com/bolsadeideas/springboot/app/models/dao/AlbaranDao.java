@@ -20,4 +20,7 @@ public interface AlbaranDao extends PagingAndSortingRepository<Albaran, Long> {
 
 	@Query("select p from Albaran p where p.cliente.id = ?1")
 	public Page<Albaran> findAlbaranCliente(Long Cliente, Pageable pageable);
+
+
+
 }

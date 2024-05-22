@@ -7,116 +7,134 @@
 
 <div layout:fragment="content">
 
-<div class="container py-8">
+    <div class="container py-8">
 
-    <div class="card bg-light">
-        <div class="card-header" th:text="${titulo}"></div>
-        <div class="card-body">
+        <div class="card bg-light">
+            <div class="card-header" th:text="${titulo}"></div>
+            <div class="card-body">
 
-            <h4 class="card-title">
-                <!--<a class="btn btn-success btn-sm"
-                    th:href="@{'/facturas/form/' + ${cliente.id}}"
-                    th:text="'Crear Factura'"></a>
-                <a class="btn btn-success btn-sm"
-                    th:href="@{'/albaranes/form/' + ${cliente.id}}"
-                    th:text="'Crear Albaran'"></a>
-                <a class="btn btn-success btn-sm"
-                   th:href="@{'/pedidos/form/' + ${cliente.id}}"
-                   th:text="'Crear Pedido'"></a>-->
-            </h4>
-
-
-            <!-- <img th:if="${#strings.length(cliente.foto) > 0}"
-                class="img-thumbnail rounded float-left" style="max-width: 25%;"
-                th:src="@{'/uploads/' + ${cliente.foto}}" th:alt="${cliente.foto}" />
-
-                 -->
-            <ul class="list-group">
-                <li class="list-group-item active" th:text="'Datos del Cliente'"></li>
-                <li class="list-group-item" th:text="'Dirección: '+${cliente.direccion}"></li>
-                <li class="list-group-item" th:text="'Telefóno: '+${cliente.telefono}"></li>
-                <li class="list-group-item" th:text="'Email: '+ ${cliente.email}"></li>
-                <li class="list-group-item" th:text="'Fecha de Alta: '+${cliente.createAt}"></li>
-            </ul>
-
-            <br>
-            <ul th:if="${not #lists.isEmpty(cliente.pedido)}" class="list-group">
-                <li class="list-group-item active" th:text="'Lista de Pedidos Creados'"></li>
-            </ul>
+                <h4 class="card-title">
+                    <!--<a class="btn btn-success btn-sm"
+                        th:href="@{'/facturas/form/' + ${cliente.id}}"
+                        th:text="'Crear Factura'"></a>
+                    <a class="btn btn-success btn-sm"
+                        th:href="@{'/albaranes/form/' + ${cliente.id}}"
+                        th:text="'Crear Albaran'"></a>
+                    <a class="btn btn-success btn-sm"
+                       th:href="@{'/pedidos/form/' + ${cliente.id}}"
+                       th:text="'Crear Pedido'"></a>-->
+                </h4>
 
 
-            <div class="table-responsive">
-                <table id="table" class="table mt-2">
-                    <thead class="thead-dark">
-                    <tr>
-                        <th>Nº Pedido</th>
-                        <th>Cliente</th>
-                        <th>Estado</th>
-                        <th>T.Pedido</th>
-                        <th>F.Pedido</th>
-                        <th>Ver</th>
-                        <th>Editar</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr th:each="pedido:${pedido}">
-                        <td th:text="${pedido.npedido}"></td>
-                        <td th:text="${pedido.cliente.nombre}"></td>
-                        <td th:text="${pedido.estado}"></td>
-                        <td th:text="${pedido.tipoPedido}"></td>
-                        <td th:text=" ${#dates.format(pedido.dfecha, 'dd/MM/yyyy')}"></td>
-                        <td><a class="btn btn-primary btn-sm" th:href="@{'/pedidos/ver/' + ${pedido.npedido}}" th:text="'detalle'"></a></td>
-                        <td><a class="btn btn-primary btn-sm" th:href="@{'/pedidos/formEditar/' + ${pedido.npedido}}" th:text="'Editar'"></a></td>
-                    </tr>
-                    </tbody>
-                </table>
-                <div th:if="${#lists.isEmpty(cliente.pedido)}"
-                     class="alert alert-info my-4"
-                     th:text="'No hay Pedidos asignados para el cliente ' + ${cliente.nombre} + ' ' + ${cliente.apellido}"></div>
-                <nav th:replace="paginator-navVerPedido ::paginatorPedido"></nav>
+                <!-- <img th:if="${#strings.length(cliente.foto) > 0}"
+                    class="img-thumbnail rounded float-left" style="max-width: 25%;"
+                    th:src="@{'/uploads/' + ${cliente.foto}}" th:alt="${cliente.foto}" />
+
+                     -->
+                <ul class="list-group">
+                    <li class="list-group-item active" th:text="'Datos del Cliente'"></li>
+                    <li class="list-group-item" th:text="'Dirección: '+${cliente.direccion}"></li>
+                    <li class="list-group-item" th:text="'Telefóno: '+${cliente.telefono}"></li>
+                    <li class="list-group-item" th:text="'Email: '+ ${cliente.email}"></li>
+                    <li class="list-group-item" th:text="'Fecha de Alta: '+${cliente.createAt}"></li>
+                </ul>
+                <br>
+                <!-- Pestañas para Pedidos y Albaranes -->
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="pedidos-tab" data-toggle="tab" href="#pedidos" role="tab" aria-controls="pedidos" aria-selected="true">Pedidos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="albaranes-tab" data-toggle="tab" href="#albaranes" role="tab" aria-controls="albaranes" aria-selected="false">Albaranes</a>
+                    </li>
+                </ul>
+
+                <!-- Contenido de las pestañas -->
+                <div class="tab-content" id="myTabContent">
+                    <!-- Tab para los pedidos -->
+                    <div class="tab-pane fade show active" id="pedidos" role="tabpanel" aria-labelledby="pedidos-tab">
+                        <h4 class="mt-3">Pedidos del Cliente</h4>
+
+
+                        <div class="table-responsive">
+                            <!-- Tabla de Pedidos -->
+                            <table id="table" class="table mt-2">
+                                <thead class="thead-dark">
+                                <tr>
+                                    <th>Nº Pedido</th>
+                                    <th>Cliente</th>
+                                    <th>Estado</th>
+                                    <th>Tipo de Pedido</th>
+                                    <th>F. Pedido</th>
+                                    <th>Ver</th>
+                                    <th>Editar</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <!-- Contenido de la tabla de pedidos -->
+                                <tr th:each="pedido:${pedido}">
+                                    <td th:text="${pedido.npedido}"></td>
+                                    <td th:text="${pedido.cliente.nombre}"></td>
+                                    <td th:text="${pedido.estado}"></td>
+                                    <td th:text="${pedido.tipoPedido}"></td>
+                                    <td th:text="${#dates.format(pedido.dfecha, 'dd/MM/yyyy')}"></td>
+                                    <td><a class="btn btn-primary btn-sm" th:href="@{'/pedidos/ver/' + ${pedido.npedido}}" th:text="'detalle'"></a></td>
+                                    <td><a class="btn btn-primary btn-sm" th:href="@{'/pedidos/formEditar/' + ${pedido.npedido}}" th:text="'Editar'"></a></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <div th:if="${#lists.isEmpty(cliente.pedido)}"
+                                 class="alert alert-info my-4"
+                                 th:text="'No hay Pedidos asignados para el cliente ' + ${cliente.nombre} + ' ' + ${cliente.apellido}"></div>
+                            <nav th:replace="paginator-navVerPedido ::paginatorPedido"></nav>
+                        </div>
+                    </div>
+
+                    <!-- Tab para los albaranes -->
+                    <div class="tab-pane fade" id="albaranes" role="tabpanel" aria-labelledby="albaranes-tab">
+                        <h4 class="mt-3">Albaranes del Cliente</h4>
+
+
+                        <div class="table-responsive">
+                            <!-- Tabla de Albaranes -->
+                            <table id="tableAlbaran" class="table mt-2">
+                                <thead class="thead-dark">
+                                <tr>
+                                    <th>Nº Albaran</th>
+                                    <th>F. Albaran</th>
+                                    <th>Cliente</th>
+                                    <th>Tipo de Pedido</th>
+                                    <th>Total</th>
+                                    <th>Ver</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <!-- Contenido de la tabla de albaranes -->
+                                <tr th:each="factura:${factura}">
+                                    <td th:text="${factura.id}"></td>
+                                    <td th:text ="${factura.dfechaAlbaran}"></td>
+                                    <td th:text="${factura.cliente.nombre}"></td>
+                                    <td th:text="${factura.tipoPedido}"></td>
+                                    <td th:text="${#numbers.formatDecimal(factura.subTotal, 0, 'DEFAULT', 2, 'DEFAULT')}+' €'"></td>
+                                    <td><a class="btn btn-primary btn-sm" th:href="@{'/facturas/ver/' + ${factura.id}}" th:text="'Ver'"></a></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <div th:if="${#lists.isEmpty(cliente.facturas)}"
+                                 class="alert alert-info my-4"
+                                 th:text="'No hay Albaranes asignados para el cliente ' + ${cliente.nombre} + ' ' + ${cliente.apellido}"></div>
+                            <nav th:replace="paginator-navVerFactura ::paginatorFactura"></nav>
+                        </div>
+                    </div>
+                </div>
+
             </div>
-
-        <br>
-        <ul th:if="${not #lists.isEmpty(cliente.facturas)}" class="list-group">
-            <li class="list-group-item active" th:text="'Listado de albaranes del Cliente'"></li>
-        </ul>
-
-
-
-        <div class="table-responsive">
-            <table id="tableAlbaran" class="table mt-2">
-                <thead class="thead-dark">
-                <tr>
-                    <th>Nº Albaran</th>
-                    <th>F.Albaran</th>
-                    <th>Cliente</th>
-                    <th>Tipo de Pedido</th>
-                    <th>Total</th>
-                    <th>Ver</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="factura:${factura}">
-                    <td th:text="${factura.id}"></td>
-                    <td th:text="${factura.dfechaAlbaran}"></td>
-                    <td th:text="${factura.cliente.nombre}"></td>
-                    <td th:text="${factura.tipoPedido}"></td>
-                    <td th:text="${#numbers.formatDecimal(factura.subTotal, 0, 'DEFAULT', 2, 'DEFAULT')}+' €'"></td>
-                    <td><a class="btn btn-primary btn-sm" th:href="@{'/facturas/ver/' + ${factura.id}}" th:text="'Ver'"></a></td>
-                </tr>
-                </tbody>
-            </table>
-            <div th:if="${#lists.isEmpty(cliente.facturas)}"
-                 class="alert alert-info my-4"
-                 th:text="'No hay Albarenes asignados para el cliente ' + ${cliente.nombre} + ' ' + ${cliente.apellido}"></div>
-            <nav th:replace="paginator-navVerFactura ::paginatorFactura"></nav>
         </div>
-        </div>
+
     </div>
 
 </div>
 
-
-</div>
 </body>
 </html>
+<!--                     <tr> -->

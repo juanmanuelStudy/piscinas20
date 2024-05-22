@@ -13,10 +13,9 @@
 		  href="cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
 	<!-- Plugin Leaflet.awesome-markers  -->
 	<link rel="stylesheet" href="../dist/leaflet.awesome-markers.css">
-
+	<script type="text/javaScript" src="/js/albaranlistar.js"></script>
 </head>
 <body>
-
 <div layout:fragment="content">
 
 	<div class="container py-4">
@@ -49,7 +48,7 @@
                                  <input type="submit" class="btn btn-primary btn-sm" value="Buscar">
 
                             </form>-->
-						<form th:action="@{'/albaranes/buscar'}" id="formBusqueda"  method="post" enctype="multipart/form-data">
+						<form th:action="@{'/albaranes/buscar'}" id="formBusquedaAlbaran"  method="post" enctype="multipart/form-data">
 
 							<label for="cliente" th:text="'Cliente'"></label>
 							<select id="cliente" name="cliente">
@@ -118,35 +117,5 @@
       -->
 </div>
 </body>
-
-<!-- ordenar la tabla poner en un archivo par poder luego llamar -->
-<script type="text/javascript">
-	// Verificar si hay valores guardados en el almacenamiento local
-	var clienteSeleccionado = localStorage.getItem('clienteSeleccionado');
-	var tipoSeleccionado = localStorage.getItem('tipoSeleccionado');
-
-	if (clienteSeleccionado && tipoSeleccionado) {
-		console.log(clienteSeleccionado);
-		console.log(tipoSeleccionado);
-		// Si hay valores guardados, establecerlos en los campos del formulario
-		document.getElementById('clienteHidden').value = clienteSeleccionado;
-		document.getElementById('tipoHidden').value = tipoSeleccionado;
-	}
-	console.log(clienteSeleccionado);
-	console.log(tipoSeleccionado);
-
-	// Al enviar el formulario, guardar los valores seleccionados
-	document.getElementById('formBusqueda').addEventListener('submit', function(e) {
-		// Obtiene los valores seleccionados
-		var clienteSeleccionado = document.getElementById('cliente').value;
-		var tipoSeleccionado = document.getElementById('tipo').value;
-
-		// Guarda los valores en el almacenamiento local
-		localStorage.setItem('clienteSeleccionado', clienteSeleccionado);
-		localStorage.setItem('tipoSeleccionado', tipoSeleccionado);
-
-	});
-</script>
-
 
 </html>

@@ -31,16 +31,11 @@ public class ItemAlbaran implements Serializable{
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "producto_id")
 	private Producto producto;
-	
 	private Integer	cantidad;
-	
 	public Double calcularImporte() {
-		
-		
-		
+
 		Double descuento= producto.getPrecio() * producto.getDescuento()/100;
 		Double precios = (producto.getPrecio()-descuento)/100;
-		
 		return cantidad.doubleValue() * precios;
 	}
 

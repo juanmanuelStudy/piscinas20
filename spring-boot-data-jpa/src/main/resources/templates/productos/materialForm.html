@@ -14,7 +14,7 @@
                         <li th:each="err: ${#fields.errors('*')}" th:text="${err}"></li>
                     </ul>
                 </div>
-                <form th:action="@{/materiales/form}" th:object="${material}" method="post"
+                <form id="createMaterialForm"  th:action="@{/materiales/form}" th:object="${material}" method="post"
                       enctype="multipart/form-data">
 
                     <div class="form-group row">
@@ -124,5 +124,46 @@
         </div>
     </div>
 </div>
+<script>
+    $(document).ready(function () {
+        // Function to fetch notification count
+        function fetchNotificationCount() {
+            $.ajax({
+                url: '/materiales/count',
+                method: 'GET',
+                success: function (data) {
+                    localStorage.setItem('notificationCount', data);
+                },
+                error: function (error) {
+                    console.error('Error fetching notification count:', error);
+                }
+            });
+        }
+
+        // Fetch notification count on page load
+        fetchNotificationCount();
+
+        // Handle form submission
+        $('#createMaterialForm').on('submit', function (e) {
+            e.preventDefault(); // Prevent the default form submission
+            var form = $(this);
+            $.ajax({
+                url: form.attr('action'),
+                method: form.attr('method'),
+                data: form.serialize(),
+                success: function (response) {
+                    // Update notification count
+                    fetchNotificationCount();
+                    // Redirect to the list page or show success message
+                    window.location.href = '/materiales/listarMaterial';
+                },
+                error: function (error) {
+                    console.error('Error submitting form:', error);
+                    // Handle form submission error (show error message, etc.)
+                }
+            });
+        });
+    });
+</script>
 </body>
 </html>

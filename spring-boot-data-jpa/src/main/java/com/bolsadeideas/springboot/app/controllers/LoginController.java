@@ -29,6 +29,12 @@ public class LoginController {
         //comparar usuario y contraseña con la base de datos
         return "login";
     }
+
+
+    @GetMapping("/logout")
+    public String logout() {
+        return "redirect:/login?logout"; // Redirige a la página de inicio de sesión con un parámetro de logout
+    }
 }
 
 

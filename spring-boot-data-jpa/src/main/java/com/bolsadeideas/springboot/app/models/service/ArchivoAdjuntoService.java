@@ -30,6 +30,10 @@ public class ArchivoAdjuntoService {
         return archivoAdjuntoRepository.findArchivoAdjuntoById(pedidoId);
     }
 
+    public List<String> findArchivosAdjuntos() {
+        return archivoAdjuntoRepository.findArchivoAdjunto();
+    }
+
 
 
 }

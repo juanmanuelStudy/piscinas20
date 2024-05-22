@@ -12,4 +12,7 @@ public interface ArchivoAdjuntoDao extends PagingAndSortingRepository<ArchivoAdj
     @Query("select a from ArchivoAdjunto a where a.pedido.npedido = ?1")
     public List<ArchivoAdjunto> findArchivoAdjuntoById(Long pedidoId);
 
+    @Query("select a.nombre from ArchivoAdjunto a")
+    public List<String> findArchivoAdjunto();
+
 }

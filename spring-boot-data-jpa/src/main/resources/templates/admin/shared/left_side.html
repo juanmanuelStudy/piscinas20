@@ -1,139 +1,222 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Sidebar</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        @media (max-width: 768px) {
+            .main-sidebar {
+                position: fixed;
+                top: 0;
+                bottom: 0;
+                width: 100%;
+                z-index: 1000;
+                background-color: #343a40;
+                transition: transform 0.3s ease;
+                transform: translateX(-100%);
+            }
+
+            .main-sidebar.show {
+                transform: translateX(0);
+            }
+
+            .sidebar-toggle {
+                position: fixed;
+                top: 10px;
+                left: 10px;
+                z-index: 1100;
+                background-color: #343a40;
+                color: #fff;
+                border: none;
+                padding: 10px;
+            }
+
+            .main-sidebar .nav-item a {
+                color: #fff;
+            }
+        }
+
+        @media (min-width: 769px) {
+            .sidebar-toggle {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+<button class="sidebar-toggle">☰</button>
 <!-- Main Sidebar Container -->
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a th:href="@{/listar}" class="brand-link">
-        <img src="/admin/dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
-             style="opacity: .8">
+        <img src="/admin/dist/img/logoTallerJoyeria.png" alt="AdminLTE Logo" class="brand-image elevation-3" style="opacity: .9">
         <span class="brand-text font-weight-light">Taller de Joyeria</span>
     </a>
 
     <!-- Sidebar -->
-
-
+    <div class="sidebar">
         <!-- Sidebar Menu -->
         <nav class="mt-2">
-
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-                <!-- Add icons to the links using the .nav-icon class
-                     with font-awesome or any other icon font library -->
+                <!-- Add icons to the links using the .nav-icon class with font-awesome or any other icon font library -->
 
                 <li class="nav-item">
-                    <a href="/admin/dashboard" class="nav-link">
-                        <i class="nav-icon fas fa-th"></i>
-                        <p>Dashboard</p>
+                    <a class="nav-link special-link" th:href="'/balance/listarBalance'">
+                        <i class="nav-icon fas fa-balance-scale"></i>
+                        Balance Gestion Piscinas
                     </a>
                 </li>
-
-                <li class="nav-item has-treeview">
-                    <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-copy"></i>
-                        <p>
-                            User
-                            <i class="right fas fa-angle-left"></i>
-                        </p>
+                <li class="nav-item">
+                    <a class="nav-link special-link">
+                        <i class="nav-icon fas fa-users"></i>
+                        Clientes
+                        <i class="right fas fa-angle-left"></i>
                     </a>
-                    <ul class="nav nav-treeview">
+                    <ul class="nav item nav-treeview">
                         <li class="nav-item">
-                            <a href="/admin/user/list" class="nav-link">
+                            <a class="nav-link" th:href="@{'/listar'}">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>List User</p>
+                                Lista De Clientes <span class="badge badge-secondary" th:text="${countCliente}"></span>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="/admin/user/add" class="nav-link">
+                            <a class="nav-link" th:href="@{'/form'}">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Add User</p>
+                                Crear Cliente
                             </a>
                         </li>
                     </ul>
                 </li>
-                <aside class="main-sidebar sidebar-dark-primary elevation-4">
-                    <!-- Brand Logo -->
-                    <a href="/admin/dashboard" class="brand-link">
-                        <img src="/admin/dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
-                             style="opacity: .8">
-                        <span class="brand-text font-weight-light">Gestion Taller Artesanal</span>
+                <li class="nav-item">
+                    <a class="nav-link special-link">
+                        <i class="nav-icon fas fa-briefcase"></i>
+                        Trabajos
+                        <i class="right fas fa-angle-left"></i>
                     </a>
-
-                    <!-- Sidebar -->
-
-                        <!-- Sidebar Menu -->
-                        <nav class="mt-2">
-                            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
-                                data-accordion="false">
-                                <li class="nav-item">
-                                    <a class="nav-link special-link" th:href="'/balance/listarBalance'">Balance Gestion
-                                        Piscinas</a>
-                                </li>
-                                <li class="nav-item">
-
-                                    <a class="nav-link special-link">Clientes<i class="right fas fa-angle-left"></i></a>
-
-                                    <ul class="nav item nav-treeview">
-
-                                        <li class="nav-item"><a class="nav-link"
-                                                                th:href="@{'/listar'}">Lista De Clientes <span
-                                                class="badge badge-secondary" th:text="${countCliente}"></span></a></li>
-                                        <li class="nav-item"><a class="nav-link" th:href="@{'/form'}">Crear Cliente</a></li>
-                                    </ul>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link special-link">Trabajos<i class="right fas fa-angle-left"></i></a>
-                                    <ul class="nav nav-treeview">
-                                        <li class="nav-item"><a class="nav-link"
-                                                                th:href="@{'/pedidos/listarPedidos'}">Listar Pedidos <span
-                                                class="badge badge-secondary" th:text="${countAlbaranes}"></span></a></li>
-                                        <li class="nav-item"><a class="nav-link"
-                                                                th:href="@{'/albaranes/listarAlbaranes'}">Listar Albaranes <span
-                                                class="badge badge-secondary" th:text="${countAlbaranes}"></span></a></li>
-                                    </ul>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link special-link">Compras<i class="right fas fa-angle-left"></i></a>
-                                    <ul class="nav nav-treeview">
-                                        <li class="nav-item"><a class="nav-link"
-                                                                th:href="@{'/proveedor/form'}">Crear Proveedor</a></li>
-                                        <li class="nav-item"><a class="nav-link"
-                                                                th:href="@{'/proveedor/listarProveedor'}">Listar Proveedor</a></li>
-                                        <li class="nav-item"><a class="nav-link"
-                                                                th:href="@{'/materiales/form'}">Comprar Material</a></li>
-                                        <li class="nav-item"><a class="nav-link"
-                                                                th:href="@{'/materiales/listarMaterial'}">Listar Material</a></li>
-                                        <li class="nav-item"><a class="nav-link"
-                                                                th:href="@{'/facturas/listarFacturasSinContabilizar'}">Listar
-                                            Facturas
-                                            de compra</a></li>
-                                    </ul>
-                                </li>
-                                <li class="nav-item" hidden="hidden">
-                                    <a class="nav-link special-link" href="#">Cobros Clientes</a>
-                                    <ul class="nav nav-treeview">
-                                        <li class="nav-item"><a class="nav-link" href="#">Pagados</a></li>
-                                        <li class="nav-item"><a class="nav-link" href="#">Pendientes</a></li>
-                                    </ul>
-                                </li>
-                                <li class="nav-item" hidden="hidden">
-                                    <a class="nav-link special-link" href="#">Incidencias</a>
-                                    <ul class="nav nav-treeview">
-                                        <li class="nav-item"><a class="nav-link" href="#">Proceso</a></li>
-                                        <li class="nav-item"><a class="nav-link" href="#">Terminadas</a></li>
-                                    </ul>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" th:href="@{'/notifications/notifications'}">Notificaciones <span
-                                            class="badge badge-secondary" th:text="${count}"></span></a>
-                                </li>
-                            </ul>
-                        </nav>
-                        <!-- /.sidebar-menu -->
-                    </div>
-                    <!-- /.sidebar -->
-                </aside>
-
-
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{'/pedidos/listarPedidos'}">
+                                <i class="far fa-circle nav-icon"></i>
+                                Listar Pedidos <span class="badge badge-secondary" th:text="${countAlbaranes}"></span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{'/albaranes/listarAlbaranes'}">
+                                <i class="far fa-circle nav-icon"></i>
+                                Listar Albaranes <span class="badge badge-secondary" th:text="${countAlbaranes}"></span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link special-link">
+                        <i class="nav-icon fas fa-shopping-cart"></i>
+                        Compras
+                        <i class="right fas fa-angle-left"></i>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{'/proveedor/form'}">
+                                <i class="far fa-circle nav-icon"></i>
+                                Crear Proveedor
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{'/proveedor/listarProveedor'}">
+                                <i class="far fa-circle nav-icon"></i>
+                                Listar Proveedor
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{'/materiales/form'}">
+                                <i class="far fa-circle nav-icon"></i>
+                                Comprar Material
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{'/materiales/listarMaterial'}">
+                                <i class="far fa-circle nav-icon"></i>
+                                Listar Material
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{'/facturas/listarFacturasSinContabilizar'}">
+                                <i class="far fa-circle nav-icon"></i>
+                                Listar Facturas de compra
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item" hidden="hidden">
+                    <a class="nav-link special-link" href="#">
+                        <i class="nav-icon fas fa-money-bill"></i>
+                        Cobros Clientes
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item"><a class="nav-link" href="#"><i class="far fa-circle nav-icon"></i> Pagados</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#"><i class="far fa-circle nav-icon"></i> Pendientes</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item" hidden="hidden">
+                    <a class="nav-link special-link" href="#">
+                        <i class="nav-icon fas fa-exclamation-triangle"></i>
+                        Incidencias
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item"><a class="nav-link" href="#"><i class="far fa-circle nav-icon"></i> Proceso</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#"><i class="far fa-circle nav-icon"></i> Terminadas</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{'/notifications/notifications'}">
+                        <i class="nav-icon fas fa-bell"></i>
+                        Notificaciones <span class="badge badge-secondary" id="notificationCount"></span>
+                    </a>
+                </li>
             </ul>
         </nav>
         <!-- /.sidebar-menu -->
     </div>
     <!-- /.sidebar -->
 </aside>
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // Toggle sidebar on smaller screens
+        $('.sidebar-toggle').click(function () {
+            $('.main-sidebar').toggleClass('show');
+        });
+    //actaulizar antes de cargar la pagina
+
+        var count = localStorage.getItem('notificationCount');
+        $('#notificationCount').text(count);
+        console.log(count);
+
+        // Function to fetch notification count
+        function fetchNotificationCount() {
+            $.ajax({
+                url: '/notifications/count', // Endpoint to fetch notification count
+                method: 'GET',
+                success: function (data) {
+                    $('#notificationCount').text(data);
+                },
+                error: function (error) {
+                    console.error('Error fetching notification count:', error);
+                }
+            });
+        }
+
+        // Fetch notification count on page load
+        fetchNotificationCount();
+        //ejecutar al pasar 30 segundo
+
+        // Optionally, refresh the count periodically (e.g., every 30 seconds)
+        setInterval(fetchNotificationCount, 50000); // 30000 milliseconds = 30 seconds
+    });
+</script>
+</body>
+</html>

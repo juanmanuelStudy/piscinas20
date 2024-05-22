@@ -62,10 +62,9 @@ public class Factura implements Serializable {
    // private String foto;
 
     private String tipoPedido;
+
+
     private String npedido ;
-
-
-
 
     @JsonIgnore
     @ManyToOne
@@ -73,11 +72,14 @@ public class Factura implements Serializable {
     private Proveedor nproveedor;
 
     private String dfechaAlbaran;
+
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String fechavencimiento;
 
     public Double total;
+
     private String observacion;
+
     @Temporal(TemporalType.DATE)
     @Column(name = "create_at")
     private Date createAt;
@@ -117,6 +119,7 @@ public class Factura implements Serializable {
     public void setIvaTotal(Double ivaTotal) {
         this.ivaTotal = ivaTotal;
     }
+
     public void setTotal(Double total) {
         this.total = total;
     }
@@ -160,6 +163,7 @@ public class Factura implements Serializable {
     public void addItemFactura(ItemFactura item) {
         this.items.add(item);
     }
+
     public Double getTotal() {
         Double total = 0.0;
         Double resultado = 0.0;

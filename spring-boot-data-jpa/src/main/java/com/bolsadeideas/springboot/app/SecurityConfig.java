@@ -17,7 +17,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                 .antMatchers("/css/**","/dist/**","/plugins/**", "/js/**", "/images/**").permitAll() // Permitir acceso a recursos estáticos sin autenticación
-                .antMatchers("/login").permitAll() // Permitir acceso a la página de login
+                .antMatchers("/login","/logout").permitAll() // Permitir acceso a la página de login
                 .anyRequest().authenticated() // Cualquier otra solicitud requiere autenticación
                 .and()
                 .formLogin()

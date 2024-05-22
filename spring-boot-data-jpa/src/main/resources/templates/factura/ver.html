@@ -2,358 +2,152 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorator="/admin/admin_layout">
-
 <head>
-    <meta charset="utf-8"/>
-
-    <title>Ver Factura</title>
-
-    <link rel="stylesheet"
-          href="https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css">
-    <script
-            src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
-    <link rel="stylesheet" href="../css/table.css">
-    <!-- Plugin Leaflet.awesome-markers  -->
-    <link rel="stylesheet" href="../dist/leaflet.awesome-markers.css">
+    <meta charset="UTF-8">
+    <div>
+        <a th:href="@{'/albaran/listarAlbaranes'}"
+           class="btn btn-light btn-xs">&laquo; volver</a>
+    </div>
+    <title>Detalles del Albaran</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Agrega aquí otros enlaces a tus estilos CSS si es necesario -->
 </head>
-
-<style>
-    .centerBlock {
-
-        width: 100%;
-        padding: 10px;
-        text-align: center
-
-    }
-</style>
-
 <body>
-
-
 <div layout:fragment="content">
-<div class="container py-4">
-
-
-    <div class="card bg-light">
-        <div class="card-body">
-            <div class="card  text-center border-info ">
-                <div class="centerBlock">
-                    <div class="row">
-
-                        <div class="col-md-12">
-
-                            <div class="row">
-
-                                <div class="col-md-3">
-
-
-                                        <div class="card border-info mb-3" style="max-width: 20rem;">
-                                            <div class="list-group-item active">
-                                                <h5>
-                                                    <span th:text="${factura.cliente.nombre}+' '+${factura.cliente.apellido}"></span>
-                                                </h5>
-                                            </div>
-                                            <div class="list-group-item list-group-item">
-                                                Dirección <span th:text="${factura.cliente.direccion}">
-									</span> <br>Teléfono: <span
-                                                    th:text="${factura.cliente.telefono}"> </span> <br>Email:
-                                                <span th:text="${factura.cliente.email}"> </span> <br>Cliente:
-                                                <span th:text="${factura.cliente.id}"> </span>
-                                            </div>
-                                        </div>
-                                    </div>
-
-
-
-
-
-                                        <!--
-                                    <div class="list-group-item active">N° FACTURA ORIGINAL</div>
-                                    <div class="list-group-item">
-                                        <div class="col-xs-4 text-left">
-
-                                            <h6>
-                                                <span th:text=" ${factura.npersonal}"></span>
-                                            </h6>
-                                        </div>
-
-                                    </div> -->
-
-
-
-
-                                <div class="col-md-3">
-
-                                    <div>
-                                        <div class="list-group-item active">N° ALBARAN</div>
-                                        <div class="list-group-item ">
-                                            <div class="col-xs-6 text-left">
-
-                                                <h6>
-                                                    <span th:text=" ${factura.id}"></span>
-                                                </h6>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-3">
-
-                                    <div>
-                                        <div class="list-group-item active">TIPO DE PEDIDO</div>
-                                        <div class="list-group-item ">
-                                            <div class="col-xs-6 text-center">
-
-                                                <h6>
-                                                    <span th:text=" ${factura.tipoPedido}"></span>
-                                                </h6>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                </div>
-
-                                <div class="col-md-3">
-
-                                    <!--
-                                    <div>
-                                        <div class="list-group-item active">FECHA VENCIMIENTO</div>
-
-                                        <div class="col-xs-6 text-center">
-
-                                            <h6 th:if="${factura.fechavencimiento>date}">
-
-                                                <blink th:text="${factura.fechavencimiento}"
-                                                       class="list-group-item bg-danger"></blink>
-                                            </h6>
-                                            <h6 th:if="${factura.fechavencimiento<date}">
-
-                                                <blink th:text="${factura.fechavencimiento}"
-                                                       class="list-group-item"></blink>
-                                            </h6>
-                                        </div>
--->
-
-                                </div>
+    <div class="container py-4">
+        <div class="card">
+            <div class="card-header">
+               <h2>Detalles del Albaran</h2>
+                <!-- Botones de volver -->
+                <div class="row justify-content-left mt-4">
+                    <div class="col-md-6">
+                        <div class="text-left">
+                            <div class="btn-group" role="group" aria-label="Botones de volver">
+                                <!-- Botón para listar albaranes -->
+                                <a th:href="@{'/albaranes/listarAlbaranes'}" class="btn btn-primary btn-sm mr-2">
+                                    Listar Albaranes</a>
+                                <!-- Botón para ver detalles de cliente -->
+                                <a th:href="@{'/ver/' + ${factura.cliente.id}}" class="btn btn-primary btn-sm">
+                                    Detalles del clientes</a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <br>
-        <div class="row">
-            <div class="col-md-12">
-                <!--
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <div class="card border-info" style="max-width: 20rem;">
-                                                <div class="list-group-item active">
-                                                    <h5>
-                                                        <span th:text="${factura.nproveedor.vnombre}"> </span>
-                                                    </h5>
-                                                </div>
 
-                                                <div class="list-group-item list-group-item">
-                                                    Dirección: <span th:text="${factura.nproveedor.vdireccion}">
-                                                    </span> <br>Teléfono: <span
-                                                        th:text="${factura.nproveedor.ntelefono}"> </span> <br>Email:
-                                                    <span th:text="${factura.nproveedor.vemail}"> </span> <br>Cif:
-                                                    <span th:text="${factura.nproveedor.cif}"> </span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        -->
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h5 class="list-group-item active">Información del Cliente</h5>
+                        <p><strong>Nombre:</strong> <span th:text="${factura.cliente.nombre}"></span></p>
+                        <p><strong>Apellido:</strong> <span th:text="${factura.cliente.apellido}"></span></p>
+                        <p><strong>Dirección:</strong> <span th:text="${factura.cliente.direccion}"></span></p>
+                        <p><strong>Teléfono:</strong> <span th:text="${factura.cliente.telefono}"></span></p>
+                        <p><strong>Email:</strong> <span th:text="${factura.cliente.email}"></span></p>
+                        <p><strong>Nº Cliente:</strong> <span th:text="${factura.cliente.id}"></span></p>
 
+                    </div>
+                    <div class="col-md-6">
+                        <h5 class="list-group-item active">Detalles del Albaran</h5>
+                        <p><strong>Tipo de Pedido:</strong> <span th:text=" ${factura.tipoPedido}"></span></p>
+                        <p><strong>Número de Albaran:</strong> <span th:text="${factura.id}"></span></p>
+                        <p><strong>Fecha de Emisión:</strong> <span th:text="${factura.createAt}"></span></p>
+                        <p><strong>Fecha de Albaran:</strong> <span th:text="${factura.dfechaAlbaran}"></span></p>
+                        <p><strong>Total:</strong> <span
+                                th:text="${#numbers.formatDecimal(factura.subTotal, 0, 'DEFAULT', 2, 'DEFAULT')}+' €'"></span>
+                        </p>
 
+                        <!-- Agrega aquí otros detalles de la factura según sea necesario -->
+                    </div>
+                </div>
+                <hr>
+                <h5>Productos</h5>
+                <table th:if="${not #lists.isEmpty(factura.items)}"
+                       class="table table-striped table-hover table-bordered my-3">
+                    <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>Precio</th>
+                        <th>Cantidad</th>
+                        <!--<th>Descuento</th>-->
 
-    <hr>
+                        <th>Total</th>
+                    </tr>
+                    <tr>
 
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="linea: ${factura.items}">
+                        <td th:text="${linea.producto.nombre}"></td>
+                        <td
+                                th:text="${#numbers.formatDecimal(linea.producto.precio, 0, 'DEFAULT', 2, 'DEFAULT')}+' €'"></td>
 
-    <div class="alert alert-info my-4"
-         th:if="${#lists.isEmpty(factura.items)}"
-         th:text="'No hay lineas para la factura' + ${factura.id}"></div>
+                        <td th:text="${linea.cantidad}"></td>
+                        <!-- <td th:text="${linea.producto.descuento}+' %'"></td>-->
+                        <td
+                                th:text="${#numbers.formatDecimal(linea.calcularImporte(), 0, 'DEFAULT', 2, 'DEFAULT')}+' €'"></td>
 
-
-    <table th:if="${not #lists.isEmpty(factura.items)}"
-           class="table table-striped table-hover table-bordered my-3">
-        <thead>
-        <tr>
-            <th>Producto</th>
-            <th>Precio</th>
-            <th>Cantidad</th>
-            <!--<th>Descuento</th>-->
-
-            <th>Total</th>
-        </tr>
-        <tr>
-
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="linea: ${factura.items}">
-            <td th:text="${linea.producto.nombre}"></td>
-            <td
-                    th:text="${#numbers.formatDecimal(linea.producto.precio, 0, 'DEFAULT', 2, 'DEFAULT')}+' €'"></td>
-
-            <td th:text="${linea.cantidad}"></td>
-           <!-- <td th:text="${linea.producto.descuento}+' %'"></td>-->
-            <td
-                    th:text="${#numbers.formatDecimal(linea.calcularImporte(), 0, 'DEFAULT', 2, 'DEFAULT')}+' €'"></td>
-
-        </tr>
-        </tbody>
-    </table>
-    <div class="float-right">
-        <table th:if="${not #lists.isEmpty(factura.items)}"
-               class="table table-striped table-hover table-bordered my-3">
-            <thead>
-            <tr>
-                <td>SubTotal</td>
-                <td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="float-right">
+                    <table th:if="${not #lists.isEmpty(factura.items)}"
+                           class="table table-striped table-hover table-bordered my-3">
+                        <thead>
+                        <tr>
+                            <td>SubTotal</td>
+                            <td>
                                 <h6>
-									<span    th:text="${#numbers.formatDecimal(factura.subTotal, 0, 'DEFAULT', 2, 'DEFAULT')}+' €'"></span>
-                                 </h6>
-                </td>
-            </tr>
-           <!-- <tr>
-                <td>Iva</td>
-                <td>
-                            <h6>
-									<span  th:text="${#numbers.formatDecimal(factura.totalIva, 0, 'DEFAULT', 2, 'DEFAULT')}+' €'"></span>
-                            </h6>
-                </td>
-            </tr>-->
-            <!--
-            <tr>
-                <th>Anticipo</th>
-                <td>
-                    <h6>
-                        <span th:text="${factura.nanticipo}+' €'"></span>
-                    </h6></td>
+                                    <span th:text="${#numbers.formatDecimal(factura.subTotal, 0, 'DEFAULT', 2, 'DEFAULT')}+' €'"></span>
+                                </h6>
+                            </td>
+                        </tr>
+                        <!-- <tr>
+                             <td>Iva</td>
+                             <td>
+                                         <h6>
+                                                 <span  th:text="${#numbers.formatDecimal(factura.totalIva, 0, 'DEFAULT', 2, 'DEFAULT')}+' €'"></span>
+                                         </h6>
+                             </td>
+                         </tr>-->
+                        <!--
+                        <tr>
+                            <th>Anticipo</th>
+                            <td>
+                                <h6>
+                                    <span th:text="${factura.nanticipo}+' €'"></span>
+                                </h6></td>
 
-            </tr>
-            -->
-            <tr>
-                <th>Total</th>
-                <td><h6>
+                        </tr>
+                        -->
+                        <tr>
+                            <th>Total</th>
+                            <td><h6>
 
 									<span
                                             th:text="${#numbers.formatDecimal(factura.subTotal, 0, 'DEFAULT', 2, 'DEFAULT')}+' €'"></span>
-                </h6></td>
+                            </h6></td>
 
-            </tr>
-            </thead>
-            <tbody>
+                        </tr>
+                        </thead>
+                        <tbody>
 
-            </tbody>
-
-
-        </table>
-    </div>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <hr>
-    <div class="row">
-        <div class="col-md-12">
-
-            <div class="row">
-
-                <div class="col-md-4">
-
-                    <ul class="list-group my-2">
+                        </tbody>
 
 
-                        <li class="list-group-item active" th:text=" 'Detalles de Fechas'"></li>
-                       <!-- <li class="list-group-item"
-                            th:text="'Creación: ' + ${factura.createAt}"> -->
-                        <li class="list-group-item"
-                            th:text="'Albaran: ' + ${factura.dfechaAlbaran}"></li>
-                        <!--<li class="list-group-item"
-                            th:text="'Factura: ' + ${factura.dfechaFactura}"></li>-->
-
-                    </ul>
+                    </table>
 
                 </div>
 
-<!--
-                <div class="col-md-4">
-                    <ul class="list-group my-2">
-                        <li class="list-group-item active" th:text="'Detalles de Pago'"></li>
-
-                        <li class="list-group-item"
-                            th:text="'Metodo : ' + ${factura.metodoPago}"></li>
-
-                        <li class="list-group-item"
-                            th:if="${not #strings.isEmpty(factura.vtrimenstre)}"
-                            th:text="'Trimestre : ' + ${factura.vtrimenstre}+' / '+${fechadefactura}"></li>
-                        <li class="list-group-item" th:text="'Pagada : ' + ${factura.npagada_factura}"
-
-                        ></li>
 
 
-                        <li class="list-group-item"
-                            th:text="'Declarada :  ' + ${factura.enviadoagestor}"></li>
-                        <li class="list-group-item"
-                            th:text="'Cuenta : ' + ${factura.vdomiciliacion}"></li>
-                    </ul>
-                </div>-->
-                <div class="col-md-4">
-                    <div class="list-group my-2" style="max-width: 20rem;">
-                        <div class="list-group-item active">Observaciones</div>
-                        <div class="list-group-item">
-                            <p class="card-text" th:text="${factura.observacion}"
-                               th:if="${not #strings.isEmpty(factura.observacion)}"></p>
-                            <h4 class="card-title"
-                                th:if="${#strings.isEmpty(factura.observacion)}"
-                                th:text="'No tiene observaciones'"></h4>
-                        </div>
-                    </div>
-                </div>
-
+                <!-- Agrega aquí otras secciones de detalles de la factura si es necesario -->
             </div>
+
         </div>
     </div>
-
-    <!--
-                <div class="col-md-4">
-                    <div class="list-group my-2" style="max-width: 20rem;">
-                        <div class="list-group-item active">Documentos Escaneados</div>
-                        <div class="list-group-item">
-                            <p class="card-text" th:text="${factura.foto}"
-                               th:if="${not #strings.isEmpty(factura.observacion)}"></p>
-                            <h4 class="card-title"
-                                th:if="${#strings.isEmpty(factura.foto)}"
-                                th:text="'No tiene documentos escaneados'"></h4>
-
-                            <img th:if="${#strings.length(factura.foto)>0}"
-                                 class="img-thumbnail rounded float-left" style="max-width: 15%;"
-                                 th:src="@{'/uploads/' + ${factura.foto}}" th:alt="${factura.foto}"/>
-                        </div>
-                    </div>
-                </div>-->
-
-
-    <br> <br>
-
-
-</div>
-<div>
-    <a th:href="@{'/albaran/listarAlbaranes'}"
-       class="btn btn-light btn-xs">&laquo; volver</a>
-</div>
 </div>
 
-</div>
-</div>
-</div>
 </body>
 </html>
