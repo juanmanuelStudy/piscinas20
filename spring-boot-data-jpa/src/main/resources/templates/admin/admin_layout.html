@@ -3,9 +3,8 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title layout:title-pattern="$CONTENT_TITLE - $DECORATOR_TITLE"></title>
 
-    <style th:replace="/admin/shared/style"></style>
+    <style th:replace="admin/shared/style"></style>
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
@@ -23,7 +22,7 @@
             background-size: cover;
             background-repeat: no-repeat;
             background-position: center;
-            height: 100vh; /* Ajusta la altura al 100% del viewport */
+            height: 110vh; /* Ajusta la altura al 100% del viewport */
             overflow: hidden; /* Oculta el desplazamiento vertical */
         }
 
@@ -35,10 +34,10 @@
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
     <!-- Header -->
-    <div th:replace="/admin/shared/header"></div>
+    <div th:replace="admin/shared/header"></div>
 
     <!-- Sidebar -->
-    <div th:replace="/admin/shared/left_side"></div>
+    <div th:replace="admin/shared/left_side"></div>
 
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
@@ -59,7 +58,7 @@
     </div>
 
     <!-- Additional Scripts -->
-    <div th:replace="/admin/shared/file_script"></div>
+    <div th:replace="admin/shared/file_script"></div>
 </div>
 
 <!-- Bootstrap JS and dependencies -->

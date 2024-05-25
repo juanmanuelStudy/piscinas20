@@ -179,6 +179,7 @@ public class ClienteController {
 
         if (id > 0) {
             Cliente cliente = clienteService.findOne(id);
+            //añadir que se modifique en la tabla cliente baja
 
             clienteService.delete(id);
             flash.addFlashAttribute("success", "Cliente eliminado con éxito!");

@@ -26,7 +26,7 @@ public class BalanceController {
 		
 		model.addAttribute("titulo", "Balance de Pagos y Beneficios");
 		
-		return "/balance/ver";
+		return "balance/ver";
 	}
 
 }

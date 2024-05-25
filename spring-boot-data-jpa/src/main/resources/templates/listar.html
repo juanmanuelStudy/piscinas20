@@ -1,7 +1,7 @@
 
 <html xmlns:th="http://www.thymeleaf.org"
 	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	  layout:decorator="/admin/admin_layout">
+	  layout:decorate="admin/admin_layout.html">
 <head>
 	<meta charset="utf-8" />
 	<title>Spring Boot + JPA + Datatables</title>
@@ -86,7 +86,7 @@
 							<td><a class="btn btn-primary btn-sm"
 								   th:href="@{/form/} + ${cliente.id}" th:text="'Editar'"></a></td>
 							<td><a class="btn btn-danger btn-sm"
-								   th:href="@{/eliminar/} + ${cliente.id}" th:text="'Eliminar'"
+								   th:href="@{/cliente/eliminar/} + ${cliente.id}" th:text="'Eliminar'"
 								   onclick="return confirm('Est�s seguro que quieres eliminar?');"></a></td>
 						</tr>
 						</tbody>

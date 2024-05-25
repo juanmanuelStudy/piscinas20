@@ -70,7 +70,7 @@ public class PedidoController {
      */
     @PostConstruct
     public void init() {
-        log.info("entra en PedidoController");
+
         // TODO document why this method is empty
     }
 
@@ -222,7 +222,7 @@ public class PedidoController {
         model.put("pedido", pedido);
         model.put("proveedores", proveedorService.findAll());
         model.put(TITULO, CREARPEDIDO);
-        return PEDIDOFORM;
+        return "pedido/pedidoform";
     }
 
 
