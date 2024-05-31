@@ -16,8 +16,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/css/**","/dist/**","/plugins/**", "/js/**", "/images/**").permitAll() // Permitir acceso a recursos estáticos sin autenticación
-                .antMatchers("/login","/logout").permitAll() // Permitir acceso a la página de login
+                .antMatchers("/css/**", "/dist/**", "/plugins/**", "/js/**", "/images/**").permitAll() // Permitir acceso a recursos estáticos sin autenticación
+                .antMatchers("/login", "/logout").permitAll() // Permitir acceso a la página de login
                 .anyRequest().authenticated() // Cualquier otra solicitud requiere autenticación
                 .and()
                 .formLogin()
@@ -36,6 +36,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .withUser("admin").password(encoder.encode("admin")).roles("ADMIN")
                 .and()
                 .withUser("user").password(encoder.encode("user")).roles("USER");
+
     }
+
 }
 
