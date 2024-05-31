@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="admin/admin_layout">
+<head>
+<!-- Agregar jQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <link rel="stylesheet"
+          href="cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
+</head>
+<style>
+    .bootstrap-iso .formden_header h2, .bootstrap-iso .formden_header p,
+    .bootstrap-iso form {
+        font-family: Arial, Helvetica, sans-serif;
+        color: black
+    }
+
+    .bootstrap-iso form button, .bootstrap-iso form button:hover {
+        color: #337ab7 !important;
+    }
+
+    .bootstrap-iso .outline, .bootstrap-iso .outline:focus {
+        background-color: transparent;
+
+        border: 2px solid #337ab7
+    }
+
+    .bootstrap-iso .outline:hover {
+        background-color: transparent;
+        border: 2px solid #5ba2df;
+        color: #5ba2df !important
+    }
+
+    .asteriskField {
+        color: red;
+    }
+    .file-list-container {
+
+        margin-botton: 20px;
+        margin-top: 20px;
+        max-width: 600px; /* Cambia el valor según tus preferencias */
+        margin: 0 auto; /* Centra el contenedor horizontalmente */
+    }
+</style>
+<style>
+    #fileListContainer {
+        background-color: white;
+        border: 1px solid #ccc;
+        padding: 10px;
+        border-radius: 5px;
+    }
+
+    #fileList {
+        list-style: none;
+        padding: 0;
+    }
+
+    .deleteButton {
+        background-color: transparent;
+        border: none;
+        color: red;
+        cursor: pointer;
+        font-size: 16px;
+        vertical-align: middle;
+        margin-left: 5px;
+    }
+</style>
+<body>
+
+
+<div layout:fragment="content">
+<div id="container" class="container py-4">
+<div id="messege">
+
+</div>
+
+    <div class="card bg-light">
+        <div class="card-header" th:text="${titulo}"></div>
+        <div class="card-body">
+
+            <form  id="pedidoForm" th:action="@{/pedidos/form/}"  enctype="multipart/form-data" th:object="${pedido}" method="post">
+
+                <div class="form-group row">
+                    <!-- Campo para el número de pedido -->
+
+                        <label class="col-sm-2 col-form-label">Nº Pedido</label>
+
+                        <div class="col-sm-4">    <!-- Si el número de pedido existe en el modelo -->
+                        <input type="text" th:if="${pedido.npedido != null}" th:field="*{npedido}" id="npedido" class="form-control" readonly="readonly" th:value="${pedido.npedido}" />
+                        <!-- Si el número de pedido no existe en el modelo -->
+                        <input type="text" th:unless="${pedido.npedido != null}" readonly="readonly" th:value="${numeroPedido}" name="npedido" id="npedido" class="form-control"/>
+                        <small class="form-text text-danger" th:if="${#fields.hasErrors('npedido')}" th:errors="*{npedido}"></small>
+                    </div>
+                </div>
+
+
+
+                <div class="form-group row">
+                 <label for="cliente" class="col-sm-2 col-form-label"
+                        th:text="'Cliente'"></label>
+                 <div class="col-sm-4">
+                     <input name="cliente"
+                            th:value="${pedido.cliente.nombre} + ' ' + ${pedido.cliente.apellido}"
+                            class="form-control" disabled='disabled' />
+                 </div>
+             </div>
+
+             <div class="form-group row">
+                    <label for="estado" class="col-sm-2 col-form-label"
+                           th:text="'Estado '">
+                    </label>
+                 <div class="col-sm-4">
+                    <select name="estado" class="form-control" th:field="*{estado}">
+                        <option th:each="estado : ${estados}"
+                                th:value="${estado}"
+                                th:text="${estado}"
+                                th:selected="${pedido.estado == estado}">
+                        </option>
+                    </select>
+                </div>
+            </div>
+
+
+                <div class="form-group row">
+                    <label for="tipoPedido" class="col-sm-2 col-form-label"
+                           th:text="'Servicio                                                                                                                                                    '"></label>
+                    <div class="col-sm-4">
+
+                        <select name="tipoPedido" class="form-control" th:field="*{tipoPedido}">
+                            <option th:each="tipoPedido : ${tipoPedido}"
+                                    th:value="${tipoPedido}"
+                                    th:text="${tipoPedido}"
+                                    th:selected="${pedido.tipoPedido == tipoPedido}"></option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="observacion" class="col-sm-2 col-form-label" th:text="'Observación'"></label>
+                    <div class="col-sm-6">
+                        <textarea id="observacion" name="observacion" class="form-control" th:text="${pedido.observacion}"></textarea>
+                    </div>
+                </div>
+
+                <!-- Botón para abrir el modal -->
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addPhotoModal">
+                    Añadir Fotos
+                </button>
+
+                <div id="fileListContainer" class="file-list-container">
+                </div>
+                <div id="miDiv">
+                </div>
+                <div style="height: 20px;"></div>
+                <input type="hidden" name="fileNamesJSON" id="fileNamesJSON"   multiple />
+                <div class="form-group row">
+                    <div class="col-sm-6">
+                        <input type="submit" th:value="${titulo}"
+                               class="btn btn-secondary" />
+
+                        <button type="reset" class="btn btn-secondary">Resetear</button>
+                        <a th:href="@{/pedidos/listarPedidos}" class="btn btn-secondary">Listar Pedidos</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+
+
+    <div class="modal fade" id="addPhotoModal" tabindex="-1" role="dialog" aria-labelledby="addPhotoModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addPhotoModalLabel">Añadir Fotos</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="modal-body">
+                        <form id="uploadForm" enctype="multipart/form-data" th:action="@{/pedidos/guardarFotos}" method="post" th:object="${pedido}">
+
+                            <input type="hidden" name="files"  th:value="${foto}">
+                            <div class="form-group row">
+                                <label for="files" class="col-sm-2 col-form-label" th:text="'Fotos'"></label>
+                                <div class="col-sm-6">
+                                    <input type="file" name="files" id="files" multiple>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-sm-6">
+                                    <button id="sumit" type="submit" class="btn btn-primary">Guardar Fotos</button>
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                </div>
+                            </div>
+
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script th:inline="javascript">
+    $(document).ready(function() {
+        // Función para mostrar una vista previa de la imagen seleccionada
+        function previewImage(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#imagePreview').attr('src', e.target.result);
+                };
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        // Cuando se selecciona un archivo, mostrar la vista previa de la imagen
+        $('#files').change(function() {
+            previewImage(this);
+        });
+
+        // Ocultar el div de fotos
+        $('#fileListContainer').hide();
+
+        $('#uploadForm').submit(function(event) {
+            // Mostrar el div de fotos
+            $('#fileListContainer').show();
+            event.preventDefault(); // Evitar la acción predeterminada del formulario
+
+            // Obtener los archivos seleccionados
+            var selectedFiles = document.getElementById('files').files;
+
+            // Convertir la lista de archivos seleccionados a un array de nombres de archivo
+            var fileNamesList = [];
+            for (var i = 0; i < selectedFiles.length; i++) {
+                fileNamesList.push(selectedFiles[i].name);
+            }
+
+            // Agregar los nuevos nombres de archivo al input oculto
+            var existingFileNames = $('#fileNamesJSON').val();
+            if (existingFileNames) {
+                var existingFileNamesArray = JSON.parse(existingFileNames);
+                fileNamesList = existingFileNamesArray.concat(fileNamesList);
+            }
+            $('#fileNamesJSON').val(JSON.stringify(fileNamesList));
+
+            // Construir el objeto de datos para la solicitud AJAX
+            var formData = new FormData(this);
+
+            // Realizar la solicitud AJAX
+            $.ajax({
+                type: $(this).attr('method'),
+                url: $(this).attr('action'),
+                data: formData,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function(response) {
+                    // Manejar la respuesta del controlador si es necesario
+                    updateFileList(selectedFiles);
+                    // Limpiar el campo de selección de archivos
+                    $('#files').val('');
+                },
+                error: function(xhr, status, error) {
+                    // Manejar errores si es necesario
+                }
+            });
+        });
+
+
+        // Función para actualizar la lista de archivos en la interfaz de usuario
+        function updateFileList(selectedFiles) {
+            // Obtener la lista de archivos seleccionados
+            if (selectedFiles.length > 0) {
+                // Crear una tabla para mostrar los archivos solo si no existe ya una tabla
+                if ($('#fileTable').length === 0) {
+                    var table = $('<table>').addClass('table').attr('id', 'fileTable').append(
+                        $('<thead>').append(
+                            $('<tr>').append(
+                                $('<th>').text('Nombre del Archivo'),
+                                $('<th>').text('Imagen'),
+                                $('<th>').text('Eliminar')
+                            )
+                        ),
+                        $('<tbody>')
+                    );
+                    $('#fileListContainer').empty().append(table);
+                }
+
+                // Agregar filas para cada archivo seleccionado
+                for (var i = 0; i < selectedFiles.length; i++) {
+                    var fileName = selectedFiles[i].name;
+                    // Obtener la URL del archivo seleccionado
+                    var fileURL = URL.createObjectURL(selectedFiles[i]);
+                    var row = $('<tr>').append(
+                        $('<td>').text(fileName),
+                        $('<td>').append($('<img>').attr('src', fileURL).css('max-width', '100px')), // Mostrar la imagen
+                        $('<td>').append(
+                            $('<button>').text('Eliminar').addClass('btn btn-danger').click(function() {
+                                var fileName = $(this).closest('tr').find('td:first-child').text();
+                                // Eliminar el archivo del servidor
+                                deleteFile(fileName);
+                                $(this).closest('tr').remove(); // Eliminar la fila de la tabla en el cliente
+                            })
+                        )
+                    );
+                    $('#fileTable tbody').append(row);
+                }
+            }
+        }
+
+        // Función para enviar el formulario pedidoForm
+        $('#pedidoForm').submit(function(event) {
+           event.preventDefault(); // Evitar la acción predeterminada del formulario
+
+            // Realizar la solicitud AJAX para el formulario pedidoForm
+            $.ajax({
+                type: $(this).attr('method'),
+                url: $(this).attr('action'),
+                data: $(this).serialize(), // Serializar los datos del formulario
+                success: function(response) {
+                    mostrarMensajeExito();
+                    // Recargar la página después de 2 segundos
+                    setTimeout(function() {
+                        location.reload();
+                    }, 2000);
+
+                },
+                error: function(xhr, status, error) {
+                    // Manejar errores si es necesario
+                    console.error(error);
+                }
+            });
+        });
+    });
+
+
+    // Función para eliminar el archivo del servidor y del input fileNamesJSON
+    function deleteFile(fileName) {
+        // Eliminar el archivo del servidor (aquí puedes agregar tu lógica para eliminar el archivo)
+        console.log('Eliminando archivo del servidor: ' + fileName);
+
+        // Obtener la lista de nombres de archivo del input fileNamesJSON
+        var existingFileNames = $('#fileNamesJSON').val();
+        if (existingFileNames) {
+            var existingFileNamesArray = JSON.parse(existingFileNames);
+            // Encontrar y eliminar el nombre de archivo correspondiente
+            var index = existingFileNamesArray.indexOf(fileName);
+            if (index !== -1) {
+                existingFileNamesArray.splice(index, 1);
+                // Actualizar el valor del input fileNamesJSON
+                $('#fileNamesJSON').val(JSON.stringify(existingFileNamesArray));
+            }
+        }
+    }
+
+    //al pulsar en le boton reset tambien se debe esconder la tabla de fotos y borrar los archivos seleccionados
+    $('#pedidoForm').on('reset', function() {
+        $('#fileListContainer').hide();
+        $('#fileListContainer').empty();
+        $('#fileNamesJSON').val('');
+    });
+
+    function mostrarMensajeExito() {
+        // Limpiar el formulario
+        document.getElementById('pedidoForm').reset();
+        // Crear un div para el mensaje de éxito
+        var div = document.createElement('div');
+        // Agregar el mensaje de éxito con el número de pedido del campo 'npedido' dentro de un div de clase 'alert alert-success'
+        div.innerHTML = 'Pedido guardado con éxito. Número de pedido: ' + document.getElementById('npedido').value;
+        div.className = 'alert alert-success';
+        // Agregar el div creado al div con id 'messege'
+        document.getElementById('messege').appendChild(div);
+        // Esperar 3 segundos y luego ocultar el mensaje de éxito con efecto de desvanecimiento
+        setTimeout(function() {
+            $(div).fadeOut('slow');
+        }, 3000);
+    }
+
+
+</script>
+    </div>
+</body>
+</html>

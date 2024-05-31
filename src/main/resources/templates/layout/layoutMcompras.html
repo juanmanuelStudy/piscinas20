@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head">
+    <meta charset="UTF-8"/>
+    <title th:text="'Spring Boot: MVC + Thymeleaf + Data JPA - ' + ${titulo}"></title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"/>
+    <link rel="stylesheet" th:href="@{/css/jquery-ui.min.css}"/>
+
+    <!-- AdminLTE CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.1/dist/css/adminlte.min.css">
+    <style>
+        /* Estilo para el menú vertical */
+        .vertical-menu {
+            width: 200px;
+            position: fixed;
+            left: 0;
+            top: 0;
+            background-color: #1964d3; /* Color de fondo */
+            overflow-y: auto; /* Para habilitar el desplazamiento vertical si el contenido es demasiado largo */
+            height: 100%; /* Para que el menú tenga el mismo alto que la ventana del navegador */
+            border-right: 1px solid #dee2e6; /* Borde derecho */
+        }
+
+        .vertical-menu ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        .vertical-menu ul ul {
+            display: none;
+            padding-left: 10px;
+            background-color: #ffffff; /* Cambia el color de fondo del submenú a blanco */
+        }
+
+        .vertical-menu .nav-item:hover > ul {
+            display: block;
+        }
+
+        .vertical-menu a {
+            padding: 5px; /* Espacio interior */
+            text-decoration: none; /* Quitar subrayado */
+            color: #111110; /* Color del texto */
+            display: block; /* Para que los enlaces ocupen todo el ancho del menú */
+        }
+
+        .vertical-menu a:hover {
+            background-color: #ffffff; /* Color de fondo al pasar el ratón */
+        }
+
+        .special-link {
+            color: #7e7641; /* Cambia el color del enlace "Compras" */
+            font-weight: bold; /* O cualquier otro estilo que quieras aplicar */
+            background-color: #1964d3;
+        }
+
+        .vertical-menu a.nav-link {
+            background-color: #a7acb4; /* Cambia el color de fondo del encabezado del menú a un tono más suave de azul */
+        }
+
+        .content {
+            margin-left: 250px;
+            padding: 20px;
+            background-color: #bb5858; /* Cambia el color de fondo según tus preferencias */
+        }
+    </style>
+</head>
+<body class="hold-transition sidebar-mini">
+<!-- Site wrapper -->
+<div class="wrapper">
+<header th:fragment="header">
+    <!-- Barra de navegación superior -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">Mi Aplicación</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Iniciar Sesión</a>
+                </li>
+                <!-- Puedes añadir más elementos de la barra de navegación aquí -->
+            </ul>
+        </div>
+    </nav>
+    <!-- Menú vertical -->
+    <aside class="main-sidebar sidebar-dark-primary elevation-4">
+        <!-- Brand Logo -->
+        <a href="#" class="brand-link">
+            <span class="brand-text font-weight-light">Mi Aplicación</span>
+        </a>
+
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <!-- Sidebar user panel (optional) -->
+            <!-- Sidebar Menu -->
+            <nav class="mt-2">
+                <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
+                    data-accordion="false">
+                    <li class="nav-item">
+                        <a class="nav-link special-link" th:href="'/balance/listarBalance'">Balance Gestion
+                            Piscinas</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link special-link">Clientes</a>
+                        <ul class="nav item nav-treeview">
+                            <li class="nav-item"><a class="nav-link"
+                                                    th:href="@{'/listar'}">Lista De Clientes <span
+                                    class="badge badge-secondary" th:text="${countCliente}"></span></a></li>
+                            <li class="nav-item"><a class="nav-link" th:href="@{'/form'}">Crear Cliente</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link special-link">Trabajos</a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item"><a class="nav-link"
+                                                    th:href="@{'/pedidos/listarPedidos'}">Listar Pedidos <span
+                                    class="badge badge-secondary" th:text="${countAlbaranes}"></span></a></li>
+                            <li class="nav-item"><a class="nav-link"
+                                                    th:href="@{'/albaranes/listarAlbaranes'}">Listar Albaranes <span
+                                    class="badge badge-secondary" th:text="${countAlbaranes}"></span></a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link special-link">Compras</a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item"><a class="nav-link"
+                                                    th:href="@{'/proveedor/form'}">Crear Proveedor</a></li>
+                            <li class="nav-item"><a class="nav-link"
+                                                    th:href="@{'/proveedor/listarProveedor'}">Listar Proveedor</a></li>
+                            <li class="nav-item"><a class="nav-link"
+                                                    th:href="@{'/materiales/form'}">Comprar Material</a></li>
+                            <li class="nav-item"><a class="nav-link"
+                                                    th:href="@{'/materiales/listarMaterial'}">Listar Material</a></li>
+                            <li class="nav-item"><a class="nav-link"
+                                                    th:href="@{'/facturas/listarFacturasSinContabilizar'}">Listar
+                                Facturas
+                                de compra</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item" hidden="hidden">
+                        <a class="nav-link special-link" href="#">Cobros Clientes</a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item"><a class="nav-link" href="#">Pagados</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#">Pendientes</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item" hidden="hidden">
+                        <a class="nav-link special-link" href="#">Incidencias</a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item"><a class="nav-link" href="#">Proceso</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#">Terminadas</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{'/notifications/notifications'}">Notificaciones <span
+                                class="badge badge-secondary" th:text="${count}"></span></a>
+                    </li>
+                </ul>
+            </nav>
+            <!-- /.sidebar-menu -->
+        </div>
+        <!-- /.sidebar -->
+    </aside>
+</header>
+<!-- Contenido al lado del menú -->
+<div class="content">
+    <div class="container">
+        <div class="alert alert-success" th:if="${success != null}" th:text="${success}"></div>
+        <div class="alert alert-danger" th:if="${error != null}" th:text="${error}"></div>
+        <div class="alert alert-warning" th:if="${warning != null}" th:text="${warning}"></div>
+        <div class="alert alert-info" th:if="${info != null}" th:text="${info}"></div>
+        <!-- Tu contenido aquí -->
+    </div>
+</div>
+
+<footer th:fragment="footer" class="container">
+
+    <!-- JavaScript -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <script th:src="@{/js/jquery-ui.min.js}"></script>
+
+</footer>
+<!-- Agregar jQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.css"/>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+</body>
+</html>

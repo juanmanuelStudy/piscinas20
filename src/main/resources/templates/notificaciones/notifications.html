@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="admin/admin_layout">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Título de tu aplicación</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+</head>
+
+<body>
+<div layout:fragment="content">
+  <div class="container py-4">
+
+
+<h1>Lista de Notificationes</h1>
+
+
+    <table id="table" class="table mt-2">
+      <thead class="thead-dark">
+        <tr>
+
+          <th>Mensaje</th>
+
+        </tr>
+      </thead>
+      <tbody>
+        <tr th:each="notification : ${notifications}">
+
+          <td th:text="${notification.mensaje}"></td>
+        </tr>
+      </tbody>
+
+
+
+
+
+    </table>
+    </div>
+</div>
+</body>
+</html>

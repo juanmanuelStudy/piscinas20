@@ -1,0 +1,209 @@
+
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="admin/admin_layout.html">
+<head>
+	<meta charset="utf-8" />
+	<title>Spring Boot + JPA + Datatables</title>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+	<script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+
+	<link rel="stylesheet" href="../css/table.css">
+	<!--  Bootstrap  -->
+	<link rel="stylesheet"
+		  href="cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js">
+	<link rel="stylesheet"
+		  href="cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
+	<!-- Plugin Leaflet.awesome-markers  -->
+	<link rel="stylesheet" href="../dist/leaflet.awesome-markers.css">
+
+	<link rel="stylesheet" href="../css/table.css">
+
+	<style>
+		.modal-body {
+			max-height: 400px; /* Ajusta la altura máxima según tus necesidades */
+			overflow-y: auto; /* Habilita el desplazamiento vertical */
+		}
+	</style>
+
+</head>
+<body>
+
+<div layout:fragment="content">
+	<div class="container py-4">
+
+		<div class="card bg-light">
+			<div class="card-header" th:text="${titulo}"></div>
+			<div class="card-body">
+				<div class="form-group row">
+
+					<h4 class="card-title">
+						<a th:href="@{/form}" class="btn btn-primary btn-sm">Crear Cliente</a>
+					</h4>
+					<div class="col-sm-6">
+						<form th:action="@{/buscar}" method="post">
+							<label for="nombre"  th:text="'Buscar Cliente'"></label>
+							<input type="text" id="nombre" name="nombre"> <input
+								type="submit" class="btn btn-primary btn-sm" value="Buscar">
+						</form>
+					</div>
+
+					<table id="table" class="table mt-2">
+						<thead class="thead-dark" >
+						<tr>
+							<th>#</th>
+							<th>Nombre</th>
+							<th>Email</th>
+							<th>Teléfono</th>
+							<th>Direccion</th>
+							<th>Crear </th>
+							<th>Crear</th>
+							<th>Editar</th>
+							<th>Eliminar</th>
+						</tr>
+						</thead>
+						<tbody>
+						<tr th:each="cliente: ${clientes}">
+							<td><a class="btn btn-primary btn-xs"
+								   th:href="@{/ver/} + ${cliente.id}" th:text="${cliente.id}"></a></td>
+							<td th:text="${cliente.nombre}+' '+${cliente.apellido}"></td>
+							<td th:text="${cliente.email}"></td>
+							<!-- <td th:text="${#dates.format(cliente.createAt,'dd-MM-yyyy')}"></td> -->
+							<td th:text="${cliente.telefono}"></td>
+							<td th:text="${cliente.direccion}"></td>
+
+							<td ><a class="btn btn-success btn-sm"
+									th:href="@{'/pedidos/form/' + ${cliente.id}}"
+									th:text="'Pedido'"></a></td>
+							<td>
+								<a class="btn btn-success btn-sm albaran-modal-btn" data-toggle="modal" data-target="#albaranesModal" th:data-cliente-id="${cliente.id}">
+									Albaran
+								</a>
+							</td>
+							<td><a class="btn btn-primary btn-sm"
+								   th:href="@{/form/} + ${cliente.id}" th:text="'Editar'"></a></td>
+							<td><a class="btn btn-danger btn-sm"
+								   th:href="@{/cliente/eliminar/} + ${cliente.id}" th:text="'Eliminar'"
+								   onclick="return confirm('Est�s seguro que quieres eliminar?');"></a></td>
+						</tr>
+						</tbody>
+
+					</table>
+					<nav th:replace="paginator-nav :: paginator"></nav>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+
+
+<script>
+	//todo falta crear el controlador que se obtiene todos los albaraens por cliete y pasar por json realizar un dto de estos datos
+	$(document).ready(function () {
+		console.log('ready');
+		$('.albaran-modal-btn').click(function () {
+			var clienteId = $(this).data('cliente-id');
+			// AJAX request para cargar los albaranes del cliente
+			$.ajax({
+				type: "GET",
+				url: "/api/pedido/listarPedidos/" + clienteId, // Reemplaza con la ruta correcta de tu servidor
+				success: function (response) {
+					tableModal (response)
+
+					console.log(response); // Solo para depuración
+				},
+				error: function (xhr, status, error) {
+					// Maneja errores en la solicitud AJAX
+					console.error(xhr.responseText,status.error(),error.error()); // Solo para depuración
+				}
+			});
+		});
+	});
+
+	function tableModal(response) {
+		if (response.length === 0) {
+			$('#albaranesModal .modal-body').html('<p>No existen pedidos finalizados para este cliente.</p>');
+		} else {
+			$('#albaranesModal .modal-body').html(
+					'<table class="table">' +
+					'<thead class="thead-dark">' +
+					'<tr>' +
+					'<th>IDPedido</th>' +
+					'<th>Cliente</th>' +
+					'<th>Fecha</th>' +
+					'</tr>' +
+					'</thead>' +
+					'<tbody>' +
+					response.map(function (pedido) {
+						return '<tr>' +
+								'<td class="pedido-id">' + pedido.npedido + '</td>' +
+								'<td>' + pedido.cliente.nombre + '</td>' +
+								'<td>' + pedido.cliente.createAt + '</td>' +
+								'</tr>';
+					}).join('') +
+					'</tbody>' +
+					'</table>'
+			);
+			$('#albaranesModal .modal-body table tbody tr').click(function () {
+				var pedidoId = $(this).find('.pedido-id').text();
+				window.location.href = '/facturas/form/' + pedidoId;
+			});
+		}
+	}
+
+</script>
+
+
+<style>
+	table tr th {
+		cursor: pointer;
+		-webkit-user-select: none;
+		-moz-user-select: none;
+		-ms-user-select: none;
+		user-select: none;
+	}
+
+	.sorting {
+		background-color: #D4D4D4;
+	}
+
+	.asc:after {
+		content: ' ↑';
+	}
+
+	.desc:after {
+		content: " ↓";
+	}
+</style>
+
+<!-- Modal -->
+<div class="modal fade" id="albaranesModal" tabindex="-1" role="dialog" aria-labelledby="albaranesModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="albaranesModalLabel">Pedidos Finalizadosss</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<!-- Aquí puedes colocar la lista de albaranes finalizados -->
+				<!-- Por ejemplo, una tabla -->
+				<table class="table">
+					<!-- Contenido de la tabla -->
+				</table>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+			</div>
+		 </div>
+		</div>
+     </div>
+</div>
+
+</body>
+</html>

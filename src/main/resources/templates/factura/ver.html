@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="admin/admin_layout">
+<head>
+    <meta charset="UTF-8">
+    <div>
+        <a th:href="@{'/albaran/listarAlbaranes'}"
+           class="btn btn-light btn-xs">&laquo; volver</a>
+    </div>
+    <title>Detalles del Albaran</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Agrega aquí otros enlaces a tus estilos CSS si es necesario -->
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="container py-4">
+        <div class="card">
+            <div class="card-header">
+               <h2>Detalles del Albaran</h2>
+                <!-- Botones de volver -->
+                <div class="row justify-content-left mt-4">
+                    <div class="col-md-6">
+                        <div class="text-left">
+                            <div class="btn-group" role="group" aria-label="Botones de volver">
+                                <!-- Botón para listar albaranes -->
+                                <a th:href="@{'/albaranes/listarAlbaranes'}" class="btn btn-primary btn-sm mr-2">
+                                    Listar Albaranes</a>
+                                <!-- Botón para ver detalles de cliente -->
+                                <a th:href="@{'/ver/' + ${factura.cliente.id}}" class="btn btn-primary btn-sm">
+                                    Detalles del clientes</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h5 class="list-group-item active">Información del Cliente</h5>
+                        <p><strong>Nombre:</strong> <span th:text="${factura.cliente.nombre}"></span></p>
+                        <p><strong>Apellido:</strong> <span th:text="${factura.cliente.apellido}"></span></p>
+                        <p><strong>Dirección:</strong> <span th:text="${factura.cliente.direccion}"></span></p>
+                        <p><strong>Teléfono:</strong> <span th:text="${factura.cliente.telefono}"></span></p>
+                        <p><strong>Email:</strong> <span th:text="${factura.cliente.email}"></span></p>
+                        <p><strong>Nº Cliente:</strong> <span th:text="${factura.cliente.id}"></span></p>
+
+                    </div>
+                    <div class="col-md-6">
+                        <h5 class="list-group-item active">Detalles del Albaran</h5>
+                        <p><strong>Tipo de Pedido:</strong> <span th:text=" ${factura.tipoPedido}"></span></p>
+                        <p><strong>Número de Albaran:</strong> <span th:text="${factura.id}"></span></p>
+                        <p><strong>Fecha de Emisión:</strong> <span th:text="${factura.createAt}"></span></p>
+                        <p><strong>Fecha de Albaran:</strong> <span th:text="${factura.dfechaAlbaran}"></span></p>
+                        <p><strong>Total:</strong> <span
+                                th:text="${#numbers.formatDecimal(factura.subTotal, 0, 'DEFAULT', 2, 'DEFAULT')}+' €'"></span>
+                        </p>
+
+                        <!-- Agrega aquí otros detalles de la factura según sea necesario -->
+                    </div>
+                </div>
+                <hr>
+                <h5>Productos</h5>
+                <table th:if="${not #lists.isEmpty(factura.items)}"
+                       class="table table-striped table-hover table-bordered my-3">
+                    <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>Precio</th>
+                        <th>Cantidad</th>
+                        <!--<th>Descuento</th>-->
+
+                        <th>Total</th>
+                    </tr>
+                    <tr>
+
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="linea: ${factura.items}">
+                        <td th:text="${linea.producto.nombre}"></td>
+                        <td
+                                th:text="${#numbers.formatDecimal(linea.producto.precio, 0, 'DEFAULT', 2, 'DEFAULT')}+' €'"></td>
+
+                        <td th:text="${linea.cantidad}"></td>
+                        <!-- <td th:text="${linea.producto.descuento}+' %'"></td>-->
+                        <td
+                                th:text="${#numbers.formatDecimal(linea.calcularImporte(), 0, 'DEFAULT', 2, 'DEFAULT')}+' €'"></td>
+
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="float-right">
+                    <table th:if="${not #lists.isEmpty(factura.items)}"
+                           class="table table-striped table-hover table-bordered my-3">
+                        <thead>
+                        <tr>
+                            <td>SubTotal</td>
+                            <td>
+                                <h6>
+                                    <span th:text="${#numbers.formatDecimal(factura.subTotal, 0, 'DEFAULT', 2, 'DEFAULT')}+' €'"></span>
+                                </h6>
+                            </td>
+                        </tr>
+                        <!-- <tr>
+                             <td>Iva</td>
+                             <td>
+                                         <h6>
+                                                 <span  th:text="${#numbers.formatDecimal(factura.totalIva, 0, 'DEFAULT', 2, 'DEFAULT')}+' €'"></span>
+                                         </h6>
+                             </td>
+                         </tr>-->
+                        <!--
+                        <tr>
+                            <th>Anticipo</th>
+                            <td>
+                                <h6>
+                                    <span th:text="${factura.nanticipo}+' €'"></span>
+                                </h6></td>
+
+                        </tr>
+                        -->
+                        <tr>
+                            <th>Total</th>
+                            <td><h6>
+
+									<span
+                                            th:text="${#numbers.formatDecimal(factura.subTotal, 0, 'DEFAULT', 2, 'DEFAULT')}+' €'"></span>
+                            </h6></td>
+
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+
+
+                    </table>
+
+                </div>
+
+
+
+                <!-- Agrega aquí otras secciones de detalles de la factura si es necesario -->
+            </div>
+
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

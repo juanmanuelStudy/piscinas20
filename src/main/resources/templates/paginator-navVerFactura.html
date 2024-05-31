@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<nav th:fragment="paginatorFactura">
+
+  <ul class="pagination">
+    <li class="page-item" th:class="${pageFactura.first? 'page-item disabled': 'page-item'}">
+      <span class="page-link" th:if="${pageFactura.first}">Primera</span>
+      <a class="page-link" th:if="${not pageFactura.first}" th:href="@{${pageFactura.url}(pageFactura=0)}">Primera</a>
+    </li>
+
+
+    <li class="page-item" th:class="${not pageFactura.hasPrevious? 'page-item disabled': 'page-item'}">
+      <span class="page-link" th:if="${not pageFactura.hasPrevious}">&laquo;</span>
+      <a class="page-link" th:if="${pageFactura.hasPrevious}" th:href="@{${pageFactura.url}(pageFactura=${pageFactura.paginaActual-2})}">&laquo;</a>
+    </li>
+
+    <li class="page-item" th:each="item : ${pageFactura.paginas}" th:class="${item.actual? 'page-item active': 'page-item'}">
+      <span class="page-link" th:if="${item.actual}" th:text="${item.numero}"></span>
+      <a class="page-link" th:if="${not item.actual}" th:href="@{${pageFactura.url}(pageFactura=${item.numero-1})}" th:text="${item.numero}"></a>
+    </li>
+
+
+    <li class="page-item" th:class="${not pageFactura.hasNext? 'page-item disabled': 'page-item'}">
+      <span class="page-link" th:if="${not pageFactura.hasNext}">&raquo;</span>
+      <a class="page-link" th:if="${pageFactura.hasNext}" th:href="@{${pageFactura.url}(pageFactura=${pageFactura.paginaActual})}">&raquo;</a>
+    </li>
+
+    <li class="page-item" th:class="${pageFactura.last? 'page-item disabled': 'page-item'}">
+      <span class="page-link" th:if="${pageFactura.last}">&Uacute;ltima</span>
+      <a class="page-link" th:if="${not pageFactura.last}" th:href="@{${pageFactura.url}(pageFactura=${pageFactura.totalPaginas-1})}">&Uacute;ltima</a>
+    </li>
+  </ul>
+
+</nav>
+
+</body>
+</html>

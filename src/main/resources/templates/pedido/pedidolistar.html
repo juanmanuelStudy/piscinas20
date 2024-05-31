@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="admin/admin_layout">
+
+
+<head>
+    <meta charset="utf-8" />
+
+    <title>Listar Pedidos</title>
+    <link rel="stylesheet" href="../css/table.css">
+    <!--  Bootstrap  -->
+    <link rel="stylesheet"
+          href="cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js">
+    <link rel="stylesheet"
+          href="cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
+    <!-- Plugin Leaflet.awesome-markers  -->
+    <link rel="stylesheet" href="../dist/leaflet.awesome-markers.css">
+
+
+
+    <script type="text/javaScript" src="/js/pedidolistar.js"></script>
+</head>
+<body>
+
+
+<div layout:fragment="content">
+<div class="container py-4">
+
+    <div class="card bg-light">
+        <div class="card-header" th:text="${titulo}"></div>
+        <div class="card-body">
+            <div class="form-group row">
+                <div class="col-sm-14">
+                    <form th:action="@{'/pedidos/buscar'}" id="formBusqueda"  method="post" enctype="multipart/form-data">
+
+                        <label for="cliente"  th:text="'Cliente'"></label>
+                        <select id="cliente" name="cliente">
+                            <option value="">Seleccione</option>
+                            <option th:each="cliente:${clientes}" th:value="${cliente.nombre}" th:text="${cliente.nombre}"></option>
+                        </select>
+                        <label for="estado"  th:text="'Estado'"></label>
+                        <select id="estado" name="estado">
+                            <option value="">Seleccione</option>
+                            <option th:each="estado:${estados}" th:value="${estado}" th:text="${estado}"></option>
+                        </select>
+                        <input type="submit" class="btn btn-primary btn-sm" value="Buscar">
+
+
+                    </form>
+                    <form id="formInforme" th:action="@{'/pedidos/report/'}" method="post" enctype="multipart/form-data">
+                        <input type="hidden" name="cliente" id="clienteHidden">
+                        <input type="hidden" name="estado" id="estadoHidden">
+                        <input type="submit" class="btn btn-primary btn-sm" value="Generar Informe">
+                    </form>
+
+                </div>
+                <div class="table-responsive">
+                    <table id="table" class="table mt-2">
+                        <thead class="thead-dark">
+                        <tr>
+                            <th>Nº Pedido</th>
+                            <th>Cliente</th>
+                            <th>Estado</th>
+                            <th>T.Pedido</th>
+                            <th>F.Pedido</th>
+                            <th>Ver</th>
+                            <th>Editar</th>
+
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="pedido:${pedido}">
+                            <td th:text="${pedido.npedido}"></td>
+                            <td th:text="${pedido.cliente.nombre}"></td>
+                            <td th:text="${pedido.estado}"></td>
+                            <td th:text="${pedido.tipoPedido}"></td>
+                            <td th:text=" ${#dates.format(pedido.dfecha, 'dd/MM/yyyy')}"></td>
+                            <td><a class="btn btn-primary btn-sm" th:href="@{'/pedidos/ver/' + ${pedido.npedido}}" th:text="'detalle'"></a></td>
+                            <td><a class="btn btn-primary btn-sm" th:href="@{'/pedidos/formEditar/' + ${pedido.npedido}}" th:text="'Editar'"></a></td>
+                        </tr>
+                        </tbody>
+
+                    </table>
+                </div>
+            </div>
+        </div>
+        <nav th:replace="paginator-nav ::paginator"></nav>
+    </div>
+</div>
+
+
+</div>
+</body>
+
+<script>
+
+</script>
+<style>
+    table tr th {
+        cursor: pointer;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+
+    .sorting {
+        background-color: #D4D4D4;
+    }
+
+    .asc:after {
+        content: ' ↑';
+    }
+
+    .desc:after {
+        content: " ↓";
+    }
+</style>
+
+</html>

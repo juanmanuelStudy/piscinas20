@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="admin/admin_layout">
+
+<head>
+
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="container py-4">
+        <div class="card bg-light">
+            <div class="card-header">
+                <h2>Detalles del Pedido</h2>
+                <!-- Botones de volver -->
+                <div class="row justify-content-left mt-4">
+                    <div class="col-md-6">
+                        <div class="text-left">
+                            <div class="btn-group" role="group" aria-label="Botones de volver">
+                                <!-- Botón para listar albaranes -->
+                                <a th:href="@{/pedidos/listarPedidos}" class="btn btn-primary btn-sm mr-2">
+                                    Listar Pedidos</a>
+                                <!-- Botón para ver detalles de cliente -->
+                                <a th:href="@{'/ver/' + ${pedido.cliente.id}}" class="btn btn-primary btn-sm">
+                                    Detalles del clientes</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="card-body">
+                <ul class="list-group my-2">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6 class="list-group-item active" th:text="${titulo} + ' ' + ${pedido.npedido}"></h6>
+                            <p><strong>Cliente:</strong> <span th:text="${pedido.cliente.nombre}"></span></p>
+                            <p><strong>Estado del Pedido:</strong> <span th:text="${pedido.estado}"></span></p>
+                            <p><strong>Tipo de Pedido:</strong> <span th:text="${pedido.tipoPedido}"></span></p>
+                            <p><strong>Fecha de Pedido:</strong> <span th:text="${#dates.format(pedido.dfecha, 'dd/MM/yyyy')}"></span></p>
+                            <p><strong>Observaciones:</strong> <span th:text="${pedido.observacion}"></span></p>
+                            <input type="hidden" th:field="*{pedido.npedido}" id="npedido" class="form-control" readonly="readonly"
+                                   th:value="${pedido.npedido}"/>
+                        </div>
+                    </div>
+                    </ul>
+                        <input type="hidden" th:field="*{pedido.npedido}" id="npedido" class="form-control" readonly="readonly"
+                       th:value="${pedido.npedido}"/>
+
+                </h6>
+            </div>
+
+                <!-- Carrusel de fotos -->
+
+            <div class="list-group-item">
+                <h6>Fotos añadidas</h6>
+                <div id="fotoMini" >
+                    <!-- Imágenes se cargarán aquí -->
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+</body>
+
+</html>
+
+
+<script>
+    // Función para cargar imágenes en el carrusel
+    function cargarImagenes() {
+        // Obtener el valor del id del pedido pasado como long
+        var id = $("#npedido").val();
+
+        // Realizar la petición AJAX para cargar las imágenes
+        $.ajax({
+            //pasar el npedido a la url
+            url: "/pedidos/cargarImagenes/"+id,
+            type: "GET",
+            success: function (data) {
+                // Limpiar el carrusel
+                $("#fotoMini").empty();
+
+                // Agregar imágenes al carrusel
+                $.each(data, function (index, imgUrl) {
+                    $("#fotoMini").append('<div><img src="/fotos/' + imgUrl + '" alt="Foto"></div>');
+                });
+
+                // Inicializar Slick Carousel
+                $('#fotoMini').slick({
+                    dots: false, // No mostrar puntos de navegación
+                    infinite: true, // Habilitar desplazamiento infinito
+                    slidesToShow: 5, // Mostrar 5 imágenes a la vez
+                    slidesToScroll: 1, // Desplazarse 1 imagen a la vez
+                    prevArrow: '<button type="button" class="slick-prev">&#10094;</button>', // Personalizar botón previo
+                    nextArrow: '<button type="button" class="slick-next">&#10095;</button>' // Personalizar botón siguiente
+                });
+            }
+        });
+    }
+
+    $(document).ready(function () {
+        // Cargar imágenes al cargar la página
+        cargarImagenes();
+
+        // Ampliar imagen al hacer clic
+        $(document).on("click", "#fotoMini img", function () {
+            // Clonar la imagen y agregar la clase zoomed
+            var $clone = $(this).clone().addClass("zoomed");
+            // Añadir la imagen ampliada al body
+            $("body").append($clone);
+            //poner l plantilla en opaco oscuro
+            $("body").css("background-color", "rgba(0, 0, 0, 0.8)");
+        });
+
+    // Restablecer tamaño de imagen al hacer clic en la imagen ampliada
+        $(document).on("click", ".zoomed", function () {
+            // Remover la imagen ampliada
+            $(this).remove();
+            // Restablecer el color de fondo del body
+            $("body").css("background-color", "white");
+        });
+
+    });
+</script>
+
+<style>
+
+
+
+
+    /* Estilo para la imagen que se hace zoom hacia la parte de la imagen */
+    .zoomed {
+
+        /*centrar la imagen*/
+
+        transform: scale(2); /* Hace que la imagen se amplíe al doble */
+        transition: transform 0.5s; /* Agrega una transición suave */
+        z-index: 1000; /* Asegura que la imagen ampliada esté por encima de las demás */
+        position: fixed; /* Fija la imagen en la pantalla */
+        background-color: rgba(0, 0, 0, 0.8); /* Fondo oscuro */
+        /* Centrar la imagen */
+        top: 82%;
+        left: 60%; /* Centra horizontalmente */
+        right: 70%; /* Centra horizontalmente */
+        transform-origin: center center; /* Establece el punto de transformación en el centro */
+        margin: -25% 0 0 -25%; /* Desplaza la imagen hacia arriba y hacia la izquierda en la mitad del ancho y alto */
+        overflow: auto; /* Ajusta el desbordamiento */
+        width: 30%; /* Ocupa el 50% del ancho de la ventana */
+        height: 45%; /* Ocupa el 50% del alto de la ventana */
+    }
+
+
+    /* Estilo para las imágenes en el carrusel */
+    #fotoMini img {
+        width: 100px;
+        height: 100px;
+        margin: 0 5px; /* Espacio entre las imágenes */
+        transition: transform 0.1s; /* Transición suave */
+        cursor: pointer; /* Cambia el cursor al pasar sobre la imagen */
+    }
+
+    /* Estilo para los botones de navegación */
+    .slick-prev, .slick-next {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 1000; /* Asegura que los botones estén por encima de las imágenes */
+        background-color: rgba(255, 255, 255, 0.5); /* Cambia el color de fondo de los botones */
+        border: none;
+        padding: 10px;
+        border-radius: 50%;
+        cursor: pointer;
+    }
+    .slick-prev {
+        left: 10px; /* Ajusta la posición izquierda del botón previo */
+    }
+    /* Ajusta la posición derecha del botón siguiente  tiene que estar como la izquierda*/
+    .slick-next {
+        right: 10px;
+    }
+    /* Estilo para el botón de volver */
+</style>

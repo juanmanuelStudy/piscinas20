@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Login</title>
+  <!-- Enlaces a los archivos CSS de Bootstrap -->
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+
+
+  <style>
+    /* Estilos personalizados */
+    body, html {
+      height: 100%;
+      margin: 0;
+    }
+    body {
+      background-color: rgba(0, 0, 0, 0.7); /* Fondo negro opaco */
+    }
+    .container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+    }
+    .login-container {
+      text-align: center;
+      width: 400px; /* Reducir el ancho del contenedor para que quepa en la pantalla */
+      padding: 20px; /* Espacio interno */
+      border-radius: 10px; /* Bordes redondeados */
+      background-color: #ffffff; /* Color de fondo blanco */
+      box-shadow: 0px 0px 10px rgba(208, 186, 38, 0.5); /* Sombra */
+    }
+    .logo-container {
+      margin-bottom: 20px;
+    }
+    .form-group {
+      position: relative;
+      margin-bottom: 20px; /* Aumentar el espacio entre elementos del formulario */
+    }
+    label {
+      color: #111110; /* Color de texto */
+    }
+    input.form-control {
+      background-color: #c5c5b6; /* Color de fondo gris */
+      color: #fff; /* Color de texto blanco */
+      padding-left: 40px; /* Espacio para el icono */
+    }
+    .form-control-icon {
+      position: absolute;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #ccc; /* Color del icono */
+    }
+    button.btn-primary {
+      background-color: #007bff; /* Color de fondo azul Bootstrap */
+      border-color: #007bff; /* Color del borde azul Bootstrap */
+      width: 100%; /* Ancho completo */
+    }
+    button.btn-primary:hover {
+      background-color: #0056b3; /* Color de fondo azul oscuro en hover */
+      border-color: #0056b3; /* Color del borde azul oscuro en hover */
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="login-container">
+    <div class="logo-container">
+      <img src="/images/logoTallerJoyeria.png" alt="Logo" width="150" height="150">
+
+    </div>
+    <h2>Gestión Taller Joyería Artesanal</h2>
+    <form th:action="@{/login}" method="post">
+      <div class="form-group">
+        <label for="username" class="form-control-icon"><i class="fas fa-user"></i></label>
+        <input type="text" class="form-control" id="username" name="username" placeholder="Username"/>
+      </div>
+      <div class="form-group">
+        <label for="password" class="form-control-icon"><i class="fas fa-lock"></i></label>
+        <input type="password" class="form-control" id="password" name="password" placeholder="Password"/>
+      </div>
+      <button type="submit" class="btn btn-primary">Login</button>
+    </form>
+  </div>
+</div>
+</body>
+</html>

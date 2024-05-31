@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taller Artesanal Joyeria</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+
+
+</head>
+<body>
+<button id="toggle" class="sidebar-toggle">☰</button>
+<!-- Main Sidebar Container -->
+<aside class="main-sidebar sidebar-dark-primary elevation-4">
+    <!-- Brand Logo -->
+    <a th:href="@{/listar}" class="brand-link">
+        <img src="/admin/dist/img/logoTallerJoyeria.png" alt="AdminLTE Logo" class="brand-image elevation-3" style="opacity: .9">
+        <span class="brand-text font-weight-light">Taller de Joyeria</span>
+    </a>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <!-- Sidebar Menu -->
+        <nav class="mt-2">
+            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                <!-- Add icons to the links using the .nav-icon class with font-awesome or any other icon font library -->
+                <li class="nav-item">
+                    <a class="nav-link special-link"  th:href="'/balance/listarBalance'">
+                        <i class="nav-icon fas fa-balance-scale"></i>
+                        Balance Gestion Piscinas
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link special-link" >
+                        <i class="nav-icon fas fa-users"></i>
+                        Clientes
+                        <i class="right fas fa-angle-left"></i>
+                    </a>
+                    <ul class="nav item nav-treeview">
+                        <li class="nav-item">
+                            <a class="nav-link"  th:href="@{'/listar'}">
+                                <i class="far fa-circle nav-icon"></i>
+                                Lista De Clientes <span class="badge badge-secondary" th:text="${countCliente}"></span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link"  th:href="@{'/form'}">
+                                <i class="far fa-circle nav-icon"></i>
+                                Crear Cliente
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link special-link" >
+                        <i class="nav-icon fas fa-briefcase"></i>
+                        Trabajos
+                        <i class="right fas fa-angle-left"></i>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{'/pedidos/listarPedidos'}">
+                                <i class="far fa-circle nav-icon"></i>
+                                Listar Pedidos <span class="badge badge-secondary" th:text="${countAlbaranes}"></span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link"  th:href="@{'/albaranes/listarAlbaranes'}">
+                                <i class="far fa-circle nav-icon"></i>
+                                Listar Albaranes <span class="badge badge-secondary" th:text="${countAlbaranes}"></span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link special-link" >
+                        <i class="nav-icon fas fa-shopping-cart"></i>
+                        Compras
+                        <i class="right fas fa-angle-left"></i>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a class="nav-link"  th:href="@{'/proveedor/form'}">
+                                <i class="far fa-circle nav-icon"></i>
+                                Crear Proveedor
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link"  th:href="@{'/proveedor/listarProveedor'}">
+                                <i class="far fa-circle nav-icon"></i>
+                                Listar Proveedor
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link"  th:href="@{'/materiales/form'}">
+                                <i class="far fa-circle nav-icon"></i>
+                                Comprar Material
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link"  th:href="@{'/materiales/listarMaterial'}">
+                                <i class="far fa-circle nav-icon"></i>
+                                Listar Material
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link"  th:href="@{'/facturas/listarFacturasSinContabilizar'}">
+                                <i class="far fa-circle nav-icon"></i>
+                                Listar Facturas de compra
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item" hidden="hidden">
+                    <a class="nav-link special-link"  href="#">
+                        <i class="nav-icon fas fa-money-bill"></i>
+                        Cobros Clientes
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item"><a class="nav-link"  href="#"><i class="far fa-circle nav-icon"></i> Pagados</a></li>
+                        <li class="nav-item"><a class="nav-link"  href="#"><i class="far fa-circle nav-icon"></i> Pendientes</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item" hidden="hidden">
+                    <a class="nav-link special-link"  href="#">
+                        <i class="nav-icon fas fa-exclamation-triangle"></i>
+                        Incidencias
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item"><a class="nav-link"  href="#"><i class="far fa-circle nav-icon"></i> Proceso</a></li>
+                        <li class="nav-item"><a class="nav-link"  href="#"><i class="far fa-circle nav-icon"></i> Terminadas</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link"  th:href="@{'/notifications/notifications'}">
+                        <i class="nav-icon fas fa-bell"></i>
+                        Notificaciones <span class="badge badge-secondary" id="notificationCount"></span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        <!-- /.sidebar-menu -->
+    </div>
+    <!-- /.sidebar -->
+</aside>
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script>
+
+
+    $(document).ready(function () {
+
+        // Evento de clic en el botón de toggle para mostrar/ocultar el menú
+        $('#toggle').click(function () {
+            $('.main-sidebar').toggleClass('show');
+        });
+
+        // Initialize notification count
+        var count = localStorage.getItem('notificationCount');
+        $('#notificationCount').text(count);
+
+        // Function to fetch notification count
+        function fetchNotificationCount() {
+            $.ajax({
+                url: '/notifications/count', // Endpoint to fetch notification count
+                method: 'GET',
+                success: function (data) {
+                    $('#notificationCount').text(data);
+                },
+                error: function (error) {
+                    console.error('Error fetching notification count:', error);
+                }
+            });
+        }
+
+        // Fetch notification count on page load
+        fetchNotificationCount();
+
+        // Optionally, refresh the count periodically (e.g., every 30 seconds)
+        setInterval(fetchNotificationCount, 30000); // 30000 milliseconds = 30 seconds
+    });
+
+
+    // Comprueba si el menú está en modo responsive
+    if (window.matchMedia('(max-width: 768px)').matches) {
+        // Obtén todos los enlaces del menú
+        var navLinks = document.querySelectorAll('.nav-link');
+
+        // Para cada enlace
+        for (var i = 0; i < navLinks.length; i++) {
+            // Añade un evento de clic
+            navLinks[i].addEventListener('click', function() {
+                // Obtén el menú
+                var menu = document.querySelector('.main-sidebar');
+                // Añade una clase que oculta el menú
+                menu.classList.add('hide-menu');
+
+                // Evento de clic en el botón de toggle para mostrar/ocultar el menú
+                $('#toggle').click(function () {
+                    $('.main-sidebar').toggleClass('show');
+                });
+            });
+        }
+
+    }
+</script>
+</body>
+</html>

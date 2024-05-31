@@ -1,0 +1,34 @@
+<!-- TENDREMOS LA CONFIGURACION BASE DEL RESTO DE TEMPLATES-->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.utraq.net.nz/thymeleaf/layout">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="UTF-8">
+    <title layout:title-pattern="$CONTENT_TITLE - $DECORATOR_TITLE">Taller Artesanal Anselm</title>
+    <style th:replace="/adminLTE/share/style"></style>
+    <link rel="stylesheet" 	href="https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css">
+    <script 	src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+</head>
+<body class="hold-transition sidebar-mini layout-fixed">
+<div class="wrapper">
+
+    <div th:replace="/adminLTE/share/header"></div>
+
+    <div th:replace="/adminLTE/share/left_side"></div>
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- añadimos el contidos de las diferentes templates form,list,edit,ect..-->
+                <div th:fragment="content"></div>
+    </div>
+
+    <div th:replace="/adminLTE/share/footer"></div>
+
+    <div th:replace="/adminLTE/share/script"></div>
+
+    <div th:fragment="script"></div>
+</div>
+
+</body>
+</html>

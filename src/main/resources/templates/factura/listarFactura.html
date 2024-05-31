@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="admin/admin_layout">
+
+<head>
+<meta charset="utf-8" />
+
+<title>Spring Boot + JPA + Datatables</title>
+	<link rel="stylesheet" href="../css/table.css">
+	<!--  Bootstrap  -->
+	<link rel="stylesheet"
+		  href="cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js">
+	<link rel="stylesheet"
+		  href="cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
+	<!-- Plugin Leaflet.awesome-markers  -->
+	<link rel="stylesheet" href="../dist/leaflet.awesome-markers.css">
+	<script type="text/javaScript" src="/js/albaranlistar.js"></script>
+</head>
+<body>
+<div layout:fragment="content">
+
+	<div class="container py-4">
+
+		<div class="card bg-light">
+			<div class="card-header" th:text="${titulo}"></div>
+				<div class="card-body">
+				<div class="form-group row">
+					<div class="col-sm-14">
+						<!--	<form th:action="@{/facturas/buscar}" method="post">
+
+                                <label for="cliente" class="card-title" th:text="'Cliente'"></label>
+                                 <input type="text" id="cliente" name="cliente">
+
+                                <label for="Tipodepedido" class="card-title" th:text="'Tipo de Pedido'"></label>
+                                <input type="text" id="Tipodepedido" name="Tipodepedido">
+
+                                 <label for="lugar" class="card-title" th:text="'Lugar'"></label>
+                                 <input type="text" id="lugar" name="lugar">
+
+                                 <label for="proveedor" class="card-title" th:text="'Proveedor'"></label>
+                                 <input type="text" id="proveedor" name="proveedor">
+
+                                   <label for="desde" class="card-title" th:text="'Fecha Incio'"></label>
+                                 <input type="date" id="desde" name="desde">
+
+                                  <label for="hasta" class="card-title" th:text="'Fecha Fin'"></label>
+                                 <input type="date" id="hasta" name="hasta">
+
+                                 <input type="submit" class="btn btn-primary btn-sm" value="Buscar">
+
+                            </form>-->
+						<form th:action="@{'/albaranes/buscar'}" id="formBusquedaAlbaran"  method="post" enctype="multipart/form-data">
+
+							<label for="cliente" th:text="'Cliente'"></label>
+							<select id="cliente" name="cliente">
+								<option value="">Seleccione</option>
+								<option th:each="cliente:${clientes}" th:value="${cliente.nombre}" th:text="${cliente.nombre}"></option>
+							</select>
+							<label for="tipo" th:text="'Estado'"></label>
+							<select id="tipo" name="tipo">
+								<option value="">Seleccione</option>
+								<option th:each="tipo:${tipos}" th:value="${tipo}" th:text="${tipo}"></option>
+							</select>
+
+							<input type="submit" class="btn btn-primary btn-sm" value="Buscar">
+
+
+						</form>
+						<form id="formInforme" th:action="@{'/albaranes/report/'}" method="post" enctype="multipart/form-data">
+							<input type="hidden" name="cliente" id="clienteHidden">
+							<input type="hidden" name="tipo" id="tipoHidden">
+							<input type="submit" class="btn btn-primary btn-sm" value="Generar Informe">
+						</form>
+
+					</div>	
+						
+					<table id="table" class="table mt-2">
+						<thead class="thead-dark">
+							<tr>
+								<th>Nº Albaran</th>
+								<!--	<th>F.Factura</th>-->
+								<th>F.Albaran</th>
+								<th>Cliente</th>
+								<!--<th>Proveedor</th>	-->
+								<!--<th>F.Vencimiento</th>	-->
+                               <th>Tipo de Pedido</th>
+                               <th>Total</th>
+                               <th>Ver</th>
+								<!--<th>D</th>-->
+							</tr>
+                        </thead>
+                         <tbody>
+                            <tr th:each="facturas:${facturas}">
+                                <td th:text="${facturas.id}"></td>
+								<!-- <td th:text="${facturas.npersonal}"></td>-->
+                                 <td th:text="${facturas.dfechaAlbaran}"></td>
+                                 <!-- <td th:text="${facturas.dfechaAlbaran}"></td>-->
+                                 <td th:text="${facturas.cliente.nombre}"></td>
+								<!-- <td th:text="${facturas.nproveedor.vnombre}"></td>
+                                 <td th:text="${facturas.fechavencimiento}"></td>-->
+                                 <td th:text="${facturas.tipoPedido}"></td>
+                                 <td th:text="${#numbers.formatDecimal(facturas.subTotal, 0, 'DEFAULT', 2, 'DEFAULT')}+' €'"></td>
+                             <td><a class="btn btn-primary btn-sm" th:href="@{'/facturas/ver/' + ${facturas.id}}" th:text="'Ver'"></a></td>
+								<!--  <td><a class="btn btn-danger btn-sm" th:href="@{'/facturas/contabilizar/' + ${facturas.id}}" th:text="'D'"></a></td>-->
+
+
+                                 </tr>
+                             </tbody>
+
+                         </table>
+                     </div>
+                 </div>
+                 <nav th:replace="paginator-nav ::paginator"></nav>
+             </div>
+                         </div>			<!--  <th>Declarar</th>
+                                    <td><a class="btn btn-primary btn-sm" th:href="@{'/facturas/contabilizar/' + ${facturas.id}}" th:text="'declarar'"></a></td>
+
+      -->
+</div>
+</body>
+
+</html>

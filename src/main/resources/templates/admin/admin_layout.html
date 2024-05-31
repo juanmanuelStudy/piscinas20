@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.utraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <style th:replace="admin/shared/style"></style>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+
+    <style>
+        body {
+            margin: 0; /* Elimina el margen predeterminado del cuerpo */
+            padding: 0; /* Elimina el relleno predeterminado del cuerpo */
+
+        }
+
+        .content-wrapper {
+            position: relative;
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            height: 110vh; /* Ajusta la altura al 100% del viewport */
+            overflow: hidden; /* Oculta el desplazamiento vertical */
+        }
+
+
+
+
+    </style>
+</head>
+<body class="hold-transition sidebar-mini layout-fixed">
+<div class="wrapper">
+    <!-- Header -->
+    <div th:replace="admin/shared/header"></div>
+
+    <!-- Sidebar -->
+    <div th:replace="admin/shared/left_side"></div>
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <div class="container-fluid">
+           <!-- Capa de superposición semi-transparente -->
+            <div class="content">
+                <div layout:fragment="content">
+                    <!-- Aquí va tu contenido -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /.content-wrapper -->
+
+    <!-- Footer Scripts -->
+    <div layout:fragment="script">
+        <!-- Aquí puedes agregar scripts adicionales -->
+    </div>
+
+    <!-- Additional Scripts -->
+    <div th:replace="admin/shared/file_script"></div>
+</div>
+
+<!-- Bootstrap JS and dependencies -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+</body>
+</html>

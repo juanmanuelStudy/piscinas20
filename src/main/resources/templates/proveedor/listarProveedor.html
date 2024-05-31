@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="admin/admin_layout">
+
+
+<head>
+</head>
+<body>
+
+
+<div layout:fragment="content">
+    <div class="container py-4">
+
+        <div class="card bg-light">
+            <div class="card-header" th:text="${titulo}"></div>
+            <div class="card-body">
+                <div class="form-group row">
+                    <h4 class="card-title">
+                        <a th:href="@{/proveedor/form}" class="btn btn-primary btn-sm">Crear Proveedor</a>
+                    </h4>
+                    <div class="col-sm-6">
+                        <form th:action="@{/proveedor/buscar}" method="post">
+                            <label for="nombre" class="card-title" th:text="'Buscar Proveedor'"></label>
+                            <input type="text" id="nombre" name="nombre"> <input
+                                type="submit" class="btn btn-primary btn-sm" value="Buscar">
+
+                        </form>
+                    </div>
+
+                    <table class="table table-striped">
+                        <thead class="thead-dark">
+                        <tr>
+                            <th>#</th>
+                            <th>Nombre</th>
+                            <th COLSPAN="1">direccion</th>
+                            <th>Teléfono</th>
+                            <th>Email</th>
+
+                            <th>Editar</th>
+                            <th>Eliminar</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="proveedor:${proveedor}">
+                            <td
+                                    th:text="${proveedor.nproveedor}"></td>
+                            <td th:text="${proveedor.vnombre}"></td>
+                            <td th:text="${proveedor.vdireccion}"></td>
+                            <td th:text="${proveedor.ntelefono}"></td>
+                            <td th:text="${proveedor.vemail}"></td>
+
+
+                            <!--hasta que no tenga el modulo completo no se vera con el tema de genera factura al los clientes
+                            <td><a class="btn btn-success btn-sm"
+                                th:href="@{'/factura/form/' + ${clientes.ncliente}}"
+                                th:text="'crear factura'"></a></td>
+                                -->
+                            <td><a class="btn btn-primary btn-sm"
+                                   th:href="@{/proveedor/form/} + ${proveedor.nproveedor}">Editar</a>
+                            </td>
+
+                            <td><a class="btn btn-danger btn-sm"
+                                   th:href="@{/proveedor/eliminar/} + ${proveedor.nproveedor}"
+                                   onclick="return confirm('Est�s seguro que quieres eliminar el proveedor?');">Eliminar</a>
+                            </td>
+                        </tr>
+                        </tbody>
+
+                    </table>
+                </div>
+                <nav th:replace="paginator-nav ::paginator"></nav>
+            </div>
+        </div>
+
+
+    </div>
+
+</div>
+</body>
+</html>

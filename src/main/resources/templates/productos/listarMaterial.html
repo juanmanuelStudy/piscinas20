@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="admin/admin_layout">
+<head>
+
+
+    <link rel="stylesheet"
+          href="cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js">
+    <link rel="stylesheet"
+          href="cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
+
+    <!-- Plugin Leaflet.awesome-markers  -->
+    <link rel="stylesheet" href="../dist/leaflet.awesome-markers.css">
+    <script src="../dist/leaflet.awesome-markers.js">
+
+    </script>
+
+    <!-- Plugin Leaflet.awesome-markers  -->
+    <link rel="stylesheet" href="../dist/leaflet.awesome-markers.css">
+    <script src="../dist/leaflet.awesome-markers.js"></script>
+
+
+</head>
+<body>
+
+<div layout:fragment="content">
+    <div class="container py-4">
+        <div class="card bg-light">
+            <div class="card-header" th:text="${titulo}"></div>
+            <div class="card-body">
+                <div class="form-group row">
+                    <h4 class="card-title">
+                        <a th:href="@{/materiales/form}" class="btn btn-primary btn-sm">Crear
+                            Material</a>
+                    </h4>
+                    <div class="col-sm-10">
+                        <form th:action="@{/materiales/buscar}" method="post">
+                            <label for="nombre" th:text="'Material'"></label>
+
+                            <input type="text" id="nombre" name="nombre">
+
+                            <label for="n_proveedor" th:text="'Proveedor'"></label>
+                            <input type="text" id="n_proveedor" name="n_proveedor"> <input
+                                type="submit" class="btn btn-primary btn-sm" value="Buscar">
+                        </form>
+
+                    </div>
+
+                    <table id="MyTable" class="table table-striped">
+                        <thead class="thead-dark">
+                        <tr>
+                            <th>Id</th>
+                            <th>Código</th>
+                            <th>Nombre</th>
+                            <th>Precio Compra</th>
+                            <th>Precio PVP</th>
+                            <th>Proveedor</th>
+                            <th>Stock</th>
+                            <th>Editar</th>
+                            <th>Eliminar</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="materiales:${material}">
+                            <td th:text="${materiales.id}"></td>
+                            <td th:text="${materiales.codigo}"></td>
+                            <td th:text="${materiales.nombre}"></td>
+                            <td th:text="${materiales.precioCompra}"></td>
+                            <td th:text="${#numbers.formatDecimal(materiales.precio, 0, 'DEFAULT', 2, 'DEFAULT')}+' €'"></td>
+                            <!--	<td
+                                    th:text="${materiales.descuento}+' %'"></td>-->
+                            <td th:text="${materiales.nproveedor.vnombre}"></td>
+                            <td th:text="${materiales.cantidad}"></td>
+
+
+                            <!--hasta que no tenga el modulo completo no se vera con el tema de genera factura al los clientes
+                        <td><a class="btn btn-success btn-sm"
+                            th:href="@{'/factura/form/' + ${clientes.ncliente}}"
+                            th:text="'crear factura'"></a></td>
+                            -->
+                            <td><a class="btn btn-primary btn-sm"
+                                   th:href="@{/materiales/form/} + ${materiales.id}">Editar</a></td>
+
+                            <td><a class="btn btn-danger btn-sm"
+                                   th:href="@{/materiales/eliminar/} + ${materiales.id}"
+                                   onclick="return confirm('Est�s seguro que quieres eliminar el material?');">Eliminar</a>
+                            </td>
+                        </tr>
+                        </tbody>
+
+                    </table>
+                </div>
+                 <label th:if="${cantidad != null}" class="btn btn-primary"
+                               th:text="${textoR}+${cantidad}">Resultados encontrados"</label>
+                <nav th:replace="paginator-nav ::paginator"></nav>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+<style>
+    table tr th {
+        cursor: pointer;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+
+    .sorting {
+        background-color: #D4D4D4;
+    }
+
+    .asc:after {
+        content: ' ↑';
+    }
+
+    .desc:after {
+        content: " ↓";
+    }
+</style>
+</html>

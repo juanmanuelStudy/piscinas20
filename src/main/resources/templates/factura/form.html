@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="admin/admin_layout">
+<head>
+    <link rel="stylesheet" type="text/css" href="/bootstrap/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
+    <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
+    <style>
+        .modal-body {
+            max-height: 400px; /* Ajusta la altura máxima según tus necesidades */
+            overflow-y: auto; /* Habilita el desplazamiento vertical */
+        }
+        .dataTables_wrapper {
+            width: 100%;
+        }
+        .dataTables_scrollHeadInner {
+            width: 100% !important;
+        }
+    </style>
+</head>
+<body>
+
+<div layout:fragment="content">
+    <!-- Contenido de la página -->
+    <div class="container py-4">
+        <div class="card bg-light">
+            <div class="card-header" th:text="'Crear Albaran del Pedido'"></div>
+            <div class="card-body">
+                <form th:action="@{/facturas/form/}" enctype="multipart/form-data" th:object="${factura}" method="post">
+                    <div class="form-group row">
+                        <label for="cliente" class="col-sm-2 col-form-label" th:text="'Cliente'"></label>
+                        <div class="col-sm-4">
+                            <input name="cliente" th:value="${factura.cliente.nombre} + ' ' + ${factura.cliente.apellido}" class="form-control" disabled='disabled'/>
+                        </div>
+                        <label class="col-sm-2 col-form-label" th:text="'Número de Pedido'"></label>
+                        <div class="col-sm-2">
+                            <input type="text" th:value="${factura.npedido}" name="npedido" id="npedido" disabled="disabled" class="form-control" />
+                            <input type="hidden" th:value="${factura.npedido}" name="npedido" class="form-control" />
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="form-group row">
+                        <label for="dfechaAlbaran" class="col-sm-2 col-form-label">Fecha de Pedido</label>
+                        <div class="col-sm-2">
+                            <input type="text" th:value="${factura.dfechaAlbaran}" disabled="disabled" class="form-control" />
+                        </div>
+                        <label for="tipoPedido" class="col-sm-2 col-form-label" th:text="'Tipo de Pedido'"></label>
+                        <div class="col-sm-2">
+                            <input type="text" th:value="${factura.tipoPedido}" disabled="disabled" class="form-control" />
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="form-group row">
+                        <div class="col-sm-2">
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#productoModal">Añadir Material</button>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <table id="cargarItemProductos" class="table table-sm table-striped table-hover">
+                            <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Precio</th>
+                                <th>Cantidad</th>
+                                <th>Descuento</th>
+                                <th>Total</th>
+                                <th>Eliminar</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <table class="d-none">
+                                <tbody id="plantillaItemsFactura">
+                                <tr id="row_{ID}">
+                                    <td class="d-none"><input type="hidden" value="{ID}" name="item_id[]"/></td>
+                                    <td>{NOMBRE}</td>
+                                    <td>{PRECIO}</td>
+                                    <td>
+                                        <input type="number" value="1" name="cantidad[]" id="cantidad_{ID}" class="form-control col-sm-4" onchange="itemsHelper.calcularImporte({ID}, {PRECIO}, this.value,{DESCUENTO});"/>
+                                    </td>
+                                    <td>{DESCUENTO}</td>
+                                    <td><span id="total_importe_{ID}">0</span></td>
+                                    <td><a href="#" class="btn btn-danger btn-sm" onclick="itemsHelper.eliminarLineaFactura({ID});">x</a></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="form-group row">
+                        <label for="observacion" class="col-sm-10 col-form-label" th:text="'Observación'"></label>
+                        <div class="col-sm-12">
+                            <textarea th:field="*{observacion}" class="form-control"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-6">
+                            <input type="submit" th:value="${titulo}" class="btn btn-secondary"/>
+                        </div>
+                    </div>
+                    <input type="hidden" id="anticipo" value='0'/>
+                    <input type="hidden" th:field="*{total}" id="total_iva"/>
+                    <input type="hidden" th:field="*{ivaTotal}" id="ivaprecio"/>
+                </form>
+                <section>
+                    <div class="clearfix"></div>
+                    <div class="float-right">
+                        <table class="table table-striped table-hover table-bordered my-1">
+                            <thead>
+                            <tr>
+                                <td class="col-sm-2">Total</td>
+                                <td width="75">
+                                    <h6><span class="col-sm-2" id="gran_total"></span></h6>
+
+                                </td>
+                            </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+    <!-- Modal -->
+    <!-- Modal -->
+    <div class="modal fade" id="productoModal" tabindex="-1" role="dialog" aria-labelledby="productoModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="productoModalLabel">Lista de Productos</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Tabla de productos -->
+                    <div class="table-responsive" id="tableContainer">
+                        <table id="tableProducto" class="table mt-2">
+                            <thead class="thead-dark">
+                            <tr>
+                                <th>Id</th>
+                                <th>Nombre</th>
+                                <th>Precio</th>
+                                <th>Stock</th>
+                                <th>Añadir</th>
+                            </tr>
+                            </thead>
+                            <tbody id="productosBody">
+                            <!-- Contenido cargado por AJAX -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+
+
+
