@@ -2,39 +2,90 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="admin/admin_layout">
-<head ></head>
+<head>
+    <meta charset="utf-8" />
+    <title>Detalle del Cliente</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="/dist/leaflet.awesome-markers.css">
+    <link rel="stylesheet" href="/stylePage.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        /* Estilos generales para el contenedor con scroll */
+        .scroll-container {
+            max-height: 100vh;
+            overflow-y: auto;
+            padding: 1rem;
+        }
+
+        /* Estilos para mejorar la responsividad */
+        @media (max-width: 770px) {
+            .list-group-item {
+                font-size: 0.8rem;
+            }
+            table {
+
+                font-size: 0.8rem;
+            }
+            .nav-link {
+                font-size: 0.8rem;
+            }
+            .table-responsive {
+                overflow-x: auto;
+                font-size: 0.7rem;
+            }
+        }
+            /*hacer las letras mas pequeñas*/
+        .list-group-item {
+            font-size: 1rem;
+        }
+        .table-responsive {
+            overflow-x: auto;
+            font-size: 1rem;
+        }
+
+        .nav-tabs {
+            margin-bottom: 1rem;
+        }
+
+        table {
+            width: 100%;
+
+        }
+
+        .thead-dark th {
+            cursor: pointer;
+        }
+
+        .sorting {
+            background-color: #D4D4D4;
+        }
+
+        .asc:after {
+            content: ' ↑';
+        }
+
+        .desc:after {
+            content: " ↓";
+        }
+    </style>
+</head>
 <body>
 
 <div layout:fragment="content">
-
     <div class="container py-8">
-
+      <div class="scroll-container">
         <div class="card bg-light">
             <div class="card-header" th:text="${titulo}"></div>
             <div class="card-body">
-
                 <h4 class="card-title">
-                    <!--<a class="btn btn-success btn-sm"
-                        th:href="@{'/facturas/form/' + ${cliente.id}}"
-                        th:text="'Crear Factura'"></a>
-                    <a class="btn btn-success btn-sm"
-                        th:href="@{'/albaranes/form/' + ${cliente.id}}"
-                        th:text="'Crear Albaran'"></a>
-                    <a class="btn btn-success btn-sm"
-                       th:href="@{'/pedidos/form/' + ${cliente.id}}"
-                       th:text="'Crear Pedido'"></a>-->
+                    <!-- Botones para crear facturas, albaranes y pedidos -->
                 </h4>
-
-
-                <!-- <img th:if="${#strings.length(cliente.foto) > 0}"
-                    class="img-thumbnail rounded float-left" style="max-width: 25%;"
-                    th:src="@{'/uploads/' + ${cliente.foto}}" th:alt="${cliente.foto}" />
-
-                     -->
                 <ul class="list-group">
                     <li class="list-group-item active" th:text="'Datos del Cliente'"></li>
                     <li class="list-group-item" th:text="'Dirección: '+${cliente.direccion}"></li>
-                    <li class="list-group-item" th:text="'Telefóno: '+${cliente.telefono}"></li>
+                    <li class="list-group-item" th:text="'Teléfono: '+${cliente.telefono}"></li>
                     <li class="list-group-item" th:text="'Email: '+ ${cliente.email}"></li>
                     <li class="list-group-item" th:text="'Fecha de Alta: '+${cliente.createAt}"></li>
                 </ul>
@@ -54,8 +105,6 @@
                     <!-- Tab para los pedidos -->
                     <div class="tab-pane fade show active" id="pedidos" role="tabpanel" aria-labelledby="pedidos-tab">
                         <h4 class="mt-3">Pedidos del Cliente</h4>
-
-
                         <div class="table-responsive">
                             <!-- Tabla de Pedidos -->
                             <table id="table" class="table mt-2">
@@ -83,9 +132,7 @@
                                 </tr>
                                 </tbody>
                             </table>
-                            <div th:if="${#lists.isEmpty(cliente.pedido)}"
-                                 class="alert alert-info my-4"
-                                 th:text="'No hay Pedidos asignados para el cliente ' + ${cliente.nombre} + ' ' + ${cliente.apellido}"></div>
+                            <div th:if="${#lists.isEmpty(cliente.pedido)}" class="alert alert-info my-4" th:text="'No hay Pedidos asignados para el cliente ' + ${cliente.nombre} + ' ' + ${cliente.apellido}"></div>
                             <nav th:replace="paginator-navVerPedido ::paginatorPedido"></nav>
                         </div>
                     </div>
@@ -93,8 +140,6 @@
                     <!-- Tab para los albaranes -->
                     <div class="tab-pane fade" id="albaranes" role="tabpanel" aria-labelledby="albaranes-tab">
                         <h4 class="mt-3">Albaranes del Cliente</h4>
-
-
                         <div class="table-responsive">
                             <!-- Tabla de Albaranes -->
                             <table id="tableAlbaran" class="table mt-2">
@@ -120,9 +165,7 @@
                                 </tr>
                                 </tbody>
                             </table>
-                            <div th:if="${#lists.isEmpty(cliente.facturas)}"
-                                 class="alert alert-info my-4"
-                                 th:text="'No hay Albaranes asignados para el cliente ' + ${cliente.nombre} + ' ' + ${cliente.apellido}"></div>
+                            <div th:if="${#lists.isEmpty(cliente.facturas)}" class="alert alert-info my-4" th:text="'No hay Albaranes asignados para el cliente ' + ${cliente.nombre} + ' ' + ${cliente.apellido}"></div>
                             <nav th:replace="paginator-navVerFactura ::paginatorFactura"></nav>
                         </div>
                     </div>
@@ -130,11 +173,9 @@
 
             </div>
         </div>
-
     </div>
-
+    </div>
 </div>
 
 </body>
 </html>
-<!--                     <tr> -->
