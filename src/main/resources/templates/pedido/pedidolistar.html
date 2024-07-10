@@ -32,16 +32,20 @@
                 <div class="col-sm-14">
                     <form th:action="@{'/pedidos/buscar'}" id="formBusqueda"  method="post" enctype="multipart/form-data">
 
-                        <label for="cliente"  th:text="'Cliente'"></label>
+                            <label for="cliente"  th:text="'Cliente'"></label>
+
                         <select id="cliente" name="cliente">
                             <option value="">Seleccione</option>
                             <option th:each="cliente:${clientes}" th:value="${cliente.nombre}" th:text="${cliente.nombre}"></option>
                         </select>
-                        <label for="estado"  th:text="'Estado'"></label>
+
+                            <label for="estado"  th:text="'Estado'"></label>
+
                         <select id="estado" name="estado">
                             <option value="">Seleccione</option>
                             <option th:each="estado:${estados}" th:value="${estado}" th:text="${estado}"></option>
                         </select>
+
                         <input type="submit" class="btn btn-primary btn-sm" value="Buscar">
 
 

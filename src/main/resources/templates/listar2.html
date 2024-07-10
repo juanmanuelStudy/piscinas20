@@ -1,4 +1,4 @@
-
+<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
 	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	  layout:decorate="admin/admin_layout.html">
@@ -9,25 +9,15 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
-
 	<link rel="stylesheet" href="../css/table.css">
 	<!--  Bootstrap  -->
 	<link rel="stylesheet"
-		  href="cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js">
-	<link rel="stylesheet"
-		  href="cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
-	<!-- Plugin Leaflet.awesome-markers  -->
+		  href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
 	<link rel="stylesheet" href="../dist/leaflet.awesome-markers.css">
+	<link rel="stylesheet" href="/stylePage.css">
 
-	<link rel="stylesheet" href="../css/table.css">
-	<link rel="stylesheet" href="../css/table.css">
-	<!--  Bootstrap  -->
-	<link rel="stylesheet"
-		  href="cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js">
-	<link rel="stylesheet"
-		  href="cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
-	<!-- Plugin Leaflet.awesome-markers  -->
-	<link rel="stylesheet" href="../dist/leaflet.awesome-markers.css">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<style>
 		/* Estilos generales para el contenedor con scroll */
 		.scroll-container {
@@ -72,16 +62,12 @@
 			overflow-x: auto;
 		}
 	</style>
-
-
 </head>
-<body>
-
 <body>
 
  <div layout:fragment="content">
 	<div class="scroll-container">
-		<div class="container py-8">
+		<div class="container py-6">
 			<div class="card bg-light">
 				<div class="card-header" th:text="${titulo}"></div>
 				<div class="card-body">
@@ -138,81 +124,80 @@
 	</div>
 
 
-	<!-- Modal -->
-	<div class="modal fade" id="albaranesModal" tabindex="-1" role="dialog" aria-labelledby="albaranesModalLabel" aria-hidden="true">
-		<div class="modal-dialog" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title" id="albaranesModalLabel">Pedidos Finalizados</h5>
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-				</div>
-				<div class="modal-body">
-					<!-- Aquí puedes colocar la lista de albaranes finalizados -->
-					<!-- Por ejemplo, una tabla -->
-					<table class="table">
-						<!-- Contenido de la tabla -->
-					</table>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-				</div>
+<!-- Modal -->
+ <div class="modal fade" id="albaranesModal" tabindex="-1" role="dialog" aria-labelledby="albaranesModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="albaranesModalLabel">Pedidos Finalizados</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<!-- Aquí puedes colocar la lista de albaranes finalizados -->
+				<!-- Por ejemplo, una tabla -->
+				<table class="table">
+					<!-- Contenido de la tabla -->
+				</table>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
 			</div>
 		</div>
 	</div>
+  </div>
 
-	<script>
-		$(document).ready(function () {
-			console.log('ready');
-			$('.albaran-modal-btn').click(function () {
-				var clienteId = $(this).data('cliente-id');
-				$.ajax({
-					type: "GET",
-					url: "/api/pedido/listarPedidos/" + clienteId, // Reemplaza con la ruta correcta de tu servidor
-					success: function (response) {
-						tableModal(response);
-						console.log(response); // Solo para depuración
-					},
-					error: function (xhr, status, error) {
-						console.error(xhr.responseText, status, error); // Solo para depuración
-					}
-				});
+ <script>
+	$(document).ready(function () {
+		console.log('ready');
+		$('.albaran-modal-btn').click(function () {
+			var clienteId = $(this).data('cliente-id');
+			$.ajax({
+				type: "GET",
+				url: "/api/pedido/listarPedidos/" + clienteId, // Reemplaza con la ruta correcta de tu servidor
+				success: function (response) {
+					tableModal(response);
+					console.log(response); // Solo para depuración
+				},
+				error: function (xhr, status, error) {
+					console.error(xhr.responseText, status, error); // Solo para depuración
+				}
 			});
 		});
+	});
 
-		function tableModal(response) {
-			if (response.length === 0) {
-				$('#albaranesModal .modal-body').html('<p>No existen pedidos finalizados para este cliente.</p>');
-			} else {
-				$('#albaranesModal .modal-body').html(
-						'<table class="table">' +
-						'<thead class="thead-dark">' +
-						'<tr>' +
-						'<th>IDPedido</th>' +
-						'<th>Cliente</th>' +
-						'<th>Fecha</th>' +
-						'</tr>' +
-						'</thead>' +
-						'<tbody>' +
-						response.map(function (pedido) {
-							return '<tr>' +
-									'<td class="pedido-id">' + pedido.npedido + '</td>' +
-									'<td>' + pedido.cliente.nombre + '</td>' +
-									'<td>' + pedido.cliente.createAt + '</td>' +
-									'</tr>';
-						}).join('') +
-						'</tbody>' +
-						'</table>'
-				);
-				$('#albaranesModal .modal-body table tbody tr').click(function () {
-					var pedidoId = $(this).find('.pedido-id').text();
-					window.location.href = '/facturas/form/' + pedidoId;
-				});
-			}
+	function tableModal(response) {
+		if (response.length === 0) {
+			$('#albaranesModal .modal-body').html('<p>No existen pedidos finalizados para este cliente.</p>');
+		} else {
+			$('#albaranesModal .modal-body').html(
+					'<table class="table">' +
+					'<thead class="thead-dark">' +
+					'<tr>' +
+					'<th>IDPedido</th>' +
+					'<th>Cliente</th>' +
+					'<th>Fecha</th>' +
+					'</tr>' +
+					'</thead>' +
+					'<tbody>' +
+					response.map(function (pedido) {
+						return '<tr>' +
+								'<td class="pedido-id">' + pedido.npedido + '</td>' +
+								'<td>' + pedido.cliente.nombre + '</td>' +
+								'<td>' + pedido.cliente.createAt + '</td>' +
+								'</tr>';
+					}).join('') +
+					'</tbody>' +
+					'</table>'
+			);
+			$('#albaranesModal .modal-body table tbody tr').click(function () {
+				var pedidoId = $(this).find('.pedido-id').text();
+				window.location.href = '/facturas/form/' + pedidoId;
+			});
 		}
-	</script>
-</div>
-
+	}
+  </script>
+ </div>
 </body>
 </html>

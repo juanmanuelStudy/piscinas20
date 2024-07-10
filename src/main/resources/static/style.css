@@ -1,3 +1,110 @@
-h1 {
-    color: green;
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.main-sidebar {
+    transition: transform 0.3s ease;
+}
+
+.menu-icon {
+    display: none;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 10px;
+    background-color: #343a40;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}
+
+@media only screen and (max-width: 770px) {
+
+    header {
+        position: fixed;
+    }
+    a {
+        padding: 10px;
+        display: block;
+
+    }
+   .navbar-toggler-icon {
+       display: inline-block;
+       width: 1.5em;
+       height: 1.5em;
+       vertical-align: middle;
+       content: "";
+       background: no-repeat center center;
+       background-size: 100% 100%;
+   }
+
+    .menu-icon {
+        display: block;
+    }
+/*espcio del menu*/
+    .main-sidebar {
+        position: fixed;
+        left: 0%;
+        right: 0%;
+        top: 0;
+        bottom: 0;
+        transform: translateY(-100%);
+        width: 200%;
+        height: auto;
+        z-index: 1000;
+        background-color: #343a40;
+        color: white;  /* Corrected property */
+        overflow: auto;
+
+    }
+
+main-header {
+    position: fixed;
+}
+
+
+    .nav-item { /*clientes trabajos compras*/
+        color: #caced7;
+        text-align: -webkit-center; /* Alineación del texto al centro */
+
+    }
+        /*subm*/
+    .nav-link {
+        flex-direction: column;
+        align-items: normal;
+
+    }
+
+    .nav-treeview {
+        display: none;
+        list-style: none;
+        padding-left: 0; /* Ajustar padding */
+        margin: 0;
+    }
+
+
+
+    .nav-treeview .nav-item {
+        padding-left: 0; /* Ajustar padding */
+    }
+
+    .nav-treeview .nav-link {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        padding: 10px 15px;
+        color: #555;
+        text-decoration: none;
+    }
+
+
+    .nav-item.active .nav-treeview {
+
+        display: block; /* Muestra submenús cuando el elemento de lista está activo */
+    }
+
+}
+.main-sidebar.show {
+    transform: translateY(0);
 }
