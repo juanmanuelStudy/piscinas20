@@ -111,6 +111,8 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
+
+
 	</dependencies>
 
 	<build>
@@ -150,6 +152,36 @@
 					</execution>
 				</executions>
 			</plugin>
+
+			<plugin>
+				<groupId>com.google.cloud.tools</groupId>
+				<artifactId>jib-maven-plugin</artifactId>
+				<version>3.3.0</version>
+				<configuration>
+					<from>
+						<image>openjdk:11-jre-slim</image>
+					</from>
+					<to>
+						<image>registry.heroku.com/taller/web</image>
+						<auth>
+							<username>HRKU-4e7ee5ae-21e2-48ac-94c2-89ecae65a087</username>
+							<password></password>
+						</auth>
+					</to>
+					<container>
+						<entrypoint>
+							<shell>java</shell>
+							<option>-Xmx512m</option>
+							<option>-jar</option>
+							<arg>/app/${project.build.finalName}.jar</arg>
+						</entrypoint>
+						<ports>
+							<port>8080</port>
+						</ports>
+					</container>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
+
 </project>
