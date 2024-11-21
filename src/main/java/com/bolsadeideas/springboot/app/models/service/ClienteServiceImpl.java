@@ -46,6 +46,11 @@ public class ClienteServiceImpl implements IClienteService {
     EntityManager em;
 
     @Override
+    public Cliente findByUsername(String username) {
+        return clienteDao.findByUsername(username);
+    }
+
+    @Override
     @Transactional(readOnly = true)
     public List<Cliente> findAll() {
         // TODO Auto-generated method stub
@@ -271,5 +276,6 @@ public class ClienteServiceImpl implements IClienteService {
         // TODO Auto-generated method stub
         return null;
     }
+
 
 }

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html layout:decorator="admin/admin_layout" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css" rel="stylesheet">
+    <link href="../dist/leaflet.awesome-markers.css" rel="stylesheet">
+    <script src="../dist/leaflet.awesome-markers.js"></script>
+</head>
+<body>
+
+<div layout:fragment="content">
+    <div class="container py-4" style="min-height: 500px;">
+        <div class="card bg-light">
+            <div class="card-header" th:text="${titulo}">Usuarios</div>
+            <div class="card-body">
+                <div class="form-group row">
+                    <h4 class="card-title">
+                        <a class="btn btn-primary btn-sm" th:href="@{/users/new}">Crear Usuario</a>
+                    </h4>
+                    <div class="col-sm-10">
+                        <form method="post" th:action="@{/users/search}">
+                            <label for="username" th:text="'Username'"></label>
+                            <input id="username" name="username" type="text">
+                            <input class="btn btn-primary btn-sm" type="submit" value="Buscar">
+                        </form>
+                    </div>
+
+                    <table class="table table-striped" id="MyTable" style="width: 100%;">
+                        <thead class="thead-dark">
+                        <tr>
+                            <th>ID</th>
+                            <th>Username</th>
+                            <th>Email</th>
+                            <th>Nombre</th>
+                            <th>Apellido</th>
+                            <th>Roles</th>
+                            <th>Editar</th>
+                            <th>Eliminar</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="user : ${users}">
+                            <td th:text="${user.id}"></td>
+                            <td th:text="${user.username}"></td>
+                            <td th:text="${user.email}"></td>
+                            <td th:text="${user.nombre}"></td>
+                            <td th:text="${user.apellido}"></td>
+                            <td>
+                                <span th:each="role : ${user.roles}" th:text="${role.nombre}"></span>
+                            </td>
+                            <td><a class="btn btn-primary btn-sm"
+                                   th:href="@{/users/edit/{id}(id=${user.id})}">Editar</a></td>
+                            <td>
+                                <form method="post" th:action="@{/users/deactivate/{id}(id=${user.id})}">
+                                    <button class="btn btn-warning btn-sm" onclick="return confirm('¿Estás seguro que quieres dar de baja a este usuario?');"
+                                            type="submit">
+                                        Dar Baja
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <label class="btn btn-primary" th:if="${cantidad != null}"
+                       th:text="${textoR} + ${cantidad}">Resultados encontrados</label>
+                <nav th:replace="paginator-nav ::paginator"></nav>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+<style>
+    table tr th {
+        cursor: pointer;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+
+    .sorting {
+        background-color: #D4D4D4;
+    }
+
+    .asc:after {
+        content: ' ↑';
+    }
+
+    .desc:after {
+        content: " ↓";
+    }
+</style>
+</html>

@@ -1,5 +1,6 @@
 package com.bolsadeideas.springboot.app.controllers;
 
+import com.bolsadeideas.springboot.app.apisms.AppSms;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -147,11 +148,17 @@ public class PedidoController {
 
         // Cargar los archivos adjuntos asociados al pedido en la vista
         model.addAttribute("pedido", pedido);
-      //  model.addAttribute("fotos", fotos); // Pasar la lista de nombres de fotos a la vista
+        //  model.addAttribute("fotos", fotos); // Pasar la lista de nombres de fotos a la vista
         model.addAttribute(TITULO, "Detalles del Pedido");
         return "pedido/pedidover";
     }
 
+    /**
+     * Cargar las imágenes asociadas a un pedido
+     *
+     * @param id
+     * @return
+     */
 
     @GetMapping("/cargarImagenes/{id}")
     @ResponseBody
@@ -168,6 +175,12 @@ public class PedidoController {
         return urls;
     }
 
+    /**
+     * Cargar las imágenes asociadas a un pedido
+     *
+     * @param nombreArchivo
+     * @return
+     */
     @GetMapping("/fotos/{nombreArchivo}")
     public ResponseEntity<Resource> obtenerFoto(@PathVariable String nombreArchivo) {
         Path rutaArchivo = Paths.get("C://temp//fotos/" + nombreArchivo); // Ruta local a tus imágenes
@@ -226,24 +239,29 @@ public class PedidoController {
     }
 
 
-
     /**
-     * Guarda los albaranes desde el formulario de pedidos con los datos del cliente
+     * Guarda los Peidos desde el formulario de pedidos con los datos del cliente.
      *
-     * @param result
-     * @param model
-     * @param flash
-     * @param status
-     * @return
+     * @param pedido       El objeto pedido que contiene los datos del formulario.
+     * @param result       Resultado de la validación del formulario.
+     * @param model        Modelo para la vista.
+     * @param npedido      Número del pedido.
+     * @param observacion  Observaciones del pedido.
+     * @param estado       Estado del pedido.
+     * @param tipoPedido   Tipo de pedido.
+     * @param flash        Atributos para mensajes flash.
+     * @param status       Estado de la sesión.
+     * @param fileNamesJSON Nombres de archivos en formato JSON.
+     * @return Redirección a la vista del formulario de pedidos.
      */
     @PostMapping("/form")
     public String guardar(@ModelAttribute @Valid Pedido pedido,
                           BindingResult result,
                           Model model,
-                          @RequestParam( "npedido") Long npedido,
-                          @RequestParam( "observacion") String observacion,
-                          @RequestParam( "estado") String estado,
-                          @RequestParam( "tipoPedido") String tipoPedido,
+                          @RequestParam("npedido") Long npedido,
+                          @RequestParam("observacion") String observacion,
+                          @RequestParam("estado") String estado,
+                          @RequestParam("tipoPedido") String tipoPedido,
                           RedirectAttributes flash,
                           SessionStatus status,
                           @RequestParam("fileNamesJSON") String fileNamesJSON) {
@@ -252,81 +270,92 @@ public class PedidoController {
             return PEDIDOFORM;
         }
 
-        // Obtener el pedido existente si el número de pedido coincide
         Pedido pedidoExistente = pedidoService.findOne(npedido);
         if (pedidoExistente != null) {
-            // Actualizar el pedido existente con los datos del formulario
-            pedidoExistente.setObservacion(observacion);
-            // Añadir lógica para actualizar otros campos del pedido si es necesario
-            pedidoExistente.setEstado(estado);
-            // Guardar el pedido existente
-            pedidoExistente.setTipoPedido(tipoPedido);
-            try {
-                pedidoService.save(pedidoExistente);
-                flash.addFlashAttribute("info", "Pedido actualizado con éxito");
-            } catch (Exception e) {
-                flash.addFlashAttribute("error", "Error al actualizar el pedido: " + e.getMessage());
-            }
+            actualizarPedidoExistente(pedidoExistente, observacion, estado, tipoPedido, flash);
         } else {
-            // Si no hay un pedido existente con el mismo número, guardar el nuevo pedido
-            try {
-                pedidoService.save(pedido);
-                flash.addFlashAttribute("info", "Pedido guardado con éxito");
-            } catch (Exception e) {
-                flash.addFlashAttribute("error", "Error al guardar el pedido: " + e.getMessage());
-            }
-        }
-        log.info("Número de caracteres en fileNamesJSON: " + fileNamesJSON.length());
-
-        //controlar si no hya archivos adjuntos siga el flujo
-        if (fileNamesJSON.isEmpty()) {
-            // Marcar la sesión como completa antes de redirigir
-            status.setComplete();
-            return "redirect:/pedidos/form/" + pedido.getCliente().getId();
-        }
-        // Convertir el JSON a una lista de nombres de archivo
-        List<String> fileNamesList = new ArrayList<>();
-        try {
-            JSONArray jsonArray = new JSONArray(fileNamesJSON);
-            for (int i = 0; i < jsonArray.length(); i++) {
-                fileNamesList.add(jsonArray.getString(i));
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-            // Manejar errores al convertir el JSON
+            guardarNuevoPedido(pedido, flash);
         }
 
-        log.info("Número de nombres de archivo en la lista: " + fileNamesList.size());
-
-        // Guardar archivos adjuntos
-        for (String fileName : fileNamesList) {
-            log.info("Nombre de archivo: " + fileName);
-
-            try {
-                // Crear un nuevo objeto ArchivoAdjunto y establecer el nombre del archivo
-                ArchivoAdjunto foto = new ArchivoAdjunto();
-                foto.setNombre(fileName);
-                foto.setPedido(pedido); // Establecer el pedido para la foto
-                // Aquí deberías guardar el contenido del archivo, por ejemplo, en una base de datos
-                archivoAdjuntoService.guardar(foto);
-                flash.addFlashAttribute("info", "Pedido guardado con éxito");
-                log.info("infomarcion mesj"+flash.getFlashAttributes().get("info"));
-            } catch (Exception e) {
-                // Manejar errores al cargar archivos adjuntos
-                flash.addFlashAttribute("error", "Error al cargar el archivo: " + fileName);
-                return "redirect:/pedidos/form/" + pedido.getCliente().getId();
-            }
+        if (!fileNamesJSON.isEmpty()) {
+            procesarArchivosAdjuntos(fileNamesJSON, pedido, flash);
         }
 
-        // Marcar la sesión como completa antes de redirigir
         status.setComplete();
-
         return "redirect:/pedidos/form/" + pedido.getCliente().getId();
     }
 
+    private void actualizarPedidoExistente(Pedido pedidoExistente, String observacion, String estado, String tipoPedido, RedirectAttributes flash) {
+        pedidoExistente.setObservacion(observacion);
+        pedidoExistente.setEstado(estado);
+        pedidoExistente.setTipoPedido(tipoPedido);
 
 
+        try {
+            if ("terminado".equalsIgnoreCase(pedidoExistente.getEstado()) && !pedidoExistente.getEnviadoSms()) {
+                enviarSms(pedidoExistente);
+            }
 
+            pedidoService.save(pedidoExistente);
+            flash.addFlashAttribute("info", "Pedido actualizado con éxito");
+        } catch (Exception e) {
+            flash.addFlashAttribute("error", "Error al actualizar el pedido: " + e.getMessage());
+        }
+    }
+
+    private void enviarSms(Pedido pedidoExistente) {
+        String destinatario = pedidoExistente.getCliente().getTelefono();
+        String mensaje = "Su pedido: " + pedidoExistente.getNpedido() + " ha sido finalizado. Gracias por su confianza, puede pasar a recoger cuando pueda!";
+
+        AppSms sms = new AppSms();
+        ResponseEntity<String> response = sms.sendMessage(destinatario, mensaje);
+
+        if (response.getStatusCode() == HttpStatus.OK) {
+            pedidoExistente.setEnviadoSms(true);
+            pedidoExistente.setEstadoEnvioSms("Mensaje: " + response.getStatusCode());
+            pedidoExistente.setFechaEnvioSms(new Date());
+            log.info("Mensaje enviado con éxito: " + response.getBody());
+        } else {
+            pedidoExistente.setEstadoEnvioSms("Error en el envío: " + response.getStatusCode());
+            log.error("Error al enviar el mensaje: " + response.getStatusCode());
+        }
+    }
+
+    private void guardarNuevoPedido(Pedido pedido, RedirectAttributes flash) {
+        try {
+            pedidoService.save(pedido);
+            flash.addFlashAttribute("info", "Pedido guardado con éxito");
+        } catch (Exception e) {
+            flash.addFlashAttribute("error", "Error al guardar el pedido: " + e.getMessage());
+        }
+    }
+
+    private void procesarArchivosAdjuntos(String fileNamesJSON, Pedido pedido, RedirectAttributes flash) {
+        try {
+            JSONArray jsonArray = new JSONArray(fileNamesJSON);
+            List<String> fileNamesList = new ArrayList<>();
+            for (int i = 0; i < jsonArray.length(); i++) {
+                fileNamesList.add(jsonArray.getString(i));
+            }
+
+            for (String fileName : fileNamesList) {
+                guardarArchivoAdjunto(fileName, pedido, flash);
+            }
+        } catch (JSONException e) {
+            flash.addFlashAttribute("error", "Error al procesar los archivos adjuntos: " + e.getMessage());
+        }
+    }
+
+    private void guardarArchivoAdjunto(String fileName, Pedido pedido, RedirectAttributes flash) {
+        try {
+            ArchivoAdjunto foto = new ArchivoAdjunto();
+            foto.setNombre(fileName);
+            foto.setPedido(pedido);
+            archivoAdjuntoService.guardar(foto);
+        } catch (Exception e) {
+            flash.addFlashAttribute("error", "Error al cargar el archivo: " + fileName);
+        }
+    }
 
 
     /**

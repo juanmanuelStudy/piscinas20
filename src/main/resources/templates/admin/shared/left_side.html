@@ -1,12 +1,13 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Taller Artesanal Joyeria</title>
 
     <!-- Google Font: Source Sans Pro -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback"
+          rel="stylesheet">
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
     <!-- IonIcons -->
@@ -24,6 +25,7 @@
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a th:href="@{/listar}" class="brand-link">
+
         <img src="/admin/dist/img/logoTallerJoyeria.png" alt="AdminLTE Logo" class="brand-image elevation-3" style="opacity: .9">
         <span class="brand-text font-weight-light">Taller de Joyeria</span>
     </a>
@@ -34,21 +36,40 @@
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                 <!-- Add icons to the links using the .nav-icon class with font-awesome or any other icon font library -->
-                <li class="nav-item">
-                    <a class="nav-link special-link"  th:href="'/balance/listarBalance'">
+                <li class="nav-item" sec:authorize="hasAnyRole('ADMIN', 'USER')">
+                    <a class="nav-link special-link" th:href="'/balance/listarBalance'">
                         <i class="nav-icon fas fa-balance-scale"></i>
                         Balances
                     </a>
                 </li>
+                <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                    <a class="nav-link special-link">
+                        <i class="nav-icon fas fa-users"></i>Administracion
+                        <i class="right fas fa-angle-left"></i>
+                    </a>
+                    <ul class="nav item nav-treeview" sec:authorize="hasRole('ADMIN')">
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{'/users/new'}">
+                                Crear usuarios <span class="badge badge-secondary" th:text="${countCliente}"></span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{'/users'}">
+                                Listar usuarios <span class="badge badge-secondary" th:text="${countCliente}"></span>
+                            </a>
+                        </li>
+
+                    </ul>
+                </li>
                 <li class="nav-item">
-                    <a class="nav-link special-link" >
+                    <a class="nav-link special-link">
                         <i class="nav-icon fas fa-users"></i>
                         Clientes
                         <i class="right fas fa-angle-left"></i>
                     </a>
                     <ul class="nav item nav-treeview">
                         <li class="nav-item">
-                            <a class="nav-link"  th:href="@{'/listar'}">
+                            <a class="nav-link" th:href="@{'/listar'}">
 
                                 Lista Clientes <span class="badge badge-secondary" th:text="${countCliente}"></span>
                             </a>
@@ -61,8 +82,8 @@
                         </li>
                     </ul>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link special-link" >
+                <li class="nav-item" sec:authorize="hasAnyRole('ADMIN', 'USER')">
+                    <a class="nav-link special-link">
                         <i class="nav-icon fas fa-briefcase"></i>
                         Trabajos
                         <i class="right fas fa-angle-left"></i>
@@ -82,15 +103,15 @@
                         </li>
                     </ul>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link special-link" >
+                <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                    <a class="nav-link special-link">
                         <i class="nav-icon fas fa-shopping-cart"></i>
                         Compras
                         <i class="right fas fa-angle-left"></i>
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a class="nav-link"  th:href="@{'/proveedor/form'}">
+                            <a class="nav-link" th:href="@{'/proveedor/form'}">
                                 Crear Proveedor
                             </a>
                         </li>

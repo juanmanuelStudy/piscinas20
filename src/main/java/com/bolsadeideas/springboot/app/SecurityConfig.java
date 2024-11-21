@@ -1,43 +1,67 @@
 package com.bolsadeideas.springboot.app;
-
+import com.bolsadeideas.springboot.app.apisms.d2fa.TwoFactorAuthenticationFilter;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.*;
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+public class SecurityConfig {
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+
         http
                 .authorizeRequests()
-                .antMatchers("/css/**", "/dist/**", "/plugins/**", "/js/**", "/images/**").permitAll() // Permitir acceso a recursos estáticos sin autenticación
-                .antMatchers("/login", "/logout").permitAll() // Permitir acceso a la página de login
-                .anyRequest().authenticated() // Cualquier otra solicitud requiere autenticación
+                .antMatchers("/css/**", "/dist/**", "/plugins/**", "/js/**", "/images/**").permitAll()
+                .antMatchers("/login", "/logout").permitAll()
+                .antMatchers("/verify_2fa").permitAll()
+                .anyRequest().authenticated()
                 .and()
                 .formLogin()
-                .loginPage("/login") // Página personalizada de login
-                .permitAll() // Permitir acceso a la página de login
+                .loginPage("/login")
+                .defaultSuccessUrl("/listar", true)
+                .failureUrl("/login?error=true")
+                .permitAll()
+                .successHandler(successHandler())
+                .failureHandler(failureHandler())
                 .and()
                 .logout()
-                .permitAll(); // Permitir acceso al logout
-    }
-
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
-        auth
-                .inMemoryAuthentication()
-                .withUser("admin").password(encoder.encode("admin")).roles("ADMIN")
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/login?logout")
+                .invalidateHttpSession(true)
+                .deleteCookies("JSESSIONID")
+                .permitAll()
                 .and()
-                .withUser("user").password(encoder.encode("user")).roles("USER");
+                .addFilterBefore(twoFactorAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
+        return http.build();
     }
 
-}
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
+
+    private AuthenticationSuccessHandler successHandler() {
+        SimpleUrlAuthenticationSuccessHandler handler = new SimpleUrlAuthenticationSuccessHandler();
+        handler.setDefaultTargetUrl("/listar");
+        return handler;
+    }
+
+    @Bean
+    public AuthenticationFailureHandler failureHandler() {
+        return new SimpleUrlAuthenticationFailureHandler("/login?error=true");
+    }
+
+    @Bean
+    public TwoFactorAuthenticationFilter twoFactorAuthenticationFilter() {
+        return new TwoFactorAuthenticationFilter();
+    }
+}

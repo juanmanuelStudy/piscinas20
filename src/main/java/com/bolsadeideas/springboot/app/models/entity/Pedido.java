@@ -30,17 +30,28 @@ public class Pedido implements Serializable {
     private Date dfecha;
 
     private String observacion;
+
     //se añade el estado del pedido con un valor por defecto de PENDIENTE
-    private String estado = "PENDIENTE";
+    private String estado;
 
     private String tipoPedido;
 
-    private Boolean facturado=false;//defecto es false
+    private Boolean facturado = false;//defecto es false
+
+    private Boolean enviadoSms = false;//defecto es false
+
+    //fecha de envio de sms
+    @Temporal(TemporalType.DATE)
+    private Date fechaEnvioSms;
+
+    //estado de envio del sms (enviado, no enviado)
+    private String estadoEnvioSms;
 
     //añadir una variable que guarde los archivos adjuntos en un arraylist
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "pedido")
     private List<ArchivoAdjunto> archivosAdjuntos;
+
     @PrePersist
     public void prePersit() {
         dfecha = new Date();

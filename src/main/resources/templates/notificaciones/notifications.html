@@ -5,39 +5,125 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Título de tu aplicación</title>
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <style>
+    .in-preparation {
+      color: red;
+    }
 
+    .status-circle {
+      height: 10px;
+      width: 10px;
+      background-color: red;
+      border-radius: 50%;
+      display: inline-block;
+      margin-right: 5px;
+    }
+  </style>
 </head>
 
 <body>
 <div layout:fragment="content">
   <div class="container py-4">
 
+    <h1>Lista de Notificaciones</h1>
 
-<h1>Lista de Notificationes</h1>
+    <!-- Pestañas para las diferentes categorías -->
+    <ul class="nav nav-tabs" id="notificationTabs" role="tablist">
+      <li class="nav-item">
+        <a aria-controls="orders" aria-selected="true" class="nav-link active" data-toggle="tab" href="#orders" id="orders-tab"
+           role="tab">Pedidos</a>
+      </li>
+      <li class="nav-item">
+        <a aria-controls="sms" aria-selected="false" class="nav-link" data-toggle="tab" href="#sms" id="sms-tab"
+           role="tab">SMS Enviados</a>
+      </li>
+      <li class="nav-item">
+        <a aria-controls="stock" aria-selected="false" class="nav-link" data-toggle="tab" href="#stock" id="stock-tab"
+           role="tab">Stock</a>
+      </li>
+    </ul>
 
+    <div class="tab-content" id="notificationTabsContent">
 
-    <table id="table" class="table mt-2">
-      <thead class="thead-dark">
-        <tr>
+      <!-- Tab de Pedidos -->
+      <div aria-labelledby="orders-tab" class="tab-pane fade show active" id="orders" role="tabpanel">
+        <table class="table mt-2" id="orders-table">
+          <thead class="thead-dark">
+          <tr>
+            <th>Mensaje</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr th:each="order : ${orders}">
+            <td>
+              <span class="status-circle" th:if="${order.estado == 'Preparación'}"></span>
+              <span th:classappend="${order.estado == 'Preparación' ? 'in-preparation' : ''}"
+                    th:text="${order.mensaje}"></span>
+            </td>
+            <td th:text="${order.estado}"></td>
+            <td>
+              <button class="btn btn-primary btn-sm" th:if="${order.estado != 'Preparación'}"
+                      th:onclick="'/cambiarEstado?pedidoId=' + ${order.id}">Cambiar a Preparación
+              </button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
 
-          <th>Mensaje</th>
+      <!-- Tab de SMS Enviados -->
+      <div aria-labelledby="sms-tab" class="tab-pane fade" id="sms" role="tabpanel">
+        <table class="table mt-2" id="sms-table">
+          <thead class="thead-dark">
+          <tr>
+            <th>Mensaje</th>
+            <th>Estado</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr th:each="sms : ${smsNotifications}">
+            <td th:text="${sms.mensaje}"></td>
+            <td>Enviado Correctamente</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
 
-        </tr>
-      </thead>
-      <tbody>
-        <tr th:each="notification : ${notifications}">
+      <!-- Tab de Stock -->
+      <div aria-labelledby="stock-tab" class="tab-pane fade" id="stock" role="tabpanel">
+        <table class="table mt-2" id="stock-table">
+          <thead class="thead-dark">
+          <tr>
+            <th>Producto</th>
+            <th>Estado</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr th:each="stock : ${stockNotifications}">
+            <td th:text="${stock.producto}"></td>
+            <td th:text="${stock.estado}"></td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
 
-          <td th:text="${notification.mensaje}"></td>
-        </tr>
-      </tbody>
-
-
-
-
-
-    </table>
     </div>
+  </div>
 </div>
+
+<script>
+  $(document).ready(function () {
+    $('#notificationTabs a').on('click', function (e) {
+      e.preventDefault();
+      $(this).tab('show');
+    });
+  });
+</script>
+
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

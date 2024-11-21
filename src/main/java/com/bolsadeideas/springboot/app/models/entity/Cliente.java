@@ -44,7 +44,7 @@ public class Cliente implements Serializable {
 
     private String direccion;
 
-
+    private String Secret;
     @Column(name = "create_at")
     @Temporal(TemporalType.DATE)
     private Date createAt;
@@ -164,6 +164,13 @@ public class Cliente implements Serializable {
         this.direccion = direccion;
     }
 
+    public String getSecret() {
+        return Secret;
+    }
+
+    public void setSecret(String Secret) {
+        this.Secret = Secret;
+    }
 
     public String getTelefono() {
         return telefono;

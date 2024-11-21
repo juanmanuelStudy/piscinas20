@@ -10,8 +10,6 @@
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
-
-
   <style>
     /* Estilos personalizados */
     body, html {
@@ -57,14 +55,20 @@
       transform: translateY(-50%);
       color: #ccc; /* Color del icono */
     }
+
     button.btn-primary {
       background-color: #007bff; /* Color de fondo azul Bootstrap */
       border-color: #007bff; /* Color del borde azul Bootstrap */
       width: 100%; /* Ancho completo */
     }
+
     button.btn-primary:hover {
       background-color: #0056b3; /* Color de fondo azul oscuro en hover */
       border-color: #0056b3; /* Color del borde azul oscuro en hover */
+    }
+
+    .alert {
+      margin-bottom: 20px; /* Espacio debajo del mensaje de error */
     }
   </style>
 </head>
@@ -73,21 +77,38 @@
   <div class="login-container">
     <div class="logo-container">
       <img src="/images/logoTallerJoyeria.png" alt="Logo" width="150" height="150">
-
     </div>
     <h2>Gestión Taller Joyería Artesanal</h2>
+
+    <!-- Mensaje de error -->
+    <div class="alert alert-danger" id="error-message" role="alert" th:if="${errorMessage}">
+      <span th:text="${errorMessage}"></span>
+    </div>
     <form th:action="@{/login}" method="post">
+
       <div class="form-group">
-        <label for="username" class="form-control-icon"><i class="fas fa-user"></i></label>
-        <input type="text" class="form-control" id="username" name="username" placeholder="Username"/>
+        <label class="form-control-icon" for="usuario"><i class="fas fa-user"></i></label>
+        <input class="form-control" id="usuario" name="username" placeholder="Username" required type="text"/>
       </div>
       <div class="form-group">
-        <label for="password" class="form-control-icon"><i class="fas fa-lock"></i></label>
-        <input type="password" class="form-control" id="password" name="password" placeholder="Password"/>
+        <label class="form-control-icon" for="contraseña"><i class="fas fa-lock"></i></label>
+        <input class="form-control" id="contraseña" name="password" placeholder="Password" required type="password"/>
       </div>
       <button type="submit" class="btn btn-primary">Login</button>
     </form>
+
   </div>
 </div>
+<script>
+  // Espera 5 segundos antes de ocultar el mensaje de error
+  setTimeout(function () {
+    const errorMessage = document.getElementById("error-message");
+    if (errorMessage) {
+      errorMessage.style.transition = "opacity 1s"; // Añade una transición suave
+      errorMessage.style.opacity = "0"; // Reduce la opacidad a 0 para ocultar
+      setTimeout(() => errorMessage.style.display = "none", 1000); // Cambia el display a 'none' después de la transición
+    }
+  }, 3000);
+</script>
 </body>
 </html>

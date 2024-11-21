@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:th="http://www.thymeleaf.org">
 <head th:fragment="head">
     <meta charset="UTF-8"/>
     <title th:text="'Spring Boot: MVC + Thymeleaf + Data JPA - ' + ${titulo}"></title>
@@ -99,11 +99,17 @@
             <nav class="mt-2">
                 <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
                     data-accordion="false">
-                    <li class="nav-item">
+                    <li class="nav-item" sec:authorize="hasRole('ADMIN')">
                         <a class="nav-link special-link" th:href="'/balance/listarBalance'">Balance Gestion
                             Piscinas</a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                        <a class="nav-link special-link">Administraciosssn</a>
+                        <ul class="nav item nav-treeview">
+                            <li class="nav-item"><a class="nav-link" th:href="@{'/users'}">Crear Usuarios</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item" sec:authorize="hasAnyRole('ADMIN', 'USER')">
                         <a class="nav-link special-link">Clientes</a>
                         <ul class="nav item nav-treeview">
                             <li class="nav-item"><a class="nav-link"
@@ -112,7 +118,7 @@
                             <li class="nav-item"><a class="nav-link" th:href="@{'/form'}">Crear Cliente</a></li>
                         </ul>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item" sec:authorize="hasAnyRole('ADMIN', 'USER')">
                         <a class="nav-link special-link">Trabajos</a>
                         <ul class="nav nav-treeview">
                             <li class="nav-item"><a class="nav-link"
@@ -123,7 +129,7 @@
                                     class="badge badge-secondary" th:text="${countAlbaranes}"></span></a></li>
                         </ul>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item" sec:authorize="hasRole('ADMIN')">
                         <a class="nav-link special-link">Compras</a>
                         <ul class="nav nav-treeview">
                             <li class="nav-item"><a class="nav-link"
@@ -168,7 +174,8 @@
 <!-- Contenido al lado del menú -->
 <div class="content">
     <div class="container">
-        <div class="alert alert-success" th:if="${success != null}" th:text="${success}"></div>
+
+    <div class="alert alert-success" th:if="${success != null}" th:text="${success}"></div>
         <div class="alert alert-danger" th:if="${error != null}" th:text="${error}"></div>
         <div class="alert alert-warning" th:if="${warning != null}" th:text="${warning}"></div>
         <div class="alert alert-info" th:if="${info != null}" th:text="${info}"></div>

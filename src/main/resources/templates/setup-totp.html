@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Configurar Verificación de Dos Factores</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</head>
+<body>
+<h1>Configura la verificación de dos factores</h1>
+
+<p>Escanea este código QR con Google Authenticator o cualquier aplicación compatible:</p>
+
+<div id="qrcode"></div> <!-- Aquí se generará el código QR -->
+
+<script type="text/javascript">
+    // Obtener la URL del código QR desde la variable del modelo
+    var qrUrl = "[[${qrUrl}]]";  // Enlace TOTP pasado desde el controlador
+    var qrcode = new QRCode(document.getElementById("qrcode"), {
+        text: qrUrl,
+        width: 256,
+        height: 256
+    });
+</script>
+
+<p>Después de escanear el código, ingresa el código de verificación generado por la aplicación.</p>
+
+<form action="/verify-totp" method="post">
+    <label for="otp">Código OTP:</label>
+    <input id="otp" name="otp" required type="text">
+    <button type="submit">Verificar</button>
+</form>
+</body>
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <!-- Enlaces a los archivos CSS de Bootstrap -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Google Font: Source Sans Pro -->
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback"
+          rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
+
+    <style>
+        /* Estilos personalizados */
+        body, html {
+            height: 100%;
+            margin: 0;
+        }
+
+        body {
+            background-color: rgba(0, 0, 0, 0.7); /* Fondo negro opaco */
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+        }
+
+        .login-container {
+            text-align: center;
+            width: 400px; /* Reducir el ancho del contenedor para que quepa en la pantalla */
+            padding: 20px; /* Espacio interno */
+            border-radius: 10px; /* Bordes redondeados */
+            background-color: #ffffff; /* Color de fondo blanco */
+            box-shadow: 0px 0px 10px rgba(208, 186, 38, 0.5); /* Sombra */
+        }
+
+        .logo-container {
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            position: relative;
+            margin-bottom: 20px; /* Aumentar el espacio entre elementos del formulario */
+        }
+
+        label {
+            color: #111110; /* Color de texto */
+        }
+
+        input.form-control {
+            background-color: #c5c5b6; /* Color de fondo gris */
+            color: #fff; /* Color de texto blanco */
+            padding-left: 40px; /* Espacio para el icono */
+        }
+
+        .form-control-icon {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #ccc; /* Color del icono */
+        }
+
+        button.btn-primary {
+            background-color: #007bff; /* Color de fondo azul Bootstrap */
+            border-color: #007bff; /* Color del borde azul Bootstrap */
+            width: 100%; /* Ancho completo */
+        }
+
+        button.btn-primary:hover {
+            background-color: #0056b3; /* Color de fondo azul oscuro en hover */
+            border-color: #0056b3; /* Color del borde azul oscuro en hover */
+        }
+    </style>
+</head>
+<body>
+<body>
+<h2>Introduce el código de verificación</h2>
+
+<form action="/verify-totp" method="post">
+    <label for="otp">Código OTP:</label>
+    <input id="otp" name="otp" required type="text">
+    <button type="submit">Verificar</button>
+</form>
+
+<p style="color: red;" th:if="${error}">[[${error}]]</p>
+</body>
+</html>

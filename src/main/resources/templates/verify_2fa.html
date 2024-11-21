@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Verificación 2FA</title>
+    <!-- Enlaces a los archivos CSS de Bootstrap -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Google Font: Source Sans Pro -->
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback"
+          rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
+    <style>
+        /* Estilos personalizados */
+        body, html {
+            height: 100%;
+            margin: 0;
+        }
+
+        body {
+            background-color: rgba(0, 0, 0, 0.7); /* Fondo negro opaco */
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+        }
+
+        .verification-container {
+            text-align: center;
+            width: 400px; /* Reducir el ancho del contenedor */
+            padding: 20px; /* Espacio interno */
+            border-radius: 10px; /* Bordes redondeados */
+            background-color: #ffffff; /* Color de fondo blanco */
+            box-shadow: 0px 0px 10px rgba(208, 186, 38, 0.5); /* Sombra */
+        }
+
+        .logo-container {
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            position: relative;
+            margin-bottom: 20px; /* Espacio entre elementos */
+        }
+
+        label {
+            color: #111110; /* Color de texto */
+        }
+
+        input.form-control {
+            background-color: #c5c5b6; /* Fondo gris */
+            color: #fff; /* Texto blanco */
+            padding-left: 40px; /* Espacio para el icono */
+        }
+
+        .form-control-icon {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #ccc; /* Color del icono */
+        }
+
+        button.btn-primary {
+            background-color: #007bff; /* Azul Bootstrap */
+            border-color: #007bff;
+            width: 100%;
+        }
+
+        button.btn-primary:hover {
+            background-color: #0056b3; /* Azul oscuro */
+            border-color: #0056b3;
+        }
+
+        .alert {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="verification-container">
+
+        <h2>Verificación 2FA </h2>
+
+        <!-- Mensaje de error -->
+        <div class="alert alert-danger" id="error-message" role="alert" th:if="${error}">
+            <span th:text="${error}"></span>
+        </div>
+
+        <form method="post" th:action="@{/verify_2fa}">
+            <div class="form-group">
+                <label class="form-control-icon" for="code"><i class="fas fa-key"></i></label>
+                <input class="form-control" id="code" name="code" placeholder="Código de Verificación" required
+                       type="text">
+            </div>
+            <input name="username" th:value="${#authentication.name}" type="hidden">
+            <button class="btn btn-primary" type="submit">Verificar</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    // Ocultar el mensaje de error después de 5 segundos
+    setTimeout(function () {
+        const errorMessage = document.getElementById("error-message");
+        if (errorMessage) {
+            errorMessage.style.transition = "opacity 1s";
+            errorMessage.style.opacity = "0";
+            setTimeout(() => errorMessage.style.display = "none", 1000);
+        }
+    }, 3000);
+</script>
+</body>
+</html>

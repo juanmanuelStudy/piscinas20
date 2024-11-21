@@ -34,6 +34,7 @@
     .asteriskField {
         color: red;
     }
+
     .file-list-container {
 
         margin-botton: 20px;
@@ -41,8 +42,18 @@
         max-width: 600px; /* Cambia el valor según tus preferencias */
         margin: 0 auto; /* Centra el contenedor horizontalmente */
     }
+
+    .estado-pendiente {
+        background-color: #f8d7da; /* Rojo claro */
+    }
+
+    .estado-terminado {
+        background-color: #d4edda; /* Verde claro */
+    }
 </style>
 <style>
+
+
     #fileListContainer {
         background-color: white;
         border: 1px solid #ccc;
@@ -191,11 +202,12 @@
                             </div>
 
                             <div class="form-group row">
-                                <div class="col-sm-6">
-                                    <button id="sumit" type="submit" class="btn btn-primary">Guardar Fotos</button>
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                <div class="col-sm-2 d-flex justify-content-start">
+                                    <button class="btn btn-primary mr-2" id="submit" type="submit">Guardar</button>
+
                                 </div>
                             </div>
+
 
                         </form>
                     </div>
@@ -208,6 +220,8 @@
 </div>
 <script th:inline="javascript">
     $(document).ready(function() {
+
+
         // Función para mostrar una vista previa de la imagen seleccionada
         function previewImage(input) {
             if (input.files && input.files[0]) {
@@ -328,9 +342,9 @@
                 success: function(response) {
                     mostrarMensajeExito();
                     // Recargar la página después de 2 segundos
-                    setTimeout(function() {
+                    setTimeout(function () {
                         location.reload();
-                    }, 2000);
+                    }, 0);
 
                 },
                 error: function(xhr, status, error) {
@@ -369,20 +383,13 @@
     });
 
     function mostrarMensajeExito() {
-        // Limpiar el formulario
-        document.getElementById('pedidoForm').reset();
-        // Crear un div para el mensaje de éxito
-        var div = document.createElement('div');
-        // Agregar el mensaje de éxito con el número de pedido del campo 'npedido' dentro de un div de clase 'alert alert-success'
-        div.innerHTML = 'Pedido guardado con éxito. Número de pedido: ' + document.getElementById('npedido').value;
-        div.className = 'alert alert-success';
-        // Agregar el div creado al div con id 'messege'
-        document.getElementById('messege').appendChild(div);
-        // Esperar 3 segundos y luego ocultar el mensaje de éxito con efecto de desvanecimiento
-        setTimeout(function() {
-            $(div).fadeOut('slow');
-        }, 3000);
+        // Limpiar el formulario y crear el mensaje
+        var mensaje = 'Pedido guardado con éxito. Número de pedido: ' + document.getElementById('npedido').value;
+        $('#messege').html('<div class="alert alert-success">' + mensaje + '</div>');
     }
+
+
+
 
 
 </script>

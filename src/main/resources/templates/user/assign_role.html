@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Assign Role</title>
+</head>
+<body>
+<h1>Assign Role</h1>
+<form method="post" th:action="@{/users/assignRole}">
+    <div>
+        <label>Select User:</label>
+        <select name="userId">
+            <option th:each="user : ${users}" th:text="${user.username}" th:value="${user.id}"></option>
+        </select>
+    </div>
+    <div>
+        <label>Select Role:</label>
+        <select name="roleId">
+            <option th:each="role : ${roles}" th:text="${role.nombre}" th:value="${role.id}"></option>
+        </select>
+    </div>
+    <div>
+        <button type="submit">Assign Role</button>
+    </div>
+</form>
+</body>
+</html>
