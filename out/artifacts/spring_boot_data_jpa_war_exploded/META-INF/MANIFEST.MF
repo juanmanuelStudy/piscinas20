@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Created-By: IntelliJ IDEA
+Built-By: Juanma
+Build-Jdk: Eclipse Temurin 17.0.13
+Implementation-Title: spring-boot-data-jpa
+Implementation-Version: 0.0.1-SNAPSHOT
+Implementation-Vendor-Id: com.bolsadeideas.springboot.datajpa.app
+Main-Class: ${start-class}
+

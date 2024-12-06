@@ -1,0 +1,1282 @@
+@startuml
+
+!theme plain
+top to bottom direction
+skinparam linetype ortho
+
+class Albaran {
+  + Albaran(): 
+  - items: List<ItemAlbaran>
+  - cliente: Cliente
+  - foto: String
+  - id: Long
+  - dfechavenci: String
+  - numeroAlbaran: String
+  - lugar: String
+  - dfecha: Date
+  - proveedor: Proveedor
+  - observacion: String
+  - pasadoAlbaran: Boolean
+  - descripcion: String
+  - serialVersionUID: long
+  + getObservacion(): String
+  + setItems(List<ItemAlbaran>): void
+  + getTotal(): Double
+  + getDfecha(): Date
+  + getDescripcion(): String
+  + setDfecha(Date): void
+  + getFoto(): String
+  + prePersit(): void
+  + setFoto(String): void
+  + setNumeroAlbaran(String): void
+  + getItems(): List<ItemAlbaran>
+  + getProveedor(): Proveedor
+  + getNumeroAlbaran(): String
+  + setId(Long): void
+  + setDescripcion(String): void
+  + setCliente(Cliente): void
+  + addItemAlbaran(ItemAlbaran): void
+  + setProveedor(Proveedor): void
+  + getLugar(): String
+  + setObservacion(String): void
+  + getId(): Long
+  + setLugar(String): void
+  + getDfechavenci(): String
+  + getCliente(): Cliente
+  + setDfechavenci(String): void
+}
+class AlbaranController {
+  + AlbaranController(): 
+  ~ CREARALBARAN: String
+  ~ ALBARANFORM: String
+  ~ ERROR: String
+  ~ REDIRECTLISTAR: String
+  ~ TITULO: String
+  - clienteService: IClienteService
+  - albaranService: AlbaranServiceImpl
+  - log: Logger
+  - request: HttpServletRequest
+  - uploadFileService: IUploadFileService
+  - proveedorService: ProveedorServiceImpl
+  + verFoto(String): ResponseEntity<Resource>
+  + listar(int, Model): String
+  + guardar(Albaran, BindingResult, Model, Long[], Integer[], RedirectAttributes, SessionStatus, MultipartFile): String
+  + ver(Long, Model, RedirectAttributes): String
+  + generateReport(HttpServletResponse, String, String): ResponseEntity<?>
+  + buscar(int, String, String, Pageable, Model): String
+  + init(): void
+  + crear(Long, Map<String, Object>, RedirectAttributes): String
+  + eliminar(Long, RedirectAttributes): String
+}
+interface AlbaranDao << interface >> {
+  + findByClienteAndProveedorAndLugar(String, String, String, Pageable): Page<Albaran>
+  + count(): long
+  + findAlbaranCliente(Long, Pageable): Page<Albaran>
+}
+class AlbaranDto {
+  + AlbaranDto(Long, String, String, Date, String, String, String, String, List<ItemAlbaran>, Proveedor, Cliente): 
+  + AlbaranDto(): 
+  - id: Long
+  - descripcion: String
+  - numeroAlbaran: String
+  - cliente: Cliente
+  - lugar: String
+  - dfecha: Date
+  - foto: String
+  - proveedor: Proveedor
+  - dfechavenci: String
+  - observacion: String
+  - items: List<ItemAlbaran>
+  + getLugar(): String
+  + getId(): Long
+  + setDescripcion(String): void
+  + setDfechavenci(String): void
+  + getCliente(): Cliente
+  + setItems(List<ItemAlbaran>): void
+  + setDfecha(Date): void
+  + getDescripcion(): String
+  + setFoto(String): void
+  + getObservacion(): String
+  + getDfecha(): Date
+  + getDfechavenci(): String
+  + setId(Long): void
+  + getItems(): List<ItemAlbaran>
+  + getProveedor(): Proveedor
+  + setProveedor(Proveedor): void
+  + setCliente(Cliente): void
+  + setObservacion(String): void
+  + setNumeroAlbaran(String): void
+  + setLugar(String): void
+  + getNumeroAlbaran(): String
+  + getFoto(): String
+}
+class AlbaranServiceImpl {
+  + AlbaranServiceImpl(): 
+  - AlbaranDao: AlbaranDao
+  + findAll(): Iterable<Albaran>
+  + findAlbaranCliente(Long, Pageable): Page<Albaran>
+  + save(Albaran): Albaran
+  + delete(Long): void
+  + findByClienteAndProveedorAndLugar(String, String, String, Pageable): Page<Albaran>
+  + findOne(Long): Albaran
+  + count(): long
+  + findAll(Pageable): Page<Albaran>
+}
+interface AlbaranesMapper << interface >> {
+  + toAlbaranes(AlbaranDto): Albaran
+  + toAlbaranesDto(Albaran): AlbaranDto
+}
+class AlbaranesMapperImpl {
+  + AlbaranesMapperImpl(): 
+  - albaranesMapper: AlbaranesMapper
+  + toAlbaranesDto(Albaran): AlbaranDto
+  + toAlbaranes(AlbaranDto): Albaran
+}
+interface AlbaranesService << interface >> {
+  + findAlbaranCliente(Long, Pageable): Page<Albaran>
+  + count(): long
+  + findByClienteAndProveedorAndLugar(String, String, String, Pageable): Page<Albaran>
+  + findAll(): Iterable<Albaran>
+  + findAll(Pageable): Page<Albaran>
+  + save(Albaran): Albaran
+  + delete(Long): void
+  + findOne(Long): Albaran
+}
+class AppSms {
+  + AppSms(): 
+  - restTemplate: RestTemplate
+  - pedidoService: PedidoService
+  - url: String
+  - authorizationToken: String
+  + sendMessage(String, String): ResponseEntity<String>
+}
+class ArchivoAdjunto {
+  + ArchivoAdjunto(): 
+  - serialVersionUID: long
+  - id: Long
+  - nombre: String
+  - pedido: Pedido
+}
+interface ArchivoAdjuntoDao << interface >> {
+  + findArchivoAdjuntoById(Long): List<ArchivoAdjunto>
+  + findArchivoAdjunto(): List<String>
+}
+class ArchivoAdjuntoService {
+  + ArchivoAdjuntoService(ArchivoAdjuntoDao): 
+  - archivoAdjuntoRepository: ArchivoAdjuntoDao
+  + guardar(ArchivoAdjunto): void
+  + findArchivosAdjuntosByPedidoId(Long): List<ArchivoAdjunto>
+  + eliminarArchivoAdjunto(ArchivoAdjunto): void
+  + findArchivosAdjuntos(): List<String>
+}
+class BalanceController {
+  + BalanceController(): 
+  + listar(Model): String
+}
+class Cliente {
+  + Cliente(): 
+  - pedido: List<Pedido>
+  - email: String
+  - Secret: String
+  - telefono: String
+  - id: Long
+  - albaranes: List<Albaran>
+  - nombre: String
+  - facturas: List<Factura>
+  - apellido: String
+  - direccion: String
+  - serialVersionUID: long
+  - createAt: Date
+  - foto: String
+  + getApellido(): String
+  + addFactura(Factura): void
+  + setFoto(String): void
+  + getDireccion(): String
+  + toString(): String
+  + setAlbaranes(List<Albaran>): void
+  + setNombre(String): void
+  + setSecret(String): void
+  + setTelefono(String): void
+  + getEmail(): String
+  + getPedido(): List<Pedido>
+  + getNombre(): String
+  + setId(Long): void
+  + getFacturas(): List<Factura>
+  + getSecret(): String
+  + getId(): Long
+  + setFacturas(List<Factura>): void
+  + getAlbaranes(): List<Albaran>
+  + getTelefono(): String
+  + getSerialversionuid(): long
+  + setApellido(String): void
+  + addAlbaran(Albaran): void
+  + prePersist(): void
+  + getCreateAt(): Date
+  + setEmail(String): void
+  + setDireccion(String): void
+  + setCreateAt(Date): void
+  + getFoto(): String
+}
+class ClienteController {
+  + ClienteController(): 
+  - fechadefactura: String
+  - pedidoService: PedidoServiceImpl
+  - uploadFileService: IUploadFileService
+  - clienteService: IClienteService
+  + obtenerFoto(String): ResponseEntity<Resource>
+  + crear(Map<String, Object>): String
+  + buscar(String, int, Model): String
+  + ver(Long, Map<String, Object>, RedirectAttributes, int, int): String
+  + editar(Long, Map<String, Object>, RedirectAttributes): String
+  + guardar(Cliente, BindingResult, Model, RedirectAttributes, SessionStatus): String
+  + eliminar(Long, RedirectAttributes): String
+  + listar(int, Model): String
+  + verFoto(String): ResponseEntity<Resource>
+}
+class ClienteServiceImpl {
+  + ClienteServiceImpl(): 
+  ~ em: EntityManager
+  - clienteDao: IClienteDao
+  - resourceLoader: ResourceLoader
+  - albaranDAO: AlbaranDao
+  - pedidoDao: PedidoDao
+  - log: Logger
+  - productoDao: IProductoDao
+  - facturaDao: IFacturaDao
+  + findAllProducto(): List<Producto>
+  + findFacturaById(Long): Factura
+  + findAllByCliente(Long, Pageable): Page<Factura>
+  + deleteAlbaran(Long): void
+  + findAll(Pageable): Page<Cliente>
+  + count(): Object
+  + findByClienteAndProveedorAndLugarAndEmviadoS(String, String, String, String, String, Pageable): Page<Factura>
+  + findByClienteAndProveedorAndLugarAndEnviadoSS(String, String, String, Pageable): Page<Factura>
+  + findByvenviadoagestor(Pageable): Page<Factura>
+  + modificarContbilizar(Factura): Factura
+  + findProductoById(Long): Producto
+  + findByClienteAndProveedorAndLugarAndEmviadoN(String, String, String, String, String, Pageable): Page<Factura>
+  + findByvenviadoagestorS(Pageable): Page<Factura>
+  + findAlbaranById(Long): Albaran
+  + findFacturaByIdPage(Long, Pageable): Page<Factura>
+  + generateJasperPrints(String, String): JasperPrint
+  + findByNombre(String): List<Producto>
+  + findByUsername(String): Cliente
+  + saveFactura(Factura): void
+  + deleteFactura(Long): void
+  + deletePedido(Long): void
+  + findOneBy(Long): Optional<Factura>
+  + findByClienteAndProveedorAndTipo(String, String, Pageable): Page<Factura>
+  + listarFactuaByNumero(String): Factura
+  + findByNombreListar(String, Pageable): Page<Cliente>
+  + save(Cliente): void
+  + saveAlbaran(Albaran): void
+  + findPedidoById(Long): Pedido
+  + findFacturaAll(Pageable): Page<Factura>
+  + findOne(Long): Cliente
+  + delete(Long): void
+  + findAll(): List<Cliente>
+  - findAllByClienteAndTipo(String, String): Iterable<Factura>
+}
+class CookieClearController {
+  + CookieClearController(): 
+  + clearCookies(HttpServletRequest, HttpServletResponse): String
+}
+class CustomUserDetailsService {
+  + CustomUserDetailsService(): 
+  ~ log: Logger
+  - userRepository: UserRepository
+  + loadUserByUsername(String): UserDetails
+}
+class ErrorController {
+  + ErrorController(): 
+  + getErrorPath(): String
+  + handleError(): String
+}
+enum Estados << enumeration >> {
+  + Estados(): 
+  + REALIZANDO: 
+  + PENDIENTE: 
+  + FINALIZADO: 
+  + values(): Estados[]
+  + getEstados(): String
+  + valueOf(String): Estados
+}
+class Factura {
+  + Factura(): 
+  + total: Double
+  - iva: Integer
+  - vdomiciliacion: String
+  - ivaTotal: Double
+  - vlugar: String
+  - npedido: String
+  - nproveedor: Proveedor
+  - cliente: Cliente
+  - npersonal: String
+  - fechavencimiento: String
+  - serialVersionUID: long
+  - tipoPedido: String
+  - observacion: String
+  - items: List<ItemFactura>
+  - metodoPago: String
+  - dfechaAlbaran: String
+  - vtrimenstre: String
+  - Id: Long
+  - enviadoagestor: String
+  - createAt: Date
+  + setDfechaAlbaran(String): void
+  + getTotal(): Double
+  + setEnviadoagestor(String): void
+  + prePersist(): void
+  + getIva(): Integer
+  + setNpersonal(String): void
+  + getTotalIva(): Double
+  + getCreateAt(): Date
+  + getItems(): List<ItemFactura>
+  + setObservacion(String): void
+  + getVtrimenstre(): String
+  + getNproveedor(): Proveedor
+  + getNpersonal(): String
+  + setId(Long): void
+  + setItems(List<ItemFactura>): void
+  + getIvaTotal(): Double
+  + addItemFactura(ItemFactura): void
+  + getClientes(): String
+  + getCliente(): Cliente
+  + setVtrimenstre(String): void
+  + getSerialversionuid(): long
+  + getId(): Long
+  + setNproveedor(Proveedor): void
+  + getEnviadoagestor(): String
+  + getSubTotal(): Double
+  + setIvaTotal(Double): void
+  + setMetodoPago(String): void
+  + setCliente(Cliente): void
+  + getVdomiciliacion(): String
+  + getMetodoPago(): String
+  + getObservacion(): String
+  + setTotal(Double): void
+  + setVdomiciliacion(String): void
+  + setIva(Integer): void
+  + setCreateAt(Date): void
+}
+class FacturaController {
+  + FacturaController(): 
+  - log: Logger
+  - date: Date
+  - clienteService: IClienteService
+  - uploadFileService: IUploadFileService
+  - fechadefactura: String
+  - notificacionService: NotificacionService
+  - proveedores: ProveedorServiceImpl
+  - pedidoService: PedidoService
+  - materialService: ProductoServiceImpl
+  - metodoService: ServiceMetodo
+  - proveedorService: ProveedorServiceImpl
+  - total: Double
+  - anticipo: Double
+  - facturaMapper: FacturaMapper
+  - request: HttpServletRequest
+  + cargarProductos(String): List<Producto>
+  + buscar(int, String, String, Model): String
+  + eliminar(Long, RedirectAttributes): String
+  + buscarCon(int, String, String, String, String, String, Model): String
+  + listarB(int, Model): String
+  + guardar(Factura, BindingResult, Model, Long[], Integer[], Long, RedirectAttributes, SessionStatus): String
+  + metodos(): List<String>
+  + ver(Long, Model, RedirectAttributes): String
+  + cargarProductos(): List<Producto>
+  + listar(int, Model): String
+  + crear(Long, Map<String, Object>, RedirectAttributes): String
+  + crearConta(Long, Map<String, Object>, RedirectAttributes): String
+  + verFoto(String): ResponseEntity<Resource>
+}
+class FacturaDto {
+  + FacturaDto(): 
+  + FacturaDto(Long, String, String, String, String, String, String, String, Integer, String, String, Double, String, String, String, Proveedor, String, String, Double, String, Date, Cliente, List<ItemFactura>): 
+  - dfechaAlbaran: String
+  - tipoPedido: String
+  - npagada_factura: String
+  - iva: Integer
+  - total: Double
+  - npersonal: String
+  - numeroAlbaran: String
+  - id: Long
+  - npedido: String
+  - createAt: Date
+  - vtrimenstre: String
+  - fechavencimiento: String
+  - foto: String
+  - dfechaFactura: String
+  - vlugar: String
+  - ivaTotal: Double
+  - cliente: Cliente
+  - vdomiciliacion: String
+  - enviadoagestor: String
+  - metodoPago: String
+  - nproveedor: Proveedor
+  - observacion: String
+  - items: List<ItemFactura>
+  + getNpersonal(): String
+  + getVtrimenstre(): String
+  + setNpersonal(String): void
+  + setFoto(String): void
+  + getItems(): List<ItemFactura>
+  + setMetodoPago(String): void
+  + setTipoPedido(String): void
+  + setId(Long): void
+  + getId(): Long
+  + getNumeroAlbaran(): String
+  + setCliente(Cliente): void
+  + setIva(Integer): void
+  + getObservacion(): String
+  + setDfechaFactura(String): void
+  + setIvaTotal(Double): void
+  + getFoto(): String
+  + getFechavencimiento(): String
+  + getCliente(): Cliente
+  + getDfechaFactura(): String
+  + setNproveedor(Proveedor): void
+  + getCreateAt(): Date
+  + setDfechaAlbaran(String): void
+  + getMetodoPago(): String
+  + setNumeroAlbaran(String): void
+  + setTotal(Double): void
+  + getIvaTotal(): Double
+  + getNproveedor(): Proveedor
+  + setVtrimenstre(String): void
+  + setVdomiciliacion(String): void
+  + setNpedido(String): void
+  + getTotal(): Double
+  + getNpedido(): String
+  + getVlugar(): String
+  + getVdomiciliacion(): String
+  + setVlugar(String): void
+  + setFechavencimiento(String): void
+  + setNpagada_factura(String): void
+  + setCreateAt(Date): void
+  + getEnviadoagestor(): String
+  + getDfechaAlbaran(): String
+  + setObservacion(String): void
+  + getNpagada_factura(): String
+  + getIva(): Integer
+  + setItems(List<ItemFactura>): void
+  + getTipoPedido(): String
+  + setEnviadoagestor(String): void
+}
+interface FacturaMapper << interface >> {
+  + toFactura(FacturaDto): Factura
+  + toFacturaDto(Factura): FacturaDto
+}
+class FacturaMapperImpl {
+  + FacturaMapperImpl(): 
+  - facturaMapper: FacturaMapper
+  + toFacturaDto(Factura): FacturaDto
+  + toFactura(FacturaDto): Factura
+}
+interface IClienteDao << interface >> {
+  + findByClienteAndProveedorAndLugarAndEnviadoN(String, String, String, String, String, Pageable): Page<Factura>
+  + findByUsername(String): Cliente
+  + findByClienteAndProveedorAndTipo(String, String): Iterable<Factura>
+  + findByCliente(Long, Pageable): Page<Factura>
+  + findByNombreListar(String, Pageable): Page<Cliente>
+  + findByClienteAndProveedorAndLugarAndEnviadoS(String, String, String, String, String, Pageable): Page<Factura>
+  + findByClienteAndProveedorAndTipos(String, String, String, String, Pageable): Page<Factura>
+  + findByClienteAndProveedorAndTipos(String, String, Pageable): Page<Factura>
+  + listarFactuaByNumero(String): Factura
+}
+interface IClienteService << interface >> {
+  + findAllProducto(): List<Producto>
+  + deleteFactura(Long): void
+  + findByvenviadoagestor(Pageable): Page<Factura>
+  + save(Cliente): void
+  + findAll(): List<Cliente>
+  + findAlbaranById(Long): Albaran
+  + findByvenviadoagestorS(Pageable): Page<Factura>
+  + delete(Long): void
+  + findFacturaByIdPage(Long, Pageable): Page<Factura>
+  + findByClienteAndProveedorAndTipo(String, String, Pageable): Page<Factura>
+  + findFacturaById(Long): Factura
+  + findByClienteAndProveedorAndLugarAndEnviadoSS(String, String, String, Pageable): Page<Factura>
+  + findAll(Pageable): Page<Cliente>
+  + findByUsername(String): Cliente
+  + findByNombreListar(String, Pageable): Page<Cliente>
+  + findProductoById(Long): Producto
+  + findByClienteAndProveedorAndLugarAndEmviadoS(String, String, String, String, String, Pageable): Page<Factura>
+  + findAllByCliente(Long, Pageable): Page<Factura>
+  + modificarContbilizar(Factura): Factura
+  + findByNombre(String): List<Producto>
+  + deleteAlbaran(Long): void
+  + findOneBy(Long): Optional<Factura>
+  + saveFactura(Factura): void
+  + listarFactuaByNumero(String): Factura
+  + findByClienteAndProveedorAndLugarAndEmviadoN(String, String, String, String, String, Pageable): Page<Factura>
+  + findOne(Long): Cliente
+  + generateJasperPrints(String, String): JasperPrint
+  + deletePedido(Long): void
+  + findPedidoById(Long): Pedido
+  + findFacturaAll(Pageable): Page<Factura>
+  + saveAlbaran(Albaran): void
+}
+interface IFacturaDao << interface >> {
+  + em: EntityManager
+  + findByvenviadoagestor(Pageable): Page<Factura>
+  + count(): long
+  + findByClienteAndProveedorAndLugar(String, String, String, Pageable): Page<Factura>
+  + findTotalFacturas(): Double
+  + findByvenviadoagestorS(Pageable): Page<Factura>
+  + findFacturaByClientid(Long, Pageable): Page<Factura>
+}
+interface IMetodo << interface >> {
+  + findAll(): List<MetodoPago>
+  + findOne(Long): MetodoPago
+  + delete(Long): void
+  + findAll(Pageable): Page<MetodoPago>
+  + save(MetodoPago): MetodoPago
+}
+interface IProductoDao << interface >> {
+  + findByClienteOrProveedor(String, String, Pageable): Page<Producto>
+  + findByCantidadLessThan(Double): List<Producto>
+  + findMaterialByProveedor(String): List<Producto>
+  + findByCodigo(String): List<Producto>
+  + findByCodigoLikeIgnoreCase(String): List<Producto>
+  + count(): long
+}
+interface IUploadFileService << interface >> {
+  + load(String): Resource
+  + delete(String): boolean
+  + init(): void
+  + copy(MultipartFile): String
+  + deleteAll(): void
+}
+class ItemAlbaran {
+  + ItemAlbaran(): 
+  - id: Long
+  - serialVersionUID: long
+  - producto: Producto
+  - cantidad: Integer
+  + setId(Long): void
+  + getCantidad(): Integer
+  + setProducto(Producto): void
+  + setCantidad(Integer): void
+  + getId(): Long
+  + getProducto(): Producto
+  + calcularImporte(): Double
+}
+class ItemFactura {
+  + ItemFactura(): 
+  - cantidad: Integer
+  - serialVersionUID: long
+  - id: Long
+  - producto: Producto
+  + getProducto(): Producto
+  + getId(): Long
+  + setId(Long): void
+  + getCantidad(): Integer
+  + setCantidad(Integer): void
+  + calcularImporte(): Double
+  + setProducto(Producto): void
+}
+class LoginController {
+  + LoginController(): 
+  ~ log: Log
+  - userService: UserService
+  + showLoginForm(String, Model): String
+  + logout(): String
+}
+class MaterialController {
+  + MaterialController(): 
+  - notificacionService: NotificacionService
+  - proveedorService: ProveedorServiceImpl
+  - materialService: ProductoServiceImpl
+  - clienteService: ClienteServiceImpl
+  - log: Logger
+  + crear(Map<String, Object>): String
+  + listar(Model, int): String
+  + buscar(String, String, int, Model): String
+  + getNotificationCount(): ResponseEntity<Long>
+  + editar(Long, Map<String, Object>): String
+  + guardar(Producto, BindingResult, Model, SessionStatus, RedirectAttributes): String
+  + eliminar(Long, RedirectAttributes): String
+}
+class MetodoController {
+  + MetodoController(): 
+  - log: Logger
+  - metodoService: ServiceMetodo
+  + crear(Map<String, Object>): String
+  + listar(Model, int): String
+  + eliminar(Long, RedirectAttributes): String
+  + editar(Long, Map<String, Object>): String
+  + guardar(MetodoPago, BindingResult, Model, SessionStatus, RedirectAttributes): String
+}
+interface MetodoDao << interface >>
+class MetodoPago {
+  + MetodoPago(): 
+  - descripcion: String
+  - serialVersionUID: long
+  - id: Long
+  - nombre: String
+  + getId(): Long
+  + setDescripcion(String): void
+  + getNombre(): String
+  + setNombre(String): void
+  + setId(Long): void
+  + getDescripcion(): String
+}
+class MvcConfig {
+  + MvcConfig(): 
+  - log: Logger
+  + addResourceHandlers(ResourceHandlerRegistry): void
+}
+class Notificacion {
+  + Notificacion(): 
+  - leida: boolean
+  - id: Long
+  - serialVersionUID: long
+  - materialAfectado: Producto
+  - mensaje: String
+  - total: Long
+  + getId(): Long
+  + equals(Object): boolean
+  + setLeida(boolean): void
+  + setTotal(Long): void
+  + hashCode(): int
+  + setMaterialAfectado(Producto): void
+  + toString(): String
+  + getMensaje(): String
+  + isLeida(): boolean
+  + getTotal(): Long
+  + getMaterialAfectado(): Producto
+  + setId(Long): void
+  + setMensaje(String): void
+  # canEqual(Object): boolean
+}
+interface NotificacionRepository << interface >>
+class NotificacionService {
+  + NotificacionService(): 
+  - notificacionRepository: NotificacionRepository
+  - productoService: IProductoDao
+  + guardar(Notificacion): void
+  + verificarStock(): void
+  + getNotifications(): List<Notificacion>
+  + clearNotifications(): void
+  + getNotificationCount(): Long
+  + totalNotificaciones(): Long
+  + addNotification(String): void
+}
+class NotificationController {
+  + NotificationController(): 
+  - notificacionService: NotificacionService
+  - log: Logger
+  + addNotification(): String
+  + init(): void
+  + notifications(Model): String
+  + clearNotifications(): String
+  + listarTotal(Model): String
+  + getNotificationCount(): ResponseEntity<Long>
+}
+class PageItem {
+  + PageItem(int, boolean): 
+  - actual: boolean
+  - numero: int
+  + getNumero(): int
+  + isActual(): boolean
+}
+class PageRender<T> {
+  + PageRender(String, Page<T>): 
+  - numElementosPorPagina: int
+  - page: Page<T>
+  - paginaActual: int
+  - url: String
+  - paginas: List<PageItem>
+  - totalPaginas: int
+  + isHasNext(): boolean
+  + getTotalPaginas(): int
+  + isLast(): boolean
+  + isFirst(): boolean
+  + isHasPrevious(): boolean
+  + getPaginaActual(): int
+  + getUrl(): String
+  + getPaginas(): List<PageItem>
+}
+class Pedido {
+  + Pedido(): 
+  - serialVersionUID: long
+  - facturado: Boolean
+  - cliente: Cliente
+  - observacion: String
+  - enviadoSms: Boolean
+  - estadoEnvioSms: String
+  - npedido: Long
+  - archivosAdjuntos: List<ArchivoAdjunto>
+  - dfecha: Date
+  - estado: String
+  - fechaEnvioSms: Date
+  - tipoPedido: String
+  + getClientes(): String
+  + prePersit(): void
+  + getCliente(): Cliente
+}
+class PedidoController {
+  + PedidoController(): 
+  ~ TITULO: String
+  ~ CREARPEDIDO: String
+  ~ REDIRECTLISTAR: String
+  ~ ERROR: String
+  ~ PEDIDOFORM: String
+  - log: Logger
+  - pedidoService: PedidoServiceImpl
+  - archivoAdjuntoService: ArchivoAdjuntoService
+  - clienteService: IClienteService
+  - proveedorService: ProveedorServiceImpl
+  - uploadFileService: IUploadFileService
+  - resourceLoader: ResourceLoader
+  + init(): void
+  + obtenerFoto(String): ResponseEntity<Resource>
+  + ver(Long, Model, RedirectAttributes): String
+  + generateReport(HttpServletResponse, String, String): ResponseEntity<?>
+  + guardarFotos(ArchivoAdjunto, Pedido, MultipartFile, RedirectAttributes): String
+  + listar(int, Model): String
+  + verFoto(String): ResponseEntity<Resource>
+  + buscar(int, String, String, Pageable, Model): String
+  + cargarImagenes(Long): List<String>
+  + eliminar(Long, RedirectAttributes): String
+  + editar(Long, Map<String, Object>, RedirectAttributes): String
+  + guardar(Pedido, BindingResult, Model, Long, String, String, String, RedirectAttributes, SessionStatus, String): String
+  + crear(Long, Map<String, Object>, RedirectAttributes): String
+  + eliminarFoto(String, Pedido, RedirectAttributes): String
+  - guardarNuevoPedido(Pedido, RedirectAttributes): void
+  - enviarSms(Pedido): void
+  - guardarArchivoAdjunto(String, Pedido, RedirectAttributes): void
+  - procesarArchivosAdjuntos(String, Pedido, RedirectAttributes): void
+  - actualizarPedidoExistente(Pedido, String, String, String, RedirectAttributes): void
+}
+interface PedidoDao << interface >> {
+  + findByClienteId(Long, Pageable): Page<Pedido>
+  + count(): long
+  + findByClienteOrEstado(String, String, Pageable): Page<Pedido>
+  + findByClienteOrEstadoReport(String, String): Iterable<Pedido>
+  + findTopByOrderByNpedidoDesc(): Pedido
+  + findPedidosByIdClienteAndTerminado(Long, Pageable): Page<Pedido>
+}
+class PedidoDtos {
+  + PedidoDtos(Long, Cliente, Date, String, String, String, List<ArchivoAdjunto>): 
+  + PedidoDtos(): 
+  - npedido: Long
+  - estado: String
+  - observacion: String
+  - cliente: Cliente
+  - tipoPedido: String
+  - archivosAdjuntos: List<ArchivoAdjunto>
+  - dfecha: Date
+  + getEstado(): String
+  + setObservacion(String): void
+  + getNpedido(): Long
+  + getCliente(): Cliente
+  + getDfecha(): Date
+  + getObservacion(): String
+  + setDfecha(Date): void
+  + getTipoPedido(): String
+  + setEstado(String): void
+  + setArchivosAdjuntos(List<ArchivoAdjunto>): void
+  + setTipoPedido(String): void
+  + getArchivosAdjuntos(): List<ArchivoAdjunto>
+  + setNpedido(Long): void
+  + setCliente(Cliente): void
+}
+interface PedidoMapper << interface >> {
+  + toPedido(PedidoDtos): Pedido
+  + toPedidoDto(Pedido): PedidoDtos
+}
+class PedidoMapperImpl {
+  + PedidoMapperImpl(): 
+  + toPedido(PedidoDtos): Pedido
+  + toPedidoDto(Pedido): PedidoDtos
+}
+interface PedidoService << interface >> {
+  + findAllPedidos(): List<Pedido>
+  + findOne(Long): Pedido
+  + delete(Long): void
+  + obtenerUltimoNumeroPedido(): Pedido
+  + findPedidoByIdClienteAndFinalizados(Long, Pageable): Page<Pedido>
+  + findAllByClienteAndEstado(String, String): Iterable<Pedido>
+  + count(): long
+  + findAll(): Iterable<Pedido>
+  + findAll(Pageable): Page<Pedido>
+  + findAllByCliente(Long, Pageable): Page<Pedido>
+  + save(Pedido): Pedido
+  + findByCliente(String, String, Pageable): Page<Pedido>
+}
+class PedidoServiceImpl {
+  + PedidoServiceImpl(): 
+  - resourceLoader: ResourceLoader
+  - pedidoDao: PedidoDao
+  + findOne(Long): Pedido
+  + findAllByCliente(Long, Pageable): Page<Pedido>
+  + findAll(Pageable): Page<Pedido>
+  + findAllPedidos(): List<Pedido>
+  + obtenerUltimoNumeroPedido(): Pedido
+  + delete(Long): void
+  + findAll(): Iterable<Pedido>
+  + save(Pedido): Pedido
+  + findByCliente(String, String, Pageable): Page<Pedido>
+  + generateJasperPrint(String, String): JasperPrint
+  + findPedidoByIdClienteAndFinalizados(Long, Pageable): Page<Pedido>
+  + findAllByClienteAndEstado(String, String): Iterable<Pedido>
+  + count(): long
+}
+class Producto {
+  + Producto(): 
+  - vdetalle: String
+  - nproveedor: Proveedor
+  - codigo: String
+  - createAt: Date
+  - serialVersionUID: long
+  - descuento: int
+  - foto: String
+  - nombre: String
+  - id: Long
+  - cantidad: Double
+  - marca: String
+  - precio: Double
+  - precioCompra: Double
+  + prePersist(): void
+  + getFoto(): String
+  + getId(): Long
+  + getMarca(): String
+  + getCreateAt(): Date
+  + setCreateAt(Date): void
+  + setNombre(String): void
+  + getPrecio(): Double
+  + getNombre(): String
+  + getNproveedor(): Proveedor
+  + getVdetalle(): String
+  + setDescuento(int): void
+  + setNproveedor(Proveedor): void
+  + getCodigo(): String
+  + setPrecio(Double): void
+  + setFoto(String): void
+  + setMarca(String): void
+  + setCodigo(String): void
+  + setId(Long): void
+  + getDescuento(): int
+  + setVdetalle(String): void
+}
+interface ProductoService << interface >> {
+  + findAll(Pageable): Page<Producto>
+  + count(): long
+  + save(Producto): Producto
+  + findByNombre(String): List<Producto>
+  + findByNombreListar(String, String, Pageable): Page<Producto>
+  + delete(Long): void
+  + findMaterialByProveedor(String): List<Producto>
+  + findAll(): Iterable<Producto>
+  + findOne(Long): Producto
+  + findByNombreLikeIgnoreCase(String): List<Producto>
+}
+class ProductoServiceImpl {
+  + ProductoServiceImpl(): 
+  - productoDao: IProductoDao
+  + findAll(): Iterable<Producto>
+  + save(Producto): Producto
+  + findOne(Long): Producto
+  + findMaterialByProveedor(String): List<Producto>
+  + count(): long
+  + findByNombre(String): List<Producto>
+  + findByNombreLikeIgnoreCase(String): List<Producto>
+  + delete(Long): void
+  + findByNombreListar(String, String, Pageable): Page<Producto>
+  + findAll(Pageable): Page<Producto>
+}
+class Proveedor {
+  + Proveedor(): 
+  - nproveedor: Long
+  - vlocalidad: String
+  - vpais: String
+  - serialVersionUID: long
+  - vemail: String
+  - cif: String
+  - dfecha_alta: Date
+  - vprovincia: String
+  - ntelefono: String
+  - vdireccion: String
+  - dfecha_baja: Date
+  - vnombre: String
+  + prePersit(): void
+  + setNtelefono(String): void
+  + setDfecha_alta(Date): void
+  + setVnombre(String): void
+  + getDfecha_baja(): Date
+  + setDfecha_baja(Date): void
+  + getNtelefono(): String
+  + getVdireccion(): String
+  + setCif(String): void
+  + getVprovincia(): String
+  + setVdireccion(String): void
+  + getVemail(): String
+  + getCif(): String
+  + setVpais(String): void
+  + getVpais(): String
+  + setNproveedor(Long): void
+  + setVprovincia(String): void
+  + setVemail(String): void
+  + getDfecha_alta(): Date
+  + getVnombre(): String
+  + setVlocalidad(String): void
+  + getNproveedor(): Long
+  + getVlocalidad(): String
+}
+interface ProveedorDao << interface >> {
+  + findByvNombreLikeIgnoreCase(String): List<Proveedor>
+  + count(): long
+  + findByNombreListar(String, Pageable): Page<Proveedor>
+}
+interface ProveedorService << interface >> {
+  + findAll(Pageable): Page<Proveedor>
+  + findByNombreListar(String, Pageable): Page<Proveedor>
+  + delete(Long): void
+  + findByNombre(String): List<Proveedor>
+  + count(): long
+  + save(Proveedor): Proveedor
+  + findOne(Long): Proveedor
+  + findAll(): List<Proveedor>
+}
+class ProveedorServiceImpl {
+  + ProveedorServiceImpl(): 
+  - em: EntityManager
+  - proveedorDao: ProveedorDao
+  + findByNombre(String): List<Proveedor>
+  + findByNombreListar(String, Pageable): Page<Proveedor>
+  + delete(Long): void
+  + save(Proveedor): Proveedor
+  + findAll(Pageable): Page<Proveedor>
+  + findAll(): List<Proveedor>
+  + count(): long
+  + findOne(Long): Proveedor
+}
+class ProveedoresController {
+  + ProveedoresController(): 
+  - materialService: ProductoServiceImpl
+  - clienteService: ClienteServiceImpl
+  - proveedorService: ProveedorServiceImpl
+  - log: Logger
+  + count(Model): String
+  + editar(Long, Map<String, Object>): String
+  + guardar(Proveedor, BindingResult, Model, SessionStatus, RedirectAttributes): String
+  + listar(Model, int): String
+  + crear(Map<String, Object>): String
+  + buscar(String, int, Model): String
+  + eliminar(Long, RedirectAttributes): String
+}
+class RestAlbaranController {
+  + RestAlbaranController(): 
+  - facturaMapper: FacturaMapperImpl
+  - clienteService: IClienteService
+  - albaranesService: AlbaranServiceImpl
+  - albaranesMapper: AlbaranesMapper
+  + crearFacturaCliente(Long): ResponseEntity<List<AlbaranDto>>
+}
+class RestFacturaController {
+  + RestFacturaController(): 
+}
+class RestPedidoController {
+  + RestPedidoController(): 
+  - pedidoService: PedidoServiceImpl
+  - pedidoMapper: PedidoMapper
+  + listar(Long): ResponseEntity<List<PedidoDtos>>
+}
+class Role {
+  + Role(): 
+  - users: List<User>
+  - nombre: String
+  - id: Long
+  - descripcion: String
+  - secret: String
+  - estado: String
+  + equals(Object): boolean
+  + hashCode(): int
+  + toString(): String
+  + setUsers(List<User>): void
+  + setDescripcion(String): void
+  + getId(): Long
+  + getNombre(): String
+  + getUsers(): List<User>
+  + setId(Long): void
+  + setEstado(String): void
+  + getDescripcion(): String
+  + getSecret(): String
+  + setNombre(String): void
+  + getEstado(): String
+  + setSecret(String): void
+  # canEqual(Object): boolean
+}
+interface RoleRepository << interface >> {
+  + findByUsernameWithRoles(String): Optional<User>
+  + findByNombre(String): Role
+}
+class SecurityConfig {
+  + SecurityConfig(): 
+  + passwordEncoder(): PasswordEncoder
+  + securityFilterChain(HttpSecurity): SecurityFilterChain
+  + twoFactorAuthenticationFilter(): TwoFactorAuthenticationFilter
+  + failureHandler(): AuthenticationFailureHandler
+  - successHandler(): AuthenticationSuccessHandler
+}
+class ServiceMetodo {
+  + ServiceMetodo(): 
+  - metodo: MetodoDao
+  + delete(Long): void
+  + save(MetodoPago): MetodoPago
+  + findOne(Long): MetodoPago
+  + findAll(Pageable): Page<MetodoPago>
+  + findAll(): List<MetodoPago>
+}
+class ServletInitializer {
+  + ServletInitializer(): 
+  # configure(SpringApplicationBuilder): SpringApplicationBuilder
+}
+class SpringBootDataJpaApplication {
+  + SpringBootDataJpaApplication(): 
+  ~ uploadFileService: IUploadFileService
+  + main(String[]): void
+  + run(String[]): void
+}
+class SpringBootDataJpaApplicationTests {
+  + SpringBootDataJpaApplicationTests(): 
+  + contextLoads(): void
+}
+class TwoFactorAuthenticationFilter {
+  + TwoFactorAuthenticationFilter(): 
+  - log: Logger
+  - userRepository: UserService
+  - twoFactorMessageService: TwoFactorMessageService
+  # doFilterInternal(HttpServletRequest, HttpServletResponse, FilterChain): void
+  - isTwoFactorVerified(HttpServletRequest): boolean
+}
+class TwoFactorController {
+  + TwoFactorController(): 
+  ~ log: Logger
+  - userService: UserService
+  + showVerificationPage(): String
+  + verify2fa(String, String, HttpServletRequest, HttpServletResponse, RedirectAttributes): String
+}
+class TwoFactorMessageService {
+  + TwoFactorMessageService(): 
+  - random: Random
+  - mailSender: JavaMailSender
+  + generateVerificationCode(): String
+  + sendVerificationCode(String, String): void
+}
+class UploadFileServiceImpl {
+  + UploadFileServiceImpl(): 
+  - log: Logger
+  - UPLOADS_FOLDER: String
+  + load(String): Resource
+  + deleteAll(): void
+  + delete(String): boolean
+  + init(): void
+  + getPath(String): Path
+  + copy(MultipartFile): String
+}
+class User {
+  + User(): 
+  - email: String
+  - secret: String
+  - id: Long
+  - username: String
+  - nombre: String
+  - apellido: String
+  - password: String
+  - active: boolean
+  - roles: Set<Role>
+  - intentos: Integer
+  - twoFactorEnabled: boolean
+  + getId(): Long
+  + removeRole(Role): void
+  + getUsername(): String
+  + getPassword(): String
+  + isActive(): boolean
+  + setUsername(String): void
+  + setSecret(String): void
+  + setApellido(String): void
+  + getNombre(): String
+  + setNombre(String): void
+  + setEmail(String): void
+  + getApellido(): String
+  + setPassword(String): void
+  + setRoles(Set<Role>): void
+  + isTwoFactorEnabled(): boolean
+  + getEmail(): String
+  + getSecret(): String
+  + setId(Long): void
+  + getRoles(): Set<Role>
+  + setIntentos(Integer): void
+  + setActive(boolean): void
+  + setTwoFactorEnabled(boolean): void
+  + getIntentos(): Integer
+  + prePersist(): void
+  + addRole(Role): void
+  + getGrantedAuthorities(): List<GrantedAuthority>
+}
+class UserController {
+  + UserController(): 
+  ~ log: Logger
+  - userService: UserService
+  - userRepository: UserRepository
+  - roleRepository: RoleRepository
+  + createUserForm(Model): String
+  + registerUser(User, Model, List<Long>): String
+  + listUsers(int, Model): String
+  + deactivateUser(Long): String
+}
+interface UserRepository << interface >> {
+  + findByUsername(String): User
+  + findByUsernameWithRoles(String): Optional<User>
+  + findByUsernameisActive(String): User
+  + existsByUsername(String): boolean
+  + existsByEmail(String): boolean
+  + findActiveUsers(Pageable): Page<User>
+}
+class UserService {
+  + UserService(): 
+  - passwordEncoder: PasswordEncoder
+  - userRepository: UserRepository
+  + authenticate(String, String): boolean
+  + deactivateUser(Long): void
+  + registerUser(User): void
+  + updateUser(User): void
+  + getUserEmail(String): String
+  + userExists(String): boolean
+  + isTwoFactorEnabled(String): boolean
+  + save(User): void
+  + deleteUserById(Long): void
+  + findByUsernameisActive(String): boolean
+  + isUserInactive(String): boolean
+  + findByUsername(String): User
+}
+
+Albaran                           "1" *-[#595959,plain]-> "cliente\n1" Cliente                           
+Albaran                           "1" *-[#595959,plain]-> "items\n*" ItemAlbaran                       
+Albaran                           "1" *-[#595959,plain]-> "proveedor\n1" Proveedor                         
+AlbaranController                  -[#595959,dashed]->  Albaran                           : "«create»"
+AlbaranController                 "1" *-[#595959,plain]-> "albaranService\n1" AlbaranServiceImpl                
+AlbaranController                 "1" *-[#595959,plain]-> "clienteService\n1" IClienteService                   
+AlbaranController                 "1" *-[#595959,plain]-> "uploadFileService\n1" IUploadFileService                
+AlbaranController                  -[#595959,dashed]->  ItemAlbaran                       : "«create»"
+AlbaranController                  -[#595959,dashed]->  PageRender                        : "«create»"
+AlbaranController                 "1" *-[#595959,plain]-> "proveedorService\n1" ProveedorServiceImpl              
+AlbaranDto                        "1" *-[#595959,plain]-> "cliente\n1" Cliente                           
+AlbaranDto                        "1" *-[#595959,plain]-> "items\n*" ItemAlbaran                       
+AlbaranDto                        "1" *-[#595959,plain]-> "proveedor\n1" Proveedor                         
+AlbaranServiceImpl                "1" *-[#595959,plain]-> "AlbaranDao\n1" AlbaranDao                        
+AlbaranServiceImpl                 -[#008200,dashed]-^  AlbaranesService                  
+AlbaranesMapperImpl                -[#595959,dashed]->  AlbaranDto                        : "«create»"
+AlbaranesMapperImpl                -[#008200,dashed]-^  AlbaranesMapper                   
+AlbaranesMapperImpl               "1" *-[#595959,plain]-> "albaranesMapper\n1" AlbaranesMapper                   
+AppSms                            "1" *-[#595959,plain]-> "pedidoService\n1" PedidoService                     
+ArchivoAdjunto                    "1" *-[#595959,plain]-> "pedido\n1" Pedido                            
+ArchivoAdjuntoService             "1" *-[#595959,plain]-> "archivoAdjuntoRepository\n1" ArchivoAdjuntoDao                 
+Cliente                           "1" *-[#595959,plain]-> "albaranes\n*" Albaran                           
+Cliente                           "1" *-[#595959,plain]-> "facturas\n*" Factura                           
+Cliente                           "1" *-[#595959,plain]-> "pedido\n*" Pedido                            
+ClienteController                  -[#595959,dashed]->  Cliente                           : "«create»"
+ClienteController                 "1" *-[#595959,plain]-> "clienteService\n1" IClienteService                   
+ClienteController                 "1" *-[#595959,plain]-> "uploadFileService\n1" IUploadFileService                
+ClienteController                  -[#595959,dashed]->  PageRender                        : "«create»"
+ClienteController                 "1" *-[#595959,plain]-> "pedidoService\n1" PedidoServiceImpl                 
+ClienteServiceImpl                "1" *-[#595959,plain]-> "albaranDAO\n1" AlbaranDao                        
+ClienteServiceImpl                "1" *-[#595959,plain]-> "clienteDao\n1" IClienteDao                       
+ClienteServiceImpl                 -[#008200,dashed]-^  IClienteService                   
+ClienteServiceImpl                "1" *-[#595959,plain]-> "facturaDao\n1" IFacturaDao                       
+ClienteServiceImpl                "1" *-[#595959,plain]-> "productoDao\n1" IProductoDao                      
+ClienteServiceImpl                "1" *-[#595959,plain]-> "pedidoDao\n1" PedidoDao                         
+CustomUserDetailsService          "1" *-[#595959,plain]-> "userRepository\n1" UserRepository                    
+Factura                           "1" *-[#595959,plain]-> "cliente\n1" Cliente                           
+Factura                           "1" *-[#595959,plain]-> "items\n*" ItemFactura                       
+Factura                           "1" *-[#595959,plain]-> "nproveedor\n1" Proveedor                         
+FacturaController                  -[#595959,dashed]->  Factura                           : "«create»"
+FacturaController                 "1" *-[#595959,plain]-> "facturaMapper\n1" FacturaMapper                     
+FacturaController                 "1" *-[#595959,plain]-> "clienteService\n1" IClienteService                   
+FacturaController                 "1" *-[#595959,plain]-> "uploadFileService\n1" IUploadFileService                
+FacturaController                  -[#595959,dashed]->  ItemFactura                       : "«create»"
+FacturaController                 "1" *-[#595959,plain]-> "notificacionService\n1" NotificacionService               
+FacturaController                  -[#595959,dashed]->  PageRender                        : "«create»"
+FacturaController                 "1" *-[#595959,plain]-> "pedidoService\n1" PedidoService                     
+FacturaController                 "1" *-[#595959,plain]-> "materialService\n1" ProductoServiceImpl               
+FacturaController                 "1" *-[#595959,plain]-> "proveedorService\n1" ProveedorServiceImpl              
+FacturaController                 "1" *-[#595959,plain]-> "metodoService\n1" ServiceMetodo                     
+FacturaDto                        "1" *-[#595959,plain]-> "cliente\n1" Cliente                           
+FacturaDto                        "1" *-[#595959,plain]-> "items\n*" ItemFactura                       
+FacturaDto                        "1" *-[#595959,plain]-> "nproveedor\n1" Proveedor                         
+FacturaMapperImpl                  -[#595959,dashed]->  FacturaDto                        : "«create»"
+FacturaMapperImpl                  -[#008200,dashed]-^  FacturaMapper                     
+FacturaMapperImpl                 "1" *-[#595959,plain]-> "facturaMapper\n1" FacturaMapper                     
+ItemAlbaran                       "1" *-[#595959,plain]-> "producto\n1" Producto                          
+ItemFactura                       "1" *-[#595959,plain]-> "producto\n1" Producto                          
+LoginController                   "1" *-[#595959,plain]-> "userService\n1" UserService                       
+MaterialController                "1" *-[#595959,plain]-> "clienteService\n1" ClienteServiceImpl                
+MaterialController                "1" *-[#595959,plain]-> "notificacionService\n1" NotificacionService               
+MaterialController                 -[#595959,dashed]->  PageRender                        : "«create»"
+MaterialController                 -[#595959,dashed]->  Producto                          : "«create»"
+MaterialController                "1" *-[#595959,plain]-> "materialService\n1" ProductoServiceImpl               
+MaterialController                "1" *-[#595959,plain]-> "proveedorService\n1" ProveedorServiceImpl              
+MetodoController                   -[#595959,dashed]->  MetodoPago                        : "«create»"
+MetodoController                   -[#595959,dashed]->  PageRender                        : "«create»"
+MetodoController                  "1" *-[#595959,plain]-> "metodoService\n1" ServiceMetodo                     
+Notificacion                      "1" *-[#595959,plain]-> "materialAfectado\n1" Producto                          
+NotificacionService               "1" *-[#595959,plain]-> "productoService\n1" IProductoDao                      
+NotificacionService                -[#595959,dashed]->  Notificacion                      : "«create»"
+NotificacionService               "1" *-[#595959,plain]-> "notificacionRepository\n1" NotificacionRepository            
+NotificationController            "1" *-[#595959,plain]-> "notificacionService\n1" NotificacionService               
+PageRender                         -[#595959,dashed]->  PageItem                          : "«create»"
+PageRender                        "1" *-[#595959,plain]-> "paginas\n*" PageItem                          
+Pedido                            "1" *-[#595959,plain]-> "archivosAdjuntos\n*" ArchivoAdjunto                    
+Pedido                            "1" *-[#595959,plain]-> "cliente\n1" Cliente                           
+PedidoController                   -[#595959,dashed]->  AppSms                            : "«create»"
+PedidoController                   -[#595959,dashed]->  ArchivoAdjunto                    : "«create»"
+PedidoController                  "1" *-[#595959,plain]-> "archivoAdjuntoService\n1" ArchivoAdjuntoService             
+PedidoController                  "1" *-[#595959,plain]-> "clienteService\n1" IClienteService                   
+PedidoController                  "1" *-[#595959,plain]-> "uploadFileService\n1" IUploadFileService                
+PedidoController                   -[#595959,dashed]->  PageRender                        : "«create»"
+PedidoController                   -[#595959,dashed]->  Pedido                            : "«create»"
+PedidoController                  "1" *-[#595959,plain]-> "pedidoService\n1" PedidoServiceImpl                 
+PedidoController                  "1" *-[#595959,plain]-> "proveedorService\n1" ProveedorServiceImpl              
+PedidoDtos                        "1" *-[#595959,plain]-> "archivosAdjuntos\n*" ArchivoAdjunto                    
+PedidoDtos                        "1" *-[#595959,plain]-> "cliente\n1" Cliente                           
+PedidoMapperImpl                   -[#595959,dashed]->  PedidoDtos                        : "«create»"
+PedidoMapperImpl                   -[#008200,dashed]-^  PedidoMapper                      
+PedidoServiceImpl                  -[#595959,dashed]->  Pedido                            : "«create»"
+PedidoServiceImpl                 "1" *-[#595959,plain]-> "pedidoDao\n1" PedidoDao                         
+PedidoServiceImpl                  -[#008200,dashed]-^  PedidoService                     
+Producto                          "1" *-[#595959,plain]-> "nproveedor\n1" Proveedor                         
+ProductoServiceImpl               "1" *-[#595959,plain]-> "productoDao\n1" IProductoDao                      
+ProductoServiceImpl                -[#008200,dashed]-^  ProductoService                   
+ProveedorServiceImpl              "1" *-[#595959,plain]-> "proveedorDao\n1" ProveedorDao                      
+ProveedorServiceImpl               -[#008200,dashed]-^  ProveedorService                  
+ProveedoresController             "1" *-[#595959,plain]-> "clienteService\n1" ClienteServiceImpl                
+ProveedoresController              -[#595959,dashed]->  PageRender                        : "«create»"
+ProveedoresController             "1" *-[#595959,plain]-> "materialService\n1" ProductoServiceImpl               
+ProveedoresController              -[#595959,dashed]->  Proveedor                         : "«create»"
+ProveedoresController             "1" *-[#595959,plain]-> "proveedorService\n1" ProveedorServiceImpl              
+RestAlbaranController             "1" *-[#595959,plain]-> "albaranesService\n1" AlbaranServiceImpl                
+RestAlbaranController             "1" *-[#595959,plain]-> "albaranesMapper\n1" AlbaranesMapper                   
+RestAlbaranController             "1" *-[#595959,plain]-> "facturaMapper\n1" FacturaMapperImpl                 
+RestAlbaranController             "1" *-[#595959,plain]-> "clienteService\n1" IClienteService                   
+RestPedidoController              "1" *-[#595959,plain]-> "pedidoMapper\n1" PedidoMapper                      
+RestPedidoController              "1" *-[#595959,plain]-> "pedidoService\n1" PedidoServiceImpl                 
+Role                              "1" *-[#595959,plain]-> "users\n*" User                              
+SecurityConfig                     -[#595959,dashed]->  TwoFactorAuthenticationFilter     : "«create»"
+ServiceMetodo                      -[#008200,dashed]-^  IMetodo                           
+ServiceMetodo                     "1" *-[#595959,plain]-> "metodo\n1" MetodoDao                         
+SpringBootDataJpaApplication      "1" *-[#595959,plain]-> "uploadFileService\n1" IUploadFileService                
+TwoFactorAuthenticationFilter     "1" *-[#595959,plain]-> "twoFactorMessageService\n1" TwoFactorMessageService           
+TwoFactorAuthenticationFilter     "1" *-[#595959,plain]-> "userRepository\n1" UserService                       
+TwoFactorController               "1" *-[#595959,plain]-> "userService\n1" UserService                       
+UploadFileServiceImpl              -[#008200,dashed]-^  IUploadFileService                
+User                              "1" *-[#595959,plain]-> "roles\n*" Role                              
+UserController                     -[#595959,dashed]->  PageRender                        : "«create»"
+UserController                    "1" *-[#595959,plain]-> "roleRepository\n1" RoleRepository                    
+UserController                     -[#595959,dashed]->  User                              : "«create»"
+UserController                    "1" *-[#595959,plain]-> "userRepository\n1" UserRepository                    
+UserController                    "1" *-[#595959,plain]-> "userService\n1" UserService                       
+UserService                       "1" *-[#595959,plain]-> "userRepository\n1" UserRepository                    
+@enduml

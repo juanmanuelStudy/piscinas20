@@ -6,9 +6,12 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import com.bolsadeideas.springboot.app.models.service.IUploadFileService;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 
 @SpringBootApplication
-public class SpringBootDataJpaApplication  implements CommandLineRunner {
+public class SpringBootDataJpaApplication
+		extends SpringBootServletInitializer {
 
 	@Autowired
 	IUploadFileService uploadFileService;
@@ -17,11 +20,18 @@ public class SpringBootDataJpaApplication  implements CommandLineRunner {
 		SpringApplication.run(SpringBootDataJpaApplication.class, args);
 	}
 
+
+	@Override
+	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+		return application.sources(SpringBootDataJpaApplication.class);
+	}
+
+	/*
 	@Override
 	public void run(String... args) throws Exception {
 		// TODO Auto-generated method stub
 		uploadFileService.deleteAll();
 		uploadFileService.init();
-	}
+	}*/
 
 }
