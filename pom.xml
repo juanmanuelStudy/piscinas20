@@ -165,6 +165,7 @@
 	</dependencies>
 
 	<build>
+		<!-- 
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
@@ -230,7 +231,7 @@
 					</container>
 				</configuration>
 			</plugin>
-		</plugins>
+		</plugins>-->
 	</build>
 
 </project>
