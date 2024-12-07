@@ -1,1 +1,1 @@
-web : java -Dspring.profile.active=default -Dserver.port=$PORT -jar target/*.war
+web: java -Dserver.port=$PORT -jar target/spring-boot-heroku-app-0.0.1-SNAPSHOT.jar
