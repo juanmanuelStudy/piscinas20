@@ -164,7 +164,7 @@
 
 	</dependencies>
 
-	<build>
+	
 		<!-- 
 		<plugins>
 			<plugin>
@@ -232,24 +232,21 @@
 				</configuration>
 			</plugin>
 		</plugins>-->
-		<build>
+<build>
     <plugins>
         <plugin>
             <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-resources-plugin</artifactId>
-            <version>3.2.0</version>
-            <executions>
-                <execution>
-                    <phase>process-resources</phase>
-                    <goals>
-                        <goal>resources</goal>
-                    </goals>
-                </execution>
-            </executions>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <version>3.8.1</version>
+            <configuration>
+                <source>1.8</source>
+                <target>1.8</target>
+            </configuration>
         </plugin>
     </plugins>
 </build>
 
-	</build>
+
+	
 
 </project>
